@@ -7,7 +7,7 @@ const useFetch = async (url = '/', params = {}, method = 'GET', expectedStatus =
   }
   let response
   try {
-    if (method.toUpperCase().trim()==='POST') {
+    if (method.toUpperCase().trim() === 'POST') {
       response = await axiosIns.post(url, params)
     } else {
       response = await axiosIns.get(url)

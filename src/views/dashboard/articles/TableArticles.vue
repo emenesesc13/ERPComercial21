@@ -6,7 +6,7 @@
         class="d-flex align-items-start"
       >
         <b-button
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           v-b-modal.modal-article
           variant="primary"
           @click="openModalArticle"
@@ -15,20 +15,8 @@
         </b-button>
       </div>
       <div>
-        <!-- <b-form-group
-          label="Campo"
-          label-for="field"
-        >
-          <v-select
-            v-model="serverParams.columnFilters.field"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :reduce="option => option.field"
-            label="title"
-            :options="[{title:'hola', field: 'ssss'}]"
-          />
-        </b-form-group> -->
         <b-button
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           v-b-modal.modal-search-article
           variant="primary"
         >
@@ -174,6 +162,7 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject } from '@vue/composition-api'
 import {
   BPagination, BFormSelect, BDropdown, BDropdownItem, VBModal, BButton, BBadge,
@@ -181,7 +170,8 @@ import {
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
-import useArticles from './useArticles'
+import useFetch from '@/hooks/useFetch'
+import useVariables from './useVariables'
 
 export default {
   name: 'TableArticles',
@@ -281,21 +271,22 @@ export default {
     const serverParams = inject('serverParams')
     const onPerPageChange = inject('onPerPageChange')
     const onPageChange = inject('onPageChange')
-    const resetCombos = inject('resetCombos')
-    const combos = inject('combos')
-    const loadCombo = inject('loadCombo')
     const messageToast = inject('messageToast')
-
-    const {
-      getArticleById, getProductTypes, getUnitGroup, getFeatures, getFeaturesByArticleId, deleteArticle,
-    } = useArticles()
+    const loadCombos = inject('loadCombos')
+    const resetCombos = inject('resetCombos')
+    const featureSelected = inject('featureSelected')
+    const valueSelected = inject('valueSelected')
+    const { defaultSelectedUnitGroup } = useVariables()
 
     const openModalArticle = async () => {
       resetArticle()
-      resetCombos()
-      loadCombo(['productTypes'], getProductTypes, 'Error al momento de cargar los Tipos de Producto')
-      loadCombo(['unitGroup'], getUnitGroup, 'Error al momento de cargar las Unidades de Grupo')
-      loadCombo(['features'], getFeatures, 'Error al momento de cargar las Características')
+      article.value.unitGroup = defaultSelectedUnitGroup.unitGroup
+      await loadCombos(['inventoryUnit', 'unitSale'], `/combo/grupounidad/${article.value.unitGroup}`, 'Error al momento de cargar las Unidades por Grupo')
+      article.value.inventoryUnit = defaultSelectedUnitGroup.inventoryUnit
+      article.value.unitSale = defaultSelectedUnitGroup.unitSale
+      featureSelected.value = null
+      valueSelected.value = null
+      resetCombos(['valuesByFeature'])
     }
 
     const deleteRow = async row => {
@@ -312,8 +303,12 @@ export default {
         buttonsStyling: false,
       })
       if (result.value) {
-        const { _id: articleId } = row
-        const { error, data } = await deleteArticle(articleId)
+        const articleToDelete = {
+          _id: row._id,
+          accion: 3,
+          idUsuario: store.state.auth.user._id,
+        }
+        const { error, data } = await useFetch('/articulos', articleToDelete, 'POST')
         if (error) {
           messageToast('danger', 'Error', 'Ocurrio un error')
         } else {
@@ -330,15 +325,16 @@ export default {
     }
 
     const loadFeaturesByArticleId = async articleId => {
-      const { error, data } = await getFeaturesByArticleId(articleId)
+      const url = `/ACaracteristica/?_id=0&tabla=ARTICULOCARACTERISTICA&campo=a.idarticulo&indice=${articleId}`
+      const { error, data } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un error')
       } else {
         article.value.features = []
         data.forEach(row => {
-          const { _id: idFeatureArticle, nombreCaracteristica, nombreDCaracteristica } = row
+          const { _id, nombreCaracteristica, nombreDCaracteristica } = row
           article.value.features.push({
-            id: idFeatureArticle,
+            id: _id,
             feature: nombreCaracteristica,
             value: nombreDCaracteristica,
           })
@@ -348,35 +344,35 @@ export default {
 
     const openModalForEdit = async row => {
       resetArticle()
-      console.log(row)
-      const { _id: articleId } = row
-      const { error, data } = await getArticleById(articleId)
+      featureSelected.value = null
+      valueSelected.value = null
+      resetCombos(['valuesByFeature'])
+      const { _id } = row
+      const { error, data } = await useFetch(`/articulos/${_id}`)
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un error')
       } else {
-        await openModalArticle()
         context.root.$bvModal.show('modal-article')
         const {
-          _id: idArticle, nombre, flgStock, flgServicio, precioCompra, precioVenta, precioMinimoVenta, stockMinimo, stockMaximo,
-        } = data[0]
+          _id: idArticle, sku, idTipoProducto, nombre, flgStock, flgServicio, idGrupoUnidad, idUnidadInventario, idUnidadVenta, precioCompra, precioVenta, precioMinimoVenta, stockMinimo, stockMaximo,
+        } = data
         article.value.id = idArticle
         article.value.articleName = nombre
-        article.value.sku = ''
-        article.value.productType = null
+        article.value.sku = sku
+        article.value.productType = idTipoProducto
         article.value.articleName = nombre
         article.value.stock = flgStock
         article.value.service = flgServicio
-        article.value.unitGroup = null
-        console.log(combos)
-        // loadCombo(['inventoryUnit', 'unitSale'], , 'Error al momento de cargar las Características')
-        article.value.inventoryUnit = null
-        article.value.unitSale = null
+        article.value.unitGroup = idGrupoUnidad
+        await loadCombos(['inventoryUnit', 'unitSale'], `/combo/grupounidad/${idGrupoUnidad}`, 'Error al momento de cargar las Unidades por Grupo')
+        article.value.inventoryUnit = idUnidadInventario
+        article.value.unitSale = idUnidadVenta
         article.value.purchasePrice = precioCompra
         article.value.salePrice = precioVenta
         article.value.minimumSalePrice = precioMinimoVenta
         article.value.minimumStock = stockMinimo
         article.value.maximumStock = stockMaximo
-        loadFeaturesByArticleId(articleId)
+        loadFeaturesByArticleId(_id)
       }
     }
 
