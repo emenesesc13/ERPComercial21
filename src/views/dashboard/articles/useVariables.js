@@ -66,16 +66,28 @@ const useVariables = () => {
     valuesByFeature: { ...initialStateCombo },
   })
 
-  const resetCombos = () => {
-    combos.value = {
-      productTypes: { ...initialStateCombo },
-      unitGroup: { ...initialStateCombo },
-      inventoryUnit: { ...initialStateCombo },
-      unitSale: { ...initialStateCombo },
-      features: { ...initialStateCombo },
-      valuesByFeature: { ...initialStateCombo },
-    }
+  const defaultSelectedUnitGroup = {
+    unitGroup: 15,
+    inventoryUnit: 11,
+    unitSale: 11,
   }
+
+  const resetCombos = (nameCombos = []) => {
+    nameCombos.forEach(name => {
+      combos.value[name] = { ...initialStateCombo }
+    })
+    // combos.value = {
+    //   productTypes: { ...initialStateCombo },
+    //   unitGroup: { ...initialStateCombo },
+    //   inventoryUnit: { ...initialStateCombo },
+    //   unitSale: { ...initialStateCombo },
+    //   features: { ...initialStateCombo },
+    //   valuesByFeature: { ...initialStateCombo },
+    // }
+  }
+
+  const featureSelected = ref(null)
+  const valueSelected = ref(null)
 
   const optionsColumnsFilter = [
     {
@@ -111,6 +123,9 @@ const useVariables = () => {
     resetArticle,
     initialStateCombo,
     combos,
+    featureSelected,
+    valueSelected,
+    defaultSelectedUnitGroup,
     resetCombos,
     serverParams,
     optionsColumnsFilter,

@@ -16,6 +16,8 @@
         no-close-on-backdrop
       >
 
+        <!-- Headers Article -->
+
         <b-row>
 
           <!-- SKU -->
@@ -370,14 +372,19 @@
             </b-form-group>
           </b-col>
 
+        </b-row>
+
+        <!-- Features Article -->
+
+        <b-row v-if="!article.service">
           <b-col
             cols="12"
-            class="mt-1"
+            class="mt-3"
           >
             <h4 class="text-center text-primary">
               Características
             </h4>
-            <hr class="mb-1">
+            <hr class="mb-3 dividing-line">
           </b-col>
 
           <!-- Feature -->
@@ -500,7 +507,7 @@
             Cerrar
           </b-button>
           <b-button
-            v-if="article.id"
+            v-if="article.id || article.service"
             type="submit"
             variant="primary"
             @click="handleSubmit(sendArticle)"
@@ -515,6 +522,7 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import {
   BRow,
   BCol, BForm, BFormGroup, BFormInput, BModal, BFormCheckbox, BButton,
@@ -525,8 +533,8 @@ import vSelect from 'vue-select'
 import { ref, inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
-import store from '@/store/index'
-import useArticles from './useArticles'
+import store from '@/store'
+import useFetch from '@/hooks/useFetch'
 
 export default {
   name: 'ModalArticle',
@@ -565,7 +573,6 @@ export default {
           field: 'value',
         },
       ],
-      rows: [],
     }
   },
   computed: {
@@ -590,29 +597,43 @@ export default {
     const resetArticle = inject('resetArticle')
     const tabFeatureDisabled = ref(true)
     const combos = inject('combos')
-    const loadCombo = inject('loadCombo')
+    const loadCombos = inject('loadCombos')
     const messageToast = inject('messageToast')
     const loadArticles = inject('loadArticles')
-    const {
-      getUnitsByGroup, getValuesByFeature, saveArticle, saveFeatureArticle, deleteFeatureArticle,
-    } = useArticles()
-
-    const featureSelected = ref(null)
-    const valueSelected = ref(null)
+    const featureSelected = inject('featureSelected')
+    const valueSelected = inject('valueSelected')
 
     const selectedUnitGroup = async ({ _id }) => {
-      loadCombo(['inventoryUnit', 'unitSale'], getUnitsByGroup, 'Error al momento de cargar las Unidades por Grupo', _id)
+      loadCombos(['inventoryUnit', 'unitSale'], `/combo/grupounidad/${_id}`, 'Error al momento de cargar las Unidades por Grupo')
       article.value.inventoryUnit = null
       article.value.unitSale = null
     }
 
     const selectedFeature = async ({ _id }) => {
-      loadCombo(['valuesByFeature'], getValuesByFeature, 'Error al momento de cargar los Valores por Características', _id)
+      loadCombos(['valuesByFeature'], `/comboadv/dcaracteristica/1/${_id}`, 'Error al momento de cargar los Valores por Características')
       valueSelected.value = null
     }
 
     const sendArticle = async () => {
-      const { data, error } = await saveArticle(article.value)
+      const articleToSave = {
+        _id: article.value.id,
+        sku: article.value.sku,
+        nombre: article.value.articleName,
+        idTipoProducto: article.value.productType,
+        idGrupoUnidad: article.value.unitGroup,
+        idUnidadInventario: article.value.inventoryUnit,
+        idUnidadVenta: article.value.unitSale,
+        precioCompra: article.value.purchasePrice,
+        precioVenta: article.value.salePrice,
+        precioMinimoVenta: article.value.minimumSalePrice,
+        stockMinimo: article.value.minimumStock,
+        stockMaximo: article.value.maximumStock,
+        flgStock: article.value.stock ? 1 : 0,
+        flgServicio: article.value.service ? 1 : 0,
+        accion: article.value.id ? 2 : 1,
+        idUsuario: store.state.auth.user._id,
+      }
+      const { data, error } = await useFetch('/articulos', articleToSave, 'POST')
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un error')
       } else {
@@ -631,7 +652,25 @@ export default {
 
     const addFeature = async () => {
       if (!article.value.id) {
-        const { data, error } = await saveArticle(article.value)
+        const articleToSave = {
+          _id: article.value.id,
+          sku: article.value.sku,
+          nombre: article.value.articleName,
+          idTipoProducto: article.value.productType,
+          idGrupoUnidad: article.value.unitGroup,
+          idUnidadInventario: article.value.inventoryUnit,
+          idUnidadVenta: article.value.unitSale,
+          precioCompra: article.value.purchasePrice,
+          precioVenta: article.value.salePrice,
+          precioMinimoVenta: article.value.minimumSalePrice,
+          stockMinimo: article.value.minimumStock,
+          stockMaximo: article.value.maximumStock,
+          flgStock: article.value.stock ? 1 : 0,
+          flgServicio: article.value.service ? 1 : 0,
+          accion: article.value.id ? 2 : 1,
+          idUsuario: store.state.auth.user._id,
+        }
+        const { error, data } = await useFetch('/articulos', articleToSave, 'POST')
         if (error) {
           messageToast('danger', 'Error', 'Ocurrio un error')
         } else {
@@ -652,7 +691,14 @@ export default {
         } else {
           const { _id: featureId, nombre: feature } = featureSelected.value
           const { _id: valueId, nombre: value } = valueSelected.value
-          const { error, data } = await saveFeatureArticle(article.value.id, featureId, valueId)
+          const featureArticleToSave = {
+            idDtlCaracteristica: valueId,
+            idArticulo: article.value.id,
+            idCaracteristica: featureId,
+            accion: 1,
+            idUsuario: store.state.auth.user._id,
+          }
+          const { error, data } = await useFetch('/ACaracteristica', featureArticleToSave, 'POST')
           if (error) {
             messageToast('danger', 'Error', 'Ocurrio un error')
           } else {
@@ -672,18 +718,37 @@ export default {
     }
 
     const deleteRow = async idRow => {
-      const { error, data } = await deleteFeatureArticle(idRow)
-      if (error) {
-        messageToast('danger', 'Error', 'Ocurrio un error')
-      } else {
-        data.forEach(({ id, mensaje }) => {
-          if (id === 0) {
-            messageToast('warning', 'Advertencia', mensaje)
-          } else {
-            messageToast('success', 'Característica', mensaje)
-            article.value.features = article.value.features.filter(feature => feature.id !== idRow)
-          }
-        })
+      const result = await context.root.$swal({
+        title: 'Desea eliminar esta característica?',
+        text: '¡No podrás revertir esto!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '¡Sí, eliminalo!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      })
+      if (result.value) {
+        const featureArticleToDelete = {
+          _id: idRow,
+          accion: 3,
+          idUsuario: store.state.auth.user._id,
+        }
+        const { error, data } = await useFetch('/ACaracteristica', featureArticleToDelete, 'POST')
+        if (error) {
+          messageToast('danger', 'Error', 'Ocurrio un error')
+        } else {
+          data.forEach(({ id, mensaje }) => {
+            if (id === 0) {
+              messageToast('warning', 'Advertencia', mensaje)
+            } else {
+              messageToast('success', 'Característica', mensaje)
+              article.value.features = article.value.features.filter(feature => feature.id !== idRow)
+            }
+          })
+        }
       }
     }
 
@@ -710,6 +775,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .dividing-line {
+    border: none;
+    height: 1.5px;
+    background-color: #BBB;
+  }
   .form-group-checkbox {
     margin-top: .5rem;
   }

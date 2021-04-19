@@ -1,18 +1,18 @@
 import axiosIns from '@/libs/axios'
 
-const fetchData = async (url = '/', params = {}, method = 'GET') => {
+const useFetch = async (url = '/', params = {}, method = 'GET', expectedStatus = 200) => {
   const info = {
     data: null,
     error: null,
   }
   let response
   try {
-    if (method.toUpperCase().trim()==='POST') {
+    if (method.toUpperCase().trim() === 'POST') {
       response = await axiosIns.post(url, params)
     } else {
       response = await axiosIns.get(url)
     }
-    if (response.status !== 200) throw new Error(response)
+    if (response.status !== expectedStatus) throw new Error(response)
     info.data = response.data
   } catch (error) {
     info.error = error
@@ -20,4 +20,4 @@ const fetchData = async (url = '/', params = {}, method = 'GET') => {
   return info
 }
 
-export default fetchData
+export default useFetch
