@@ -16,7 +16,7 @@
 // This will be populated in `beforeCreate` hook
 import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
 import { provideToast } from 'vue-toastification/composition'
-import { watch } from '@vue/composition-api'
+import { watch, provide } from '@vue/composition-api'
 import useAppConfig from '@core/app-config/useAppConfig'
 
 import { useWindowSize, useCssVar } from '@vueuse/core'
@@ -68,8 +68,23 @@ export default {
     const { isRTL } = $themeConfig.layout
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
   },
-  setup() {
+  setup(props, context) {
     const { skin, skinClasses } = useAppConfig()
+    const confirmDeleteSwal = async (title, text) => {
+      const result = await context.root.$swal({
+        title,
+        text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '¡Sí, eliminalo!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      })
+      return result
+    }
 
     // If skin is dark when initialized => Add class to body
     if (skin.value === 'dark') document.body.classList.add('dark-layout')
@@ -85,6 +100,7 @@ export default {
       timeout: 3000,
       transition: 'Vue-Toastification__fade',
     })
+    provide('confirmDeleteSwal', confirmDeleteSwal)
 
     // Set Window Width in store
     store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
