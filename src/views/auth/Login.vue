@@ -171,7 +171,8 @@ import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import useLogin from './useLogin'
+import useFetch from '@/hooks/useFetch'
+// import useLogin from './useLogin'
 
 export default {
   components: {
@@ -233,19 +234,25 @@ export default {
       const success = await this.$refs.loginValidation.validate()
       if (success && !this.sendLoading) {
         this.sendLoading = true
-        const { handleLogin } = useLogin()
-        const { error } = await handleLogin({
+        // const { handleLogin } = useLogin()
+        // const { error } = await handleLogin({
+        //   usuario: this.user,
+        //   clave: this.password,
+        // })
+        const payload = {
           usuario: this.user,
           clave: this.password,
-        })
-        if (error) {
+        }
+        const { error, data } = await useFetch('/login', payload, 'POST')
+        if (error || !data.usuario) {
           this.sendLoading = false
-          this.$bvToast.toast(error, {
+          this.$bvToast.toast(error || data.mensaje, {
             title: 'Error al iniciar sesión',
             variant: 'danger',
             solid: true,
           })
         } else {
+          this.$store.dispatch('auth/handleLogin', data)
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -258,7 +265,6 @@ export default {
           const lastPath = JSON.parse(localStorage.getItem('lastPath'))
           if (lastPath) this.$router.push(lastPath)
           else this.$router.push('/')
-          this.sendLoading = false
         }
       }
     },

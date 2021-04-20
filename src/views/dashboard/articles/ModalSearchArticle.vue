@@ -74,7 +74,7 @@ import { inject } from '@vue/composition-api'
 import vSelect from 'vue-select'
 
 export default {
-  name: 'ModalArticle',
+  name: 'ModalSearchArticle',
   components: {
     BRow,
     BCol,
