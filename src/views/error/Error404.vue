@@ -1,20 +1,24 @@
 <template>
   <!-- Error page-->
   <div class="misc-wrapper">
-    <b-link class="brand-logo">
-      <vuexy-logo />
+    <b-link class="brand-logo d-flex align-items-center">
+      <!-- <vuexy-logo /> -->
+      <b-img
+        :src="require('@/assets/images/logo/ico-simsac.png')"
+        alt="Simsac Perú"
+      />
       <h2 class="brand-text text-primary ml-1">
-        Vuexy
+        Simsac Perú
       </h2>
     </b-link>
 
     <div class="misc-inner p-2 p-sm-3">
       <div class="w-100 text-center">
         <h2 class="mb-1">
-          Page Not Found 🕵🏻‍♀️
+          Página No Encontrada 🕵🏻‍♀️
         </h2>
         <p class="mb-2">
-          Oops! 😖 The requested URL was not found on this server.
+          Oops! 😖 La página que quiere visitar no se encuentra en el sevidor.
         </p>
 
         <b-button
@@ -22,7 +26,7 @@
           class="mb-2 btn-sm-block"
           :to="{path:'/'}"
         >
-          Back to home
+          Regresar al Inicio
         </b-button>
 
         <!-- image -->
@@ -40,12 +44,12 @@
 <script>
 /* eslint-disable global-require */
 import { BLink, BButton, BImg } from 'bootstrap-vue'
-import VuexyLogo from '@core/layouts/components/Logo.vue'
+// import VuexyLogo from '@core/layouts/components/Logo.vue'
 import store from '@/store/index'
 
 export default {
   components: {
-    VuexyLogo,
+    // VuexyLogo,
     BLink,
     BButton,
     BImg,
