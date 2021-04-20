@@ -29,6 +29,21 @@ const dashboardRoutes = [
       ],
     },
   },
+  {
+    path: '/grupo-unidad',
+    name: 'unitGroup',
+    component: () => import('@/views/dashboard/unitGroup/UnitGroup.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Grupo Unidad',
+      breadcrumb: [
+        {
+          text: 'Grupo Unidad',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default dashboardRoutes
