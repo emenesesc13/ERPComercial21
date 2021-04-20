@@ -10,6 +10,11 @@ export default [
     icon: 'FileIcon',
   },
   {
+    title: 'Características',
+    route: 'features',
+    icon: 'SlidersIcon',
+  },
+  {
     title: 'Mantenimiento',
     route: 'articles',
     icon: 'FileIcon',
