@@ -12,6 +12,7 @@ const useVariables = () => {
     nombre: '',
     accion: null,
     idUsuario: null,
+    loading: false,
   }
 
   const feature = ref({ ...initialFeature })

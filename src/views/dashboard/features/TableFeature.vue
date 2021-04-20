@@ -86,6 +86,13 @@
                   class="text-body align-middle mr-25"
                 />
               </template>
+              <b-dropdown-item @click="changeStatus(props.row)">
+                <feather-icon
+                  :icon="props.row.activo ? 'SlashIcon' : 'CheckCircleIcon'"
+                  class="mr-50"
+                />
+                <span>{{ props.row.activo ? 'Desactivar' : 'Activar' }}</span>
+              </b-dropdown-item>
               <b-dropdown-item @click="openModalForEdit(props.row)">
                 <feather-icon
                   icon="Edit2Icon"
@@ -224,7 +231,7 @@ export default {
       return this.dir
     },
   },
-  setup() {
+  setup(props, context) {
     const feature = inject('feature')
     const features = inject('features')
     const loadFeatures = inject('loadFeatures')
@@ -233,14 +240,14 @@ export default {
     const onPerPageChange = inject('onPerPageChange')
     const onPageChange = inject('onPageChange')
     const messageToast = inject('messageToast')
-    const confirmDeleteSwal = inject('confirmDeleteSwal')
+    const confirmSwal = inject('confirmSwal')
 
     const openModalFeature = () => {
       resetFeature()
     }
 
     const deleteRow = async row => {
-      const { value } = await confirmDeleteSwal('Desea eliminar el artículo?', '¡No podrás revertir esto!')
+      const { value } = await confirmSwal('Desea eliminar la característica?', '¡No podrás revertir esto!', '¡Si, eliminalo!')
       if (value) {
         feature.value._id = row._id
         feature.value.accion = 3
@@ -264,6 +271,30 @@ export default {
     const openModalForEdit = async row => {
       resetFeature()
       feature.value = { ...row }
+      context.root.$bvModal.show('modal-feature')
+    }
+
+    const changeStatus = async row => {
+      const { value } = await confirmSwal(`Desea ${row.activo ? 'desactivar' : 'activar'} la característica?`, '¿Está seguro de hacer esto?', `¡Si, ${row.activo ? 'desactivalo' : 'activalo'}!`)
+      if (value) {
+        feature.value._id = row._id
+        feature.value.accion = 4
+        feature.value.idUsuario = store.state.auth.user._id
+        const { error, data } = await useFetch('/caracteristica', feature.value, 'POST')
+        if (error) {
+          messageToast('danger', 'Error', 'Ocurrio un error')
+        } else {
+          data.forEach(({ id, mensaje }) => {
+            if (id === 0) {
+              messageToast('warning', 'Advertencia', mensaje)
+            } else {
+              messageToast('success', 'Característica', mensaje)
+              loadFeatures()
+            }
+          })
+        }
+        resetFeature()
+      }
     }
 
     return {
@@ -274,6 +305,7 @@ export default {
       openModalFeature,
       deleteRow,
       openModalForEdit,
+      changeStatus,
     }
   },
 }

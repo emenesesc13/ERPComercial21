@@ -70,13 +70,13 @@ export default {
   },
   setup(props, context) {
     const { skin, skinClasses } = useAppConfig()
-    const confirmDeleteSwal = async (title, text) => {
+    const confirmSwal = async (title, text, confirmButtonText) => {
       const result = await context.root.$swal({
         title,
         text,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: '¡Sí, eliminalo!',
+        confirmButtonText,
         customClass: {
           confirmButton: 'btn btn-primary',
           cancelButton: 'btn btn-outline-danger ml-1',
@@ -100,7 +100,7 @@ export default {
       timeout: 3000,
       transition: 'Vue-Toastification__fade',
     })
-    provide('confirmDeleteSwal', confirmDeleteSwal)
+    provide('confirmSwal', confirmSwal)
 
     // Set Window Width in store
     store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
