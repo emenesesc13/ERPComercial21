@@ -20,6 +20,11 @@ export default [
     icon: 'SlidersIcon',
   },
   {
+    title: 'Tipo Producto',
+    route: 'productType',
+    icon: 'SlidersIcon',
+  },
+  {
     title: 'Mantenimiento',
     route: 'articles',
     icon: 'FileIcon',

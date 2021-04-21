@@ -6,20 +6,18 @@
 /* eslint no-underscore-dangle: 0 */
 import { inject, provide } from '@vue/composition-api'
 import TableComponent from '@/components/TableComponent.vue'
-import useFetch from '@/hooks/useFetch'
 
 export default {
-  name: 'TableFeatureDetail',
+  name: 'TableProductType',
   components: {
     TableComponent,
   },
   setup() {
-    const featureDetail = inject('featureDetail')
-    const featuresDetail = inject('featuresDetail')
-    const loadFeaturesDetail = inject('loadFeaturesDetail')
-    const resetFeatureDetail = inject('resetFeatureDetail')
+    const productType = inject('productType')
+    const productTypes = inject('productTypes')
+    const loadProductTypes = inject('loadProductTypes')
+    const resetProductType = inject('resetProductType')
     const serverParams = inject('serverParams')
-    const messageToast = inject('messageToast')
     const columns = [
       {
         label: 'Acción',
@@ -34,12 +32,6 @@ export default {
         tdClass: 'align-middle',
       },
       {
-        label: 'Característica',
-        field: 'nombreCaracteristica',
-        thClass: 'align-middle',
-        tdClass: 'align-middle',
-      },
-      {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
@@ -47,26 +39,22 @@ export default {
       },
     ]
 
-    const idModal = 'modal-feature-detail'
-    const url = '/dcaracteristica'
+    const idModal = 'modal-product-type'
+    const url = '/tipoproducto'
 
     const loadDataForEdit = async (rowSelected, row) => {
-      const { error, data } = await useFetch(`/dcaracteristica/${rowSelected._id}`)
-      if (error) {
-        messageToast('danger', 'Error', 'Ocurrio un Error')
-        return false
-      }
-      row.value = data
+      row.value._id = rowSelected._id
+      row.value.nombre = rowSelected.nombre
       return true
     }
 
     provide('columns', columns)
-    provide('data', featuresDetail)
-    provide('row', featureDetail)
-    provide('resetRow', resetFeatureDetail)
+    provide('data', productTypes)
+    provide('row', productType)
+    provide('resetRow', resetProductType)
     provide('url', url)
     provide('serverParams', serverParams)
-    provide('loadTable', loadFeaturesDetail)
+    provide('loadTable', loadProductTypes)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
   },
