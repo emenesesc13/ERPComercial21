@@ -5,7 +5,7 @@ export default [
     icon: 'HomeIcon',
   },
   {
-    title: 'Almacén',
+    title: 'Productos',
     icon: 'BoxIcon',
     children: [
       {
