@@ -228,9 +228,9 @@ export default {
       context.root.$bvModal.show(idModal)
     }
 
-    const openModalForEdit = async ({ _id }) => {
+    const openModalForEdit = async rowSelected => {
       resetRow()
-      const result = await loadDataForEdit(_id, row)
+      const result = await loadDataForEdit(rowSelected, row)
       if (result) {
         context.root.$bvModal.show(idModal)
       }
@@ -283,25 +283,24 @@ export default {
         const { error: errorGet, data: dataGet } = await useFetch(`${url}/${rowSelected._id}`)
         if (errorGet) {
           messageToast('danger', 'Error', 'Ocurrio un error')
-          return
         } else {
           row.value = { ...dataGet }
           row.value._id = rowSelected._id
           row.value.accion = 3
           row.value.idUsuario = store.state.auth.user._id
-        }
-        const { error: errorPost, data: dataPost } = await useFetch(url, row.value, 'POST')
-        if (errorPost) {
-          messageToast('danger', 'Error', 'Ocurrio un error')
-        } else {
-          dataPost.forEach(({ id, mensaje }) => {
-            if (id === 0) {
-              messageToast('warning', 'Advertencia', mensaje)
-            } else {
-              messageToast('success', 'Exitoso', mensaje)
-              loadTable()
-            }
-          })
+          const { error: errorPost, data: dataPost } = await useFetch(url, row.value, 'POST')
+          if (errorPost) {
+            messageToast('danger', 'Error', 'Ocurrio un error')
+          } else {
+            dataPost.forEach(({ id, mensaje }) => {
+              if (id === 0) {
+                messageToast('warning', 'Advertencia', mensaje)
+              } else {
+                messageToast('success', 'Exitoso', mensaje)
+                loadTable()
+              }
+            })
+          }
         }
       }
     }

@@ -60,6 +60,21 @@ const dashboardRoutes = [
     },
   },
   {
+    path: '/tipo-producto',
+    name: 'productType',
+    component: () => import('@/views/dashboard/productTypes/ProductType.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Tipo Producto',
+      breadcrumb: [
+        {
+          text: 'Tipo Producto',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/grupo-unidad',
     name: 'unitGroup',
     component: () => import('@/views/dashboard/unitGroup/UnitGroup.vue'),

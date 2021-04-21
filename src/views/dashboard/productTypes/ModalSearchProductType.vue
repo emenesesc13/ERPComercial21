@@ -1,12 +1,12 @@
 <template>
   <b-form @submit.prevent="sendSearch">
     <b-modal
-      id="modal-feature-detail-search"
+      id="modal-product-type-search"
       ok-only
       ok-title="Accept"
       modal-class="modal-primary"
       centered
-      title="Buscar Detalle"
+      title="Buscar Tipo Producto"
     >
       <b-row>
 
@@ -75,7 +75,7 @@ import { inject } from '@vue/composition-api'
 import vSelect from 'vue-select'
 
 export default {
-  name: 'ModalSearchFeatureDetail',
+  name: 'ModalSearchProductType',
   components: {
     BRow,
     BCol,
@@ -88,22 +88,22 @@ export default {
   },
   methods: {
     sendSearch() {
-      this.loadFeaturesDetail()
-      this.$bvModal.hide('modal-feature-detail-search')
+      this.loadProductTypes()
+      this.$bvModal.hide('modal-product-type-search')
     },
     clearSearch() {
       this.serverParams.columnFilters.field = ''
       this.serverParams.columnFilters.value = ''
-      this.loadFeaturesDetail()
-      this.$bvModal.hide('modal-feature-detail-search')
+      this.loadProductTypes()
+      this.$bvModal.hide('modal-product-type-search')
     },
   },
   setup() {
-    const loadFeaturesDetail = inject('loadFeaturesDetail')
+    const loadProductTypes = inject('loadProductTypes')
     const serverParams = inject('serverParams')
     const optionsColumnsFilter = inject('optionsColumnsFilter')
     return {
-      loadFeaturesDetail,
+      loadProductTypes,
       serverParams,
       optionsColumnsFilter,
     }
