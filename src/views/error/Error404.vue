@@ -33,6 +33,7 @@
         <b-img
           fluid
           :src="imgUrl"
+          class="img-not-found"
           alt="Error page"
         />
       </div>
@@ -74,4 +75,10 @@ export default {
 
 <style lang="scss">
 @import '@core/scss/vue/pages/page-misc.scss';
+.img-not-found {
+  display: block;
+  max-height: 60vh;
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>

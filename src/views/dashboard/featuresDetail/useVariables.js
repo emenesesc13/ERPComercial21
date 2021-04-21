@@ -10,8 +10,8 @@ const useVariables = () => {
   const initialFeatureDetail = {
     _id: 0,
     nombre: '',
-    idCaracteristica: null,
-    accion: null,
+    idCaracteristica: 0,
+    accion: 0,
     idUsuario: null,
     loading: false,
   }
