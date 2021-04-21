@@ -22,6 +22,7 @@ import useAppConfig from '@core/app-config/useAppConfig'
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
 import store from '@/store'
+import useFetch from './hooks/useFetch'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
 const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
@@ -70,6 +71,13 @@ export default {
   },
   setup(props, context) {
     const { skin, skinClasses } = useAppConfig()
+    const messageToast = (variant, title, message) => {
+      context.root.$bvToast.toast(message, {
+        title,
+        variant,
+        solid: true,
+      })
+    }
     const confirmSwal = async (title, text, confirmButtonText) => {
       const result = await context.root.$swal({
         title,
@@ -84,6 +92,24 @@ export default {
         buttonsStyling: false,
       })
       return result
+    }
+    const loadComboBoxes = async (combos, nameCombosForLoad = [], url, messageError) => {
+      nameCombosForLoad.forEach(combo => {
+        combos[combo].loading = true
+        combos[combo].disabled = true
+      })
+      const { data, error } = await useFetch(url)
+      if (error) {
+        messageToast('danger', 'Error', messageError)
+      } else {
+        nameCombosForLoad.forEach(combo => {
+          combos[combo].data = data
+        })
+      }
+      nameCombosForLoad.forEach(combo => {
+        combos[combo].loading = false
+        combos[combo].disabled = false
+      })
     }
 
     // If skin is dark when initialized => Add class to body
@@ -101,6 +127,8 @@ export default {
       transition: 'Vue-Toastification__fade',
     })
     provide('confirmSwal', confirmSwal)
+    provide('messageToast', messageToast)
+    provide('loadComboBoxes', loadComboBoxes)
 
     // Set Window Width in store
     store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)

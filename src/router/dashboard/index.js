@@ -45,6 +45,21 @@ const dashboardRoutes = [
     },
   },
   {
+    path: '/detalle-caracteristica',
+    name: 'featureDetail',
+    component: () => import('@/views/dashboard/featuresDetail/FeatureDetail.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Detalle Característica',
+      breadcrumb: [
+        {
+          text: 'Detalle Característica',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/grupo-unidad',
     name: 'unitGroup',
     component: () => import('@/views/dashboard/unitGroup/UnitGroup.vue'),
