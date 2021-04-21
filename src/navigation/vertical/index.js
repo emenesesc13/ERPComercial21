@@ -15,6 +15,11 @@ export default [
     icon: 'SlidersIcon',
   },
   {
+    title: 'Detalle Característica',
+    route: 'featureDetail',
+    icon: 'SlidersIcon',
+  },
+  {
     title: 'Mantenimiento',
     route: 'articles',
     icon: 'FileIcon',
