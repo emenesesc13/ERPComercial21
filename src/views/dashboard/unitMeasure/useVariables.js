@@ -1,25 +1,38 @@
 import { ref } from '@vue/composition-api'
 
 const useVariables = () => {
-  const features = ref({
+  const unitsMeasure = ref({
     loading: false,
     data: [],
     totalRecords: 0,
   })
 
-  const initialFeature = {
+  const initialUnitMeasure = {
     _id: 0,
     nombre: '',
+    idGrupoUnidad: 0,
+    idUnidadSunat: 0,
     accion: 0,
     idUsuario: null,
     loading: false,
   }
 
-  const feature = ref({ ...initialFeature })
+  const unitMeasure = ref({ ...initialUnitMeasure })
 
-  const resetFeature = () => {
-    feature.value = { ...initialFeature }
+  const resetUnitMeasure = () => {
+    unitMeasure.value = { ...initialUnitMeasure }
   }
+
+  const initialStateCombo = {
+    disabled: true,
+    loading: false,
+    data: [],
+  }
+
+  const combos = ref({
+    unitGroup: { ...initialStateCombo },
+    unitSunat: { ...initialStateCombo },
+  })
 
   const optionsColumnsFilter = [
     {
@@ -38,9 +51,10 @@ const useVariables = () => {
   })
 
   return {
-    features,
-    feature,
-    resetFeature,
+    unitsMeasure,
+    unitMeasure,
+    resetUnitMeasure,
+    combos,
     optionsColumnsFilter,
     serverParams,
   }

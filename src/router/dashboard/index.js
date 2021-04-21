@@ -75,6 +75,21 @@ const dashboardRoutes = [
     },
   },
   {
+    path: '/unidad-medida',
+    name: 'unitMeasure',
+    component: () => import('@/views/dashboard/unitMeasure/UnitMeasure.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Unidad Medida',
+      breadcrumb: [
+        {
+          text: 'Unidad Medida',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/grupo-unidad',
     name: 'unitGroup',
     component: () => import('@/views/dashboard/unitGroup/UnitGroup.vue'),

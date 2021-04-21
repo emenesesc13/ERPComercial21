@@ -10,7 +10,7 @@ const useVariables = () => {
   const initialProductType = {
     _id: 0,
     nombre: '',
-    accion: null,
+    accion: 0,
     idUsuario: null,
     loading: false,
   }

@@ -25,6 +25,11 @@ export default [
     icon: 'SlidersIcon',
   },
   {
+    title: 'Unidad Medida',
+    route: 'unitMeasure',
+    icon: 'SlidersIcon',
+  },
+  {
     title: 'Mantenimiento',
     route: 'articles',
     icon: 'FileIcon',

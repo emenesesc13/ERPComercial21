@@ -18,13 +18,13 @@ import ModalFeatureDetail from './ModalFeatureDetail.vue'
 import ModalSearchFeatureDetail from './ModalSearchFeatureDetail.vue'
 
 export default {
+  name: 'FeatureDetail',
   components: {
     BCard,
     TableFeatureDetail,
     ModalFeatureDetail,
     ModalSearchFeatureDetail,
   },
-  name: 'FeatureDetail',
   setup() {
     const {
       featuresDetail, featureDetail, resetFeatureDetail, optionsColumnsFilter, serverParams, combos,
