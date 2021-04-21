@@ -1,8 +1,8 @@
-const storageRoutes = [
+const productsRoutes = [
   {
     path: '/articulos',
     name: 'articles',
-    component: () => import('@/views/dashboard/storage/articles/Articles.vue'),
+    component: () => import('@/views/dashboard/products/articles/Articles.vue'),
     meta: {
       auth: true,
       pageTitle: 'Articulos',
@@ -17,7 +17,7 @@ const storageRoutes = [
   {
     path: '/caracteristicas',
     name: 'features',
-    component: () => import('@/views/dashboard/storage/features/Feature.vue'),
+    component: () => import('@/views/dashboard/products/features/Feature.vue'),
     meta: {
       auth: true,
       pageTitle: 'Características',
@@ -32,7 +32,7 @@ const storageRoutes = [
   {
     path: '/detalle-caracteristica',
     name: 'featureDetail',
-    component: () => import('@/views/dashboard/storage/featuresDetail/FeatureDetail.vue'),
+    component: () => import('@/views/dashboard/products/featuresDetail/FeatureDetail.vue'),
     meta: {
       auth: true,
       pageTitle: 'Detalle Característica',
@@ -47,7 +47,7 @@ const storageRoutes = [
   {
     path: '/tipo-producto',
     name: 'productType',
-    component: () => import('@/views/dashboard/storage/productTypes/ProductType.vue'),
+    component: () => import('@/views/dashboard/products/productTypes/ProductType.vue'),
     meta: {
       auth: true,
       pageTitle: 'Tipo Producto',
@@ -62,7 +62,7 @@ const storageRoutes = [
   {
     path: '/unidad-medida',
     name: 'unitMeasure',
-    component: () => import('@/views/dashboard/storage/unitMeasure/UnitMeasure.vue'),
+    component: () => import('@/views/dashboard/products/unitMeasure/UnitMeasure.vue'),
     meta: {
       auth: true,
       pageTitle: 'Unidad Medida',
@@ -77,7 +77,7 @@ const storageRoutes = [
   {
     path: '/grupo-unidad',
     name: 'unitGroup',
-    component: () => import('@/views/dashboard/storage/unitGroup/UnitGroup.vue'),
+    component: () => import('@/views/dashboard/products/unitGroup/UnitGroup.vue'),
     meta: {
       auth: true,
       pageTitle: 'Grupo Unidad',
@@ -91,4 +91,4 @@ const storageRoutes = [
   },
 ]
 
-export default storageRoutes
+export default productsRoutes

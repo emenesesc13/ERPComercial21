@@ -8,3 +8,8 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .vgt-responsive {
   min-height: 200px !important;
 }
+
+[dir=ltr] .vgt-table thead th,
+[dir] .vgt-table.condensed td, [dir] .vgt-table.condensed th.vgt-row-header {
+  white-space: nowrap;
+}
