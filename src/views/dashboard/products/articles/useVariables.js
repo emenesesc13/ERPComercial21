@@ -36,25 +36,24 @@ const useVariables = () => {
     loading: false,
   }
 
-  
   const article = ref({ ...initialArticle })
-  
+
   const resetArticle = () => {
     article.value = { ...initialArticle }
   }
 
   const articleFeature = ref({ ...initialArticleFeature })
-  
+
   const resetArticleFeature = () => {
     articleFeature.value = { ...initialArticleFeature }
   }
-  
+
   const initialStateCombo = {
     disabled: true,
     loading: false,
     data: [],
   }
-  
+
   const combos = ref({
     productTypes: { ...initialStateCombo },
     unitGroup: { ...initialStateCombo },
@@ -69,7 +68,7 @@ const useVariables = () => {
       combos.value[name] = { ...initialStateCombo }
     })
   }
-  
+
   const featureSelected = ref(null)
   const valueSelected = ref(null)
 
@@ -120,30 +119,30 @@ const useVariables = () => {
 export default useVariables
 
 // const initialArticle = {
-  //   id: 0,
-  //   sku: '',
-  //   productType: null,
-  //   articleName: '',
-  //   stock: false,
-  //   service: false,
-  //   unitGroup: null,
-  //   inventoryUnit: null,
-  //   unitSale: null,
-  //   purchasePrice: null,
-  //   salePrice: null,
-  //   minimumSalePrice: null,
-  //   minimumStock: null,
-  //   maximumStock: null,
-  //   features: [],
-  // }
-  
-  // const initialArticle = {
-    //   _id: 0,
-    //   sku: '',
-    //   nombre: '',
-    //   idTipoProducto: null,
-    //   idGrupoUnidad: null,
-    //   idUnidadInventario: null,
+//   id: 0,
+//   sku: '',
+//   productType: null,
+//   articleName: '',
+//   stock: false,
+//   service: false,
+//   unitGroup: null,
+//   inventoryUnit: null,
+//   unitSale: null,
+//   purchasePrice: null,
+//   salePrice: null,
+//   minimumSalePrice: null,
+//   minimumStock: null,
+//   maximumStock: null,
+//   features: [],
+// }
+
+// const initialArticle = {
+//   _id: 0,
+//   sku: '',
+//   nombre: '',
+//   idTipoProducto: null,
+//   idGrupoUnidad: null,
+//   idUnidadInventario: null,
 //   idUnidadVenta: null,
 //   precioCompra: null,
 //   precioVenta: null,
