@@ -63,7 +63,10 @@
         slot-scope="props"
       >
 
-        <slot name="custom" v-bind:props="props" />
+        <slot
+          name="custom"
+          :props="props"
+        />
         <!-- Column: Status -->
         <span v-if="props.column.field === 'activo'">
           <b-badge :variant="props.row.activo ? 'light-success' : 'light-danger'">
