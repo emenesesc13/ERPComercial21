@@ -34,4 +34,14 @@ export default [
       },
     ],
   },
+  {
+    title: 'Almacen',
+    icon: 'ClipboardIcon',
+    children: [
+      {
+        title: 'Tipo Almacen',
+        route: 'storageType',
+      },
+    ],
+  },
 ]
