@@ -718,7 +718,6 @@ export default {
     const deleteRow = async ({ _id }) => {
       const { value } = await confirmSwal('Desea eliminar esta característica?', '¡No podrás revertir esto!', '¡Sí, eliminalo!')
       if (value) {
-        console.log(_id)
         featureArticle.value._id = _id
         featureArticle.value.accion = 3
         featureArticle.value.idUsuario = store.state.auth.user._id
