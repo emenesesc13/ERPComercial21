@@ -62,7 +62,7 @@
             <b-button
               type="submit"
               variant="primary"
-              @click="handleSubmit(sendFeature)"
+              @click="handleSubmit(sendForm)"
             >
               Guardar
             </b-button>
@@ -118,7 +118,7 @@ export default {
     const messageToast = inject('messageToast')
     const loadFeatures = inject('loadFeatures')
 
-    const sendFeature = async () => {
+    const sendForm = async () => {
       feature.value.loading = true
       feature.value.accion = feature.value._id ? 2 : 1
       feature.value.idUsuario = store.state.auth.user._id
@@ -147,7 +147,7 @@ export default {
 
     return {
       feature,
-      sendFeature,
+      sendForm,
       closeForm,
     }
   },
