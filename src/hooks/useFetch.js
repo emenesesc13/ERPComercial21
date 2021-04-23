@@ -15,7 +15,8 @@ const useFetch = async (url = '/', params = {}, method = 'GET', expectedStatus =
     if (response.status !== expectedStatus) throw new Error(response)
     info.data = response.data
   } catch (error) {
-    info.error = error
+    if (error?.response?.status === 401) info.error = null
+    else info.error = error
   }
   return info
 }
