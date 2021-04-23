@@ -26,6 +26,12 @@ export default {
         thClass: 'align-middle',
       },
       {
+        label: 'Id',
+        field: '_id',
+        thClass: 'align-middle',
+        tdClass: 'align-middle',
+      },
+      {
         label: 'Nombre',
         field: 'nombre',
         thClass: 'align-middle',
