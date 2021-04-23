@@ -27,7 +27,7 @@ export default {
   },
   setup() {
     const {
-      articles, article, resetArticle, articleFeature, resetArticleFeature, serverParams, combos, resetCombos, featureSelected, valueSelected, optionsColumnsFilter,
+      articles, article, resetArticle, selectedStockOrService, resetSelectedStockOrService, featuresArticle, resetFeaturesArticle, featureArticle, resetFeatureArticle, serverParams, combos, resetCombos, optionsColumnsFilter,
     } = useVariables()
 
     const messageToast = inject('messageToast')
@@ -52,6 +52,18 @@ export default {
       articles.value.loading = false
     }
 
+    const loadFeaturesArticleByArticleId = async articleId => {
+      featuresArticle.value.loading = true
+      const url = `/ACaracteristica/?_id=0&tabla=ARTICULOCARACTERISTICA&campo=a.idarticulo&indice=${articleId}`
+      const { data, error } = await useFetch(url)
+      if (error) {
+        messageToast('danger', 'Error', 'Error al momento de cargar los características')
+      } else {
+        featuresArticle.value.data = data
+      }
+      featuresArticle.value.loading = false
+    }
+
     onMounted(() => {
       loadArticles()
       loadComboBoxes(combos.value, ['productTypes'], '/combo/tipoproducto/1', 'Error al momento de cargar los Tipos de Producto')
@@ -63,14 +75,17 @@ export default {
     provide('loadArticles', loadArticles)
     provide('article', article)
     provide('resetArticle', resetArticle)
-    provide('articleFeature', articleFeature)
-    provide('resetArticleFeature', resetArticleFeature)
+    provide('featuresArticle', featuresArticle)
+    provide('resetFeaturesArticle', resetFeaturesArticle)
+    provide('loadFeaturesArticleByArticleId', loadFeaturesArticleByArticleId)
+    provide('featureArticle', featureArticle)
+    provide('resetFeatureArticle', resetFeatureArticle)
     provide('optionsColumnsFilter', optionsColumnsFilter)
     provide('serverParams', serverParams)
     provide('combos', combos)
     provide('resetCombos', resetCombos)
-    provide('featureSelected', featureSelected)
-    provide('valueSelected', valueSelected)
+    provide('selectedStockOrService', selectedStockOrService)
+    provide('resetSelectedStockOrService', resetSelectedStockOrService)
   },
 }
 </script>

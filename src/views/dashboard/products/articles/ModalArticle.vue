@@ -53,7 +53,7 @@
               >
                 <v-select
                   id="productType"
-                  v-model="article.productType"
+                  v-model="article.idTipoProducto"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :reduce="productType => productType._id"
                   label="nombre"
@@ -86,7 +86,7 @@
               >
                 <b-form-input
                   id="articleName"
-                  v-model="article.articleName"
+                  v-model="article.nombre"
                   :state="errors.length > 0 ? false:null"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
@@ -105,12 +105,19 @@
               label-for="stock"
               class="form-group-checkbox"
             >
-              <b-form-checkbox
+              <!-- <b-form-checkbox
                 id="stock"
-                v-model.number="article.stock"
+                v-model.number="article.flgStock"
               >
                 Stock
-              </b-form-checkbox>
+              </b-form-checkbox> -->
+              <b-form-radio
+                v-model="selectedStockOrService"
+                name="some-radios"
+                value="stock"
+              >
+                Stock
+              </b-form-radio>
             </b-form-group>
           </b-col>
 
@@ -125,12 +132,20 @@
               label-for="service"
               class="form-group-checkbox"
             >
-              <b-form-checkbox
+              <!-- <b-form-checkbox
                 id="service"
-                v-model="article.service"
+                v-model="article.flgServicio"
               >
                 Servicio
-              </b-form-checkbox>
+              </b-form-checkbox> -->
+              <b-form-radio
+                v-model="selectedStockOrService"
+                name="some-radios"
+                value="service"
+                :disabled="featuresArticle.data.length ? true : false"
+              >
+                Servicio
+              </b-form-radio>
             </b-form-group>
           </b-col>
 
@@ -152,7 +167,7 @@
               >
                 <v-select
                   id="unitGroup"
-                  v-model="article.unitGroup"
+                  v-model="article.idGrupoUnidad"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :reduce="unit => unit._id"
                   label="nombre"
@@ -189,7 +204,7 @@
               >
                 <v-select
                   id="inventoryUnit"
-                  v-model="article.inventoryUnit"
+                  v-model="article.idUnidadInventario"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :reduce="inventoryUnit => inventoryUnit._id"
                   label="nombre"
@@ -224,7 +239,7 @@
               >
                 <v-select
                   id="unitSale"
-                  v-model="article.unitSale"
+                  v-model="article.idUnidadVenta"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :reduce="unitSale => unitSale._id"
                   label="nombre"
@@ -258,7 +273,7 @@
               >
                 <b-form-input
                   id="purchasePrice"
-                  v-model.number="article.purchasePrice"
+                  v-model.number="article.precioCompra"
                   type="number"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -284,7 +299,7 @@
               >
                 <b-form-input
                   id="salePrice"
-                  v-model.number="article.salePrice"
+                  v-model.number="article.precioVenta"
                   type="number"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -310,7 +325,7 @@
               >
                 <b-form-input
                   id="minimumSalePrice"
-                  v-model.number="article.minimumSalePrice"
+                  v-model.number="article.precioMinimoVenta"
                   type="number"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -337,7 +352,7 @@
               >
                 <b-form-input
                   id="minimumStock"
-                  v-model.number="article.minimumStock"
+                  v-model.number="article.stockMinimo"
                   type="number"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -363,7 +378,7 @@
               >
                 <b-form-input
                   id="maximumStock"
-                  v-model.number="article.maximumStock"
+                  v-model.number="article.stockMaximo"
                   type="number"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -376,7 +391,7 @@
 
         <!-- Features Article -->
 
-        <b-row v-if="!article.service">
+        <b-row v-if="!article.flgServicio">
           <b-col
             cols="12"
             class="mt-3"
@@ -398,7 +413,8 @@
             >
               <v-select
                 id="feature"
-                v-model="featureSelected"
+                v-model="featureArticle.idCaracteristica"
+                :reduce="feature => feature._id"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 label="nombre"
                 :options="combos.features.data"
@@ -427,7 +443,8 @@
             >
               <v-select
                 id="valueFeature"
-                v-model="valueSelected"
+                v-model="featureArticle.idDtlCaracteristica"
+                :reduce="detail => detail._id"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 label="nombre"
                 :options="combos.valuesByFeature.data"
@@ -453,7 +470,7 @@
               variant="primary"
               class="btn-icon"
               block
-              @click="handleSubmit(addFeature)"
+              @click="handleSubmit(addFeatureArticle)"
             >
               <feather-icon
                 icon="PlusCircleIcon"
@@ -468,7 +485,7 @@
           >
             <vue-good-table
               :columns="columns"
-              :rows="article.features"
+              :rows="featuresArticle.data"
               max-height="300px"
               style-class="vgt-table condensed table-feature"
               :rtl="direction"
@@ -487,7 +504,7 @@
                   <b-button
                     variant="danger"
                     size="sm"
-                    @click="deleteRow(props.row.id)"
+                    @click="deleteRow(props.row)"
                   >
                     Remover
                   </b-button>
@@ -506,14 +523,22 @@
           >
             Cerrar
           </b-button>
-          <b-button
-            v-if="article.id || article.service"
-            type="submit"
-            variant="primary"
-            @click="handleSubmit(sendArticle)"
+          <b-overlay
+            :show="article.loading"
+            variant="transparent"
+            :opacity="0.85"
+            blur="2px"
+            rounded="sm"
           >
-            Guardar
-          </b-button>
+            <b-button
+              v-if="article._id || article.flgServicio"
+              type="submit"
+              variant="primary"
+              @click="handleSubmit(updateArticle)"
+            >
+              Guardar
+            </b-button>
+          </b-overlay>
         </template>
 
       </b-modal>
@@ -525,12 +550,12 @@
 /* eslint no-underscore-dangle: 0 */
 import {
   BRow,
-  BCol, BForm, BFormGroup, BFormInput, BModal, BFormCheckbox, BButton,
+  BCol, BForm, BFormGroup, BFormInput, BModal, BFormRadio, BButton, BOverlay,
 } from 'bootstrap-vue'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
-import { ref, inject } from '@vue/composition-api'
+import { inject, watch } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store'
@@ -545,8 +570,9 @@ export default {
     BFormGroup,
     BFormInput,
     BModal,
-    BFormCheckbox,
+    BFormRadio,
     BButton,
+    BOverlay,
     ValidationObserver,
     ValidationProvider,
     vSelect,
@@ -566,11 +592,11 @@ export default {
         },
         {
           label: 'Característica',
-          field: 'feature',
+          field: 'nombreCaracteristica',
         },
         {
           label: 'Valor',
-          field: 'value',
+          field: 'nombreDCaracteristica',
         },
       ],
     }
@@ -595,110 +621,84 @@ export default {
   setup(props, context) {
     const article = inject('article')
     const resetArticle = inject('resetArticle')
-    const tabFeatureDisabled = ref(true)
+    const selectedStockOrService = inject('selectedStockOrService')
+    const featureArticle = inject('featureArticle')
+    const featuresArticle = inject('featuresArticle')
+    const loadFeaturesArticleByArticleId = inject('loadFeaturesArticleByArticleId')
     const combos = inject('combos')
-    const loadCombos = inject('loadCombos')
+    const loadComboBoxes = inject('loadComboBoxes')
     const messageToast = inject('messageToast')
+    const confirmSwal = inject('confirmSwal')
     const loadArticles = inject('loadArticles')
-    const featureSelected = inject('featureSelected')
-    const valueSelected = inject('valueSelected')
+
+    watch(selectedStockOrService, newValue => {
+      if (newValue === 'stock') {
+        article.value.flgStock = 1
+        article.value.flgServicio = 0
+      } else {
+        article.value.flgStock = 0
+        article.value.flgServicio = 1
+      }
+    })
 
     const selectedUnitGroup = async ({ _id }) => {
-      loadCombos(['inventoryUnit', 'unitSale'], `/combo/grupounidad/${_id}`, 'Error al momento de cargar las Unidades por Grupo')
-      article.value.inventoryUnit = null
-      article.value.unitSale = null
+      loadComboBoxes(combos.value, ['inventoryUnit', 'unitSale'], `/combo/grupounidad/${_id}`, 'Error al momento de cargar las Unidades por Grupo')
+      article.value.idUnidadInventario = 0
+      article.value.idUnidadVenta = 0
     }
 
     const selectedFeature = async ({ _id }) => {
-      loadCombos(['valuesByFeature'], `/comboadv/dcaracteristica/1/${_id}`, 'Error al momento de cargar los Valores por Características')
-      valueSelected.value = null
+      loadComboBoxes(combos.value, ['valuesByFeature'], `/comboadv/dcaracteristica/1/${_id}`, 'Error al momento de cargar los Valores por Características')
+      featureArticle.value.idDtlCaracteristica = 0
     }
 
     const sendArticle = async () => {
-      const articleToSave = {
-        _id: article.value.id,
-        sku: article.value.sku,
-        nombre: article.value.articleName,
-        idTipoProducto: article.value.productType,
-        idGrupoUnidad: article.value.unitGroup,
-        idUnidadInventario: article.value.inventoryUnit,
-        idUnidadVenta: article.value.unitSale,
-        precioCompra: article.value.purchasePrice,
-        precioVenta: article.value.salePrice,
-        precioMinimoVenta: article.value.minimumSalePrice,
-        stockMinimo: article.value.minimumStock,
-        stockMaximo: article.value.maximumStock,
-        flgStock: article.value.stock ? 1 : 0,
-        flgServicio: article.value.service ? 1 : 0,
-        accion: article.value.id ? 2 : 1,
-        idUsuario: store.state.auth.user._id,
-      }
-      const { data, error } = await useFetch('/articulos', articleToSave, 'POST')
+      let result = false
+      article.value.loading = true
+      // article.value.flgStock = article.value.flgStock ? 1 : 0
+      // article.value.flgServicio = article.value.flgServicio ? 1 : 0
+      article.value.accion = article.value._id ? 2 : 1
+      article.value.idUsuario = store.state.auth.user._id
+      const { data, error } = await useFetch('/articulos', article.value, 'POST')
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un error')
+        result = false
       } else {
         data.forEach(({ id, mensaje }) => {
           if (id === 0) {
             messageToast('warning', 'Advertencia', mensaje)
+            result = false
           } else {
-            article.value.id = id
-            messageToast('success', 'Característica', mensaje)
-            context.root.$bvModal.hide('modal-article')
-            loadArticles()
+            article.value._id = id
+            messageToast('success', 'Articulo', mensaje)
+            result = true
           }
         })
       }
+      return result
     }
 
-    const addFeature = async () => {
-      if (!article.value.id) {
-        const articleToSave = {
-          _id: article.value.id,
-          sku: article.value.sku,
-          nombre: article.value.articleName,
-          idTipoProducto: article.value.productType,
-          idGrupoUnidad: article.value.unitGroup,
-          idUnidadInventario: article.value.inventoryUnit,
-          idUnidadVenta: article.value.unitSale,
-          precioCompra: article.value.purchasePrice,
-          precioVenta: article.value.salePrice,
-          precioMinimoVenta: article.value.minimumSalePrice,
-          stockMinimo: article.value.minimumStock,
-          stockMaximo: article.value.maximumStock,
-          flgStock: article.value.stock ? 1 : 0,
-          flgServicio: article.value.service ? 1 : 0,
-          accion: article.value.id ? 2 : 1,
-          idUsuario: store.state.auth.user._id,
-        }
-        const { error, data } = await useFetch('/articulos', articleToSave, 'POST')
-        if (error) {
-          messageToast('danger', 'Error', 'Ocurrio un error')
-        } else {
-          data.forEach(({ id, mensaje }) => {
-            if (id === 0) {
-              messageToast('warning', 'Advertencia', mensaje)
-            } else {
-              article.value.id = id
-              messageToast('success', 'Característica', mensaje)
-            }
-          })
-        }
+    const updateArticle = async () => {
+      const responseArticle = await sendArticle()
+      if (responseArticle) {
+        context.root.$bvModal.hide('modal-article')
+        loadArticles()
       }
+    }
 
-      if (article.value.id) {
-        if (!featureSelected.value || !valueSelected.value) {
+    const addFeatureArticle = async () => {
+      if (!article.value._id) {
+        await sendArticle()
+      }
+      if (article.value._id) {
+        if (!featureArticle.value.idCaracteristica || !featureArticle.value.idDtlCaracteristica) {
           messageToast('warning', 'Característica', 'Debe seleccionar una característica y su valor')
         } else {
-          const { _id: featureId, nombre: feature } = featureSelected.value
-          const { _id: valueId, nombre: value } = valueSelected.value
-          const featureArticleToSave = {
-            idDtlCaracteristica: valueId,
-            idArticulo: article.value.id,
-            idCaracteristica: featureId,
-            accion: 1,
-            idUsuario: store.state.auth.user._id,
-          }
-          const { error, data } = await useFetch('/ACaracteristica', featureArticleToSave, 'POST')
+          featureArticle.value.idArticulo = article.value._id
+          featureArticle.value.loading = true
+          featureArticle.value.accion = 1
+          featureArticle.value.idUsuario = store.state.auth.user._id
+          const { error, data } = await useFetch('/ACaracteristica', featureArticle.value, 'POST')
           if (error) {
             messageToast('danger', 'Error', 'Ocurrio un error')
           } else {
@@ -707,9 +707,7 @@ export default {
                 messageToast('warning', 'Advertencia', mensaje)
               } else {
                 messageToast('success', 'Característica', mensaje)
-                article.value.features.push({ id, feature, value })
-                featureSelected.value = null
-                valueSelected.value = null
+                loadFeaturesArticleByArticleId(article.value._id)
               }
             })
           }
@@ -717,26 +715,14 @@ export default {
       }
     }
 
-    const deleteRow = async idRow => {
-      const result = await context.root.$swal({
-        title: 'Desea eliminar esta característica?',
-        text: '¡No podrás revertir esto!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '¡Sí, eliminalo!',
-        customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1',
-        },
-        buttonsStyling: false,
-      })
-      if (result.value) {
-        const featureArticleToDelete = {
-          _id: idRow,
-          accion: 3,
-          idUsuario: store.state.auth.user._id,
-        }
-        const { error, data } = await useFetch('/ACaracteristica', featureArticleToDelete, 'POST')
+    const deleteRow = async ({ _id }) => {
+      const { value } = await confirmSwal('Desea eliminar esta característica?', '¡No podrás revertir esto!', '¡Sí, eliminalo!')
+      if (value) {
+        console.log(_id)
+        featureArticle.value._id = _id
+        featureArticle.value.accion = 3
+        featureArticle.value.idUsuario = store.state.auth.user._id
+        const { error, data } = await useFetch('/ACaracteristica', featureArticle.value, 'POST')
         if (error) {
           messageToast('danger', 'Error', 'Ocurrio un error')
         } else {
@@ -745,7 +731,7 @@ export default {
               messageToast('warning', 'Advertencia', mensaje)
             } else {
               messageToast('success', 'Característica', mensaje)
-              article.value.features = article.value.features.filter(feature => feature.id !== idRow)
+              loadFeaturesArticleByArticleId(article.value._id)
             }
           })
         }
@@ -759,14 +745,14 @@ export default {
     return {
       article,
       resetArticle,
-      tabFeatureDisabled,
+      selectedStockOrService,
       combos,
       selectedUnitGroup,
       selectedFeature,
-      featureSelected,
-      valueSelected,
-      sendArticle,
-      addFeature,
+      updateArticle,
+      featureArticle,
+      featuresArticle,
+      addFeatureArticle,
       deleteRow,
       closeForm,
     }

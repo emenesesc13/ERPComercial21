@@ -7,30 +7,32 @@ const useVariables = () => {
     totalRecords: 0,
   })
 
+  const initialFeaturesArticle = {
+    loading: false,
+    data: [],
+  }
+
+  const featuresArticle = ref({ ...initialFeaturesArticle })
+
+  const resetFeaturesArticle = () => {
+    featuresArticle.value = { ...initialFeaturesArticle }
+  }
+
   const initialArticle = {
-    _id: 85,
+    _id: 0,
     nombre: '',
     idGrupoUnidad: 15,
     idUnidadInventario: 11,
     idUnidadVenta: 11,
     idTipoProducto: 0,
     sku: '',
-    precioCompra: null,
-    precioVenta: null,
-    precioMinimoVenta: null,
-    stockMinimo: null,
-    stockMaximo: null,
-    flgStock: false,
-    flgServicio: false,
-    accion: 0,
-    idUsuario: null,
-    loading: false,
-  }
-
-  const initialArticleFeature = {
-    _id: 0,
-    nombre: '',
-    idCaracteristica: 0,
+    precioCompra: 0,
+    precioVenta: 0,
+    precioMinimoVenta: 0,
+    stockMinimo: 0,
+    stockMaximo: 0,
+    flgStock: 1,
+    flgServicio: 0,
     accion: 0,
     idUsuario: null,
     loading: false,
@@ -42,10 +44,26 @@ const useVariables = () => {
     article.value = { ...initialArticle }
   }
 
-  const articleFeature = ref({ ...initialArticleFeature })
+  const selectedStockOrService = ref('stock')
 
-  const resetArticleFeature = () => {
-    articleFeature.value = { ...initialArticleFeature }
+  const resetSelectedStockOrService = () => {
+    selectedStockOrService.value = 'stock'
+  }
+
+  const initialFeatureArticle = {
+    _id: 0,
+    idDtlCaracteristica: 0,
+    idArticulo: 0,
+    idCaracteristica: 0,
+    accion: 0,
+    idUsuario: null,
+    loading: false,
+  }
+
+  const featureArticle = ref({ ...initialFeatureArticle })
+
+  const resetFeatureArticle = () => {
+    featureArticle.value = { ...initialFeatureArticle }
   }
 
   const initialStateCombo = {
@@ -69,10 +87,11 @@ const useVariables = () => {
     })
   }
 
-  const featureSelected = ref(null)
-  const valueSelected = ref(null)
-
   const optionsColumnsFilter = [
+    {
+      title: 'Id',
+      field: 'a._id',
+    },
     {
       title: 'Nombre',
       field: 'a.nombre',
@@ -104,59 +123,18 @@ const useVariables = () => {
     articles,
     article,
     resetArticle,
-    articleFeature,
-    resetArticleFeature,
+    selectedStockOrService,
+    resetSelectedStockOrService,
+    featuresArticle,
+    resetFeaturesArticle,
+    featureArticle,
+    resetFeatureArticle,
     initialStateCombo,
     combos,
     resetCombos,
-    featureSelected,
-    valueSelected,
     serverParams,
     optionsColumnsFilter,
   }
 }
 
 export default useVariables
-
-// const initialArticle = {
-//   id: 0,
-//   sku: '',
-//   productType: null,
-//   articleName: '',
-//   stock: false,
-//   service: false,
-//   unitGroup: null,
-//   inventoryUnit: null,
-//   unitSale: null,
-//   purchasePrice: null,
-//   salePrice: null,
-//   minimumSalePrice: null,
-//   minimumStock: null,
-//   maximumStock: null,
-//   features: [],
-// }
-
-// const initialArticle = {
-//   _id: 0,
-//   sku: '',
-//   nombre: '',
-//   idTipoProducto: null,
-//   idGrupoUnidad: null,
-//   idUnidadInventario: null,
-//   idUnidadVenta: null,
-//   precioCompra: null,
-//   precioVenta: null,
-//   precioMinimoVenta: null,
-//   stockMinimo: null,
-//   stockMaxim: null,
-//   flgStock: false,
-//   flgServicio: false,
-//   accion: null,
-//   idUsuario: null,
-//   features: [],
-// }
-// const defaultSelectedUnitGroup = {
-//   unitGroup: 15,
-//   inventoryUnit: 11,
-//   unitSale: 11,
-// }

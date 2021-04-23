@@ -37,8 +37,8 @@ export default {
       unitsMeasure.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/unidadmedida/?_id=0&tabla=unidad&inicio=${page}&tope=${perPage}`
-      if (field) url += `&campo=${field}&filtro=${value}`
+      let url = `/unidadmedida/?_id=0&tabla=unidad&pinicio=${page}&pfin=${perPage}`
+      if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los detalle característica')
