@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.prevent="searchArticles">
     <b-modal
-      id="modal-search-article"
+      id="modal-article-search"
       ok-only
       ok-title="Accept"
       modal-class="modal-primary"
@@ -92,13 +92,13 @@ export default {
   methods: {
     searchArticles() {
       this.loadArticles()
-      this.$bvModal.hide('modal-search-article')
+      this.$bvModal.hide('modal-article-search')
     },
     clearSearch() {
       this.serverParams.columnFilters.field = ''
       this.serverParams.columnFilters.value = ''
       this.loadArticles()
-      this.$bvModal.hide('modal-search-article')
+      this.$bvModal.hide('modal-article-search')
     },
   },
   setup() {

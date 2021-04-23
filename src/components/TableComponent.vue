@@ -63,6 +63,10 @@
         slot-scope="props"
       >
 
+        <slot
+          name="custom"
+          :props="props"
+        />
         <!-- Column: Status -->
         <span v-if="props.column.field === 'activo'">
           <b-badge :variant="props.row.activo ? 'light-success' : 'light-danger'">
@@ -110,10 +114,10 @@
           </span>
         </span>
 
-        <!-- Column: Common -->
+        <!-- Column: Common
         <span v-else>
           {{ props.formattedRow[props.column.field] }}
-        </span>
+        </span> -->
       </template>
 
       <!-- pagination -->
@@ -219,13 +223,21 @@ export default {
     const serverParams = inject('serverParams')
     const loadTable = inject('loadTable')
     const idModal = inject('idModal')
+    const loadDataForRegister = inject('loadDataForRegister', null)
     const loadDataForEdit = inject('loadDataForEdit')
     const messageToast = inject('messageToast')
     const confirmSwal = inject('confirmSwal')
 
-    const openModal = () => {
+    const openModal = async () => {
       resetRow()
-      context.root.$bvModal.show(idModal)
+      if (loadDataForRegister) {
+        const result = await loadDataForRegister()
+        if (result) {
+          context.root.$bvModal.show(idModal)
+        }
+      } else {
+        context.root.$bvModal.show(idModal)
+      }
     }
 
     const openModalForEdit = async rowSelected => {

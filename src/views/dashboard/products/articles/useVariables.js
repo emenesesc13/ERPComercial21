@@ -7,48 +7,63 @@ const useVariables = () => {
     totalRecords: 0,
   })
 
-  const initialArticle = {
-    id: 0,
-    sku: '',
-    productType: null,
-    articleName: '',
-    stock: false,
-    service: false,
-    unitGroup: null,
-    inventoryUnit: null,
-    unitSale: null,
-    purchasePrice: null,
-    salePrice: null,
-    minimumSalePrice: null,
-    minimumStock: null,
-    maximumStock: null,
-    features: [],
+  const initialFeaturesArticle = {
+    loading: false,
+    data: [],
   }
 
-  // const initialArticle = {
-  //   _id: 0,
-  //   sku: '',
-  //   nombre: '',
-  //   idTipoProducto: null,
-  //   idGrupoUnidad: null,
-  //   idUnidadInventario: null,
-  //   idUnidadVenta: null,
-  //   precioCompra: null,
-  //   precioVenta: null,
-  //   precioMinimoVenta: null,
-  //   stockMinimo: null,
-  //   stockMaxim: null,
-  //   flgStock: false,
-  //   flgServicio: false,
-  //   accion: null,
-  //   idUsuario: null,
-  //   features: [],
-  // }
+  const featuresArticle = ref({ ...initialFeaturesArticle })
+
+  const resetFeaturesArticle = () => {
+    featuresArticle.value = { ...initialFeaturesArticle }
+  }
+
+  const initialArticle = {
+    _id: 0,
+    nombre: '',
+    idGrupoUnidad: 15,
+    idUnidadInventario: 11,
+    idUnidadVenta: 11,
+    idTipoProducto: 0,
+    sku: '',
+    precioCompra: 0,
+    precioVenta: 0,
+    precioMinimoVenta: 0,
+    stockMinimo: 0,
+    stockMaximo: 0,
+    flgStock: 1,
+    flgServicio: 0,
+    accion: 0,
+    idUsuario: null,
+    loading: false,
+  }
 
   const article = ref({ ...initialArticle })
 
   const resetArticle = () => {
     article.value = { ...initialArticle }
+  }
+
+  const selectedStockOrService = ref('stock')
+
+  const resetSelectedStockOrService = () => {
+    selectedStockOrService.value = 'stock'
+  }
+
+  const initialFeatureArticle = {
+    _id: 0,
+    idDtlCaracteristica: 0,
+    idArticulo: 0,
+    idCaracteristica: 0,
+    accion: 0,
+    idUsuario: null,
+    loading: false,
+  }
+
+  const featureArticle = ref({ ...initialFeatureArticle })
+
+  const resetFeatureArticle = () => {
+    featureArticle.value = { ...initialFeatureArticle }
   }
 
   const initialStateCombo = {
@@ -66,30 +81,17 @@ const useVariables = () => {
     valuesByFeature: { ...initialStateCombo },
   })
 
-  const defaultSelectedUnitGroup = {
-    unitGroup: 15,
-    inventoryUnit: 11,
-    unitSale: 11,
-  }
-
   const resetCombos = (nameCombos = []) => {
     nameCombos.forEach(name => {
       combos.value[name] = { ...initialStateCombo }
     })
-    // combos.value = {
-    //   productTypes: { ...initialStateCombo },
-    //   unitGroup: { ...initialStateCombo },
-    //   inventoryUnit: { ...initialStateCombo },
-    //   unitSale: { ...initialStateCombo },
-    //   features: { ...initialStateCombo },
-    //   valuesByFeature: { ...initialStateCombo },
-    // }
   }
 
-  const featureSelected = ref(null)
-  const valueSelected = ref(null)
-
   const optionsColumnsFilter = [
+    {
+      title: 'Id',
+      field: 'a._id',
+    },
     {
       title: 'Nombre',
       field: 'a.nombre',
@@ -121,11 +123,14 @@ const useVariables = () => {
     articles,
     article,
     resetArticle,
+    selectedStockOrService,
+    resetSelectedStockOrService,
+    featuresArticle,
+    resetFeaturesArticle,
+    featureArticle,
+    resetFeatureArticle,
     initialStateCombo,
     combos,
-    featureSelected,
-    valueSelected,
-    defaultSelectedUnitGroup,
     resetCombos,
     serverParams,
     optionsColumnsFilter,

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { onMounted, provide } from '@vue/composition-api'
+import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import ModalArticle from './ModalArticle.vue'
@@ -25,18 +25,13 @@ export default {
     ModalSearchArticle,
     TableArticles,
   },
-  setup(props, context) {
+  setup() {
     const {
-      articles, article, resetArticle, serverParams, combos, resetCombos, featureSelected, valueSelected, optionsColumnsFilter,
+      articles, article, resetArticle, selectedStockOrService, resetSelectedStockOrService, featuresArticle, resetFeaturesArticle, featureArticle, resetFeatureArticle, serverParams, combos, resetCombos, optionsColumnsFilter,
     } = useVariables()
 
-    const messageToast = (variant, title, message) => {
-      context.root.$bvToast.toast(message, {
-        title,
-        variant,
-        solid: true,
-      })
-    }
+    const messageToast = inject('messageToast')
+    const loadComboBoxes = inject('loadComboBoxes')
 
     const loadArticles = async () => {
       articles.value.loading = true
@@ -51,86 +46,46 @@ export default {
         articles.value.data = data
         articles.value.totalRecords = 0
         if (data.length > 0) {
-          articles.value.totalRecords = data[0].numberRow
+          if (data[0]?.numberRow) articles.value.totalRecords = data[0].numberRow
         }
       }
       articles.value.loading = false
     }
 
-    const loadCombo = async (combosForLoad = [], functionLoad, messageError, ...parametes) => {
-      combosForLoad.forEach(combo => {
-        combos.value[combo].loading = true
-        combos.value[combo].disabled = true
-      })
-      const { data, error } = await functionLoad(...parametes)
-      if (error) {
-        messageToast('danger', 'Error', messageError)
-      } else {
-        combosForLoad.forEach(combo => {
-          combos.value[combo].data = data
-        })
-      }
-      combosForLoad.forEach(combo => {
-        combos.value[combo].loading = false
-        combos.value[combo].disabled = false
-      })
-    }
-
-    const loadCombos = async (combosForLoad = [], url, messageError) => {
-      combosForLoad.forEach(combo => {
-        combos.value[combo].loading = true
-        combos.value[combo].disabled = true
-      })
+    const loadFeaturesArticleByArticleId = async articleId => {
+      featuresArticle.value.loading = true
+      const url = `/ACaracteristica/?_id=0&tabla=ARTICULOCARACTERISTICA&campo=a.idarticulo&indice=${articleId}`
       const { data, error } = await useFetch(url)
       if (error) {
-        messageToast('danger', 'Error', messageError)
+        messageToast('danger', 'Error', 'Error al momento de cargar los características')
       } else {
-        combosForLoad.forEach(combo => {
-          combos.value[combo].data = data
-        })
+        featuresArticle.value.data = data
       }
-      combosForLoad.forEach(combo => {
-        combos.value[combo].loading = false
-        combos.value[combo].disabled = false
-      })
-    }
-
-    const updateParams = newProps => {
-      serverParams.value = { ...serverParams.value, ...newProps }
-    }
-
-    const onPerPageChange = params => {
-      updateParams({ perPage: Number(params.currentPerPage) })
-      loadArticles()
-    }
-
-    const onPageChange = params => {
-      updateParams({ page: Number(params.currentPage) })
-      loadArticles()
+      featuresArticle.value.loading = false
     }
 
     onMounted(() => {
       loadArticles()
-      loadCombos(['productTypes'], '/combo/tipoproducto/1', 'Error al momento de cargar los Tipos de Producto')
-      loadCombos(['unitGroup'], '/combo/grupounidad/0', 'Error al momento de cargar las Unidades de Grupo')
-      loadCombos(['features'], '/combo/caracteristica/1', 'Error al momento de cargar las Características')
+      loadComboBoxes(combos.value, ['productTypes'], '/combo/tipoproducto/1', 'Error al momento de cargar los Tipos de Producto')
+      loadComboBoxes(combos.value, ['unitGroup'], '/combo/grupounidad/0', 'Error al momento de cargar las Unidades de Grupo')
+      loadComboBoxes(combos.value, ['features'], '/combo/caracteristica/1', 'Error al momento de cargar las Características')
     })
 
     provide('articles', articles)
     provide('loadArticles', loadArticles)
     provide('article', article)
     provide('resetArticle', resetArticle)
-    provide('serverParams', serverParams)
+    provide('featuresArticle', featuresArticle)
+    provide('resetFeaturesArticle', resetFeaturesArticle)
+    provide('loadFeaturesArticleByArticleId', loadFeaturesArticleByArticleId)
+    provide('featureArticle', featureArticle)
+    provide('resetFeatureArticle', resetFeatureArticle)
     provide('optionsColumnsFilter', optionsColumnsFilter)
-    provide('loadCombo', loadCombo)
-    provide('loadCombos', loadCombos)
-    provide('messageToast', messageToast)
+    provide('serverParams', serverParams)
     provide('combos', combos)
     provide('resetCombos', resetCombos)
-    provide('featureSelected', featureSelected)
-    provide('valueSelected', valueSelected)
-    provide('onPerPageChange', onPerPageChange)
-    provide('onPageChange', onPageChange)
+    provide('selectedStockOrService', selectedStockOrService)
+    provide('resetSelectedStockOrService', resetSelectedStockOrService)
   },
 }
 </script>
