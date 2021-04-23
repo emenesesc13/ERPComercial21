@@ -22,7 +22,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('_secret')
+  const loggedIn = localStorage.getItem(process.env.VUE_APP_NAME_VAR_SECURITY)
   if (to.matched.some(record => record.meta.auth) && !loggedIn) {
     next({ name: 'login' })
     return

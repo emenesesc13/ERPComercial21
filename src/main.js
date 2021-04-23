@@ -39,7 +39,8 @@ new Vue({
     },
   },
   created() {
-    const secret = JSON.parse(localStorage.getItem('_secret'))
+    localStorage.removeItem('_secret')
+    const secret = localStorage.getItem(process.env.VUE_APP_NAME_VAR_SECURITY) ? JSON.parse(atob(localStorage.getItem(process.env.VUE_APP_NAME_VAR_SECURITY))) : null
     if (secret) this.$store.commit('auth/handleLogin', secret)
     this.$http.interceptors.response.use(
       response => response,
