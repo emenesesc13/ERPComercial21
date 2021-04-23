@@ -1,7 +1,7 @@
 <template>
-  <b-form @submit.prevent="searchFeatures">
+  <b-form @submit.prevent="sendSearch">
     <b-modal
-      id="modal-search-feature"
+      id="modal-feature-search"
       ok-only
       ok-title="Accept"
       modal-class="modal-primary"
@@ -56,7 +56,7 @@
         <b-button
           type="submit"
           variant="primary"
-          @click="searchFeatures"
+          @click="sendSearch"
         >
           Buscar
         </b-button>
@@ -87,15 +87,15 @@ export default {
     vSelect,
   },
   methods: {
-    searchFeatures() {
+    sendSearch() {
       this.loadFeatures()
-      this.$bvModal.hide('modal-search-feature')
+      this.$bvModal.hide('modal-feature-search')
     },
     clearSearch() {
       this.serverParams.columnFilters.field = ''
       this.serverParams.columnFilters.value = ''
       this.loadFeatures()
-      this.$bvModal.hide('modal-search-feature')
+      this.$bvModal.hide('modal-feature-search')
     },
   },
   setup() {

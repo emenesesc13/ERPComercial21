@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { onMounted, provide } from '@vue/composition-api'
+import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import TableFeature from './TableFeature.vue'
@@ -25,18 +25,11 @@ export default {
     ModalFeature,
     ModalSearchFeature,
   },
-  setup(props, context) {
+  setup() {
     const {
       features, feature, resetFeature, optionsColumnsFilter, serverParams,
     } = useVariables()
-
-    const messageToast = (variant, title, message) => {
-      context.root.$bvToast.toast(message, {
-        title,
-        variant,
-        solid: true,
-      })
-    }
+    const messageToast = inject('messageToast')
 
     const loadFeatures = async () => {
       features.value.loading = true
@@ -57,20 +50,6 @@ export default {
       features.value.loading = false
     }
 
-    const updateParams = newProps => {
-      serverParams.value = { ...serverParams.value, ...newProps }
-    }
-
-    const onPerPageChange = params => {
-      updateParams({ perPage: Number(params.currentPerPage) })
-      loadFeatures()
-    }
-
-    const onPageChange = params => {
-      updateParams({ page: Number(params.currentPage) })
-      loadFeatures()
-    }
-
     onMounted(() => {
       loadFeatures()
     })
@@ -81,9 +60,6 @@ export default {
     provide('resetFeature', resetFeature)
     provide('optionsColumnsFilter', optionsColumnsFilter)
     provide('serverParams', serverParams)
-    provide('messageToast', messageToast)
-    provide('onPerPageChange', onPerPageChange)
-    provide('onPageChange', onPageChange)
   },
 }
 </script>
