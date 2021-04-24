@@ -22,7 +22,7 @@ export default {
       state.user = {
         usuario: null,
       }
-      router.push('/login')
+      window.location.reload()
     },
     handleLogout(state) {
       localStorage.removeItem(process.env.VUE_APP_NAME_VAR_SECURITY)

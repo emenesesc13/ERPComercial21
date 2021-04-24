@@ -42,7 +42,7 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los artículos')
-      } else {
+      } else if (data) {
         articles.value.data = data
         articles.value.totalRecords = 0
         if (data?.length) {

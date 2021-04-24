@@ -40,7 +40,7 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los grupos de unidad')
-      } else {
+      } else if (data) {
         unitsGroup.value.data = data
         unitsGroup.value.totalRecords = 0
         if (data?.length) {

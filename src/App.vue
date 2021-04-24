@@ -101,7 +101,7 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', messageError)
-      } else {
+      } else if (data) {
         nameCombosForLoad.forEach(combo => {
           combos[combo].data = data
         })
