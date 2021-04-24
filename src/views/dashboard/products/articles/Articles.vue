@@ -45,7 +45,7 @@ export default {
       } else {
         articles.value.data = data
         articles.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) articles.value.totalRecords = data[0].numberRow
         }
       }

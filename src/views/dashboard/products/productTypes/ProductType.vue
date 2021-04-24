@@ -43,7 +43,7 @@ export default {
       } else {
         productTypes.value.data = data
         productTypes.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) productTypes.value.totalRecords = data[0].numberRow
         }
       }

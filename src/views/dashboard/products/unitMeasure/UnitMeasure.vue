@@ -45,7 +45,7 @@ export default {
       } else {
         unitsMeasure.value.data = data
         unitsMeasure.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) unitsMeasure.value.totalRecords = data[0].numberRow
         }
       }

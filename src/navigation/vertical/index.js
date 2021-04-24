@@ -42,6 +42,10 @@ export default [
         title: 'Tipo Almacen',
         route: 'storageType',
       },
+      {
+        title: 'Predio',
+        route: 'predio',
+      },
     ],
   },
 ]

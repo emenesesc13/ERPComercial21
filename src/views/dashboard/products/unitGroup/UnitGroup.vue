@@ -43,7 +43,7 @@ export default {
       } else {
         unitsGroup.value.data = data
         unitsGroup.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) unitsGroup.value.totalRecords = data[0].numberRow
         }
       }
