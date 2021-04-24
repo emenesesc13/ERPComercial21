@@ -43,7 +43,7 @@ export default {
       } else {
         storageTypes.value.data = data
         storageTypes.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) storageTypes.value.totalRecords = data[0].numberRow
         }
       }

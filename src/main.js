@@ -47,11 +47,6 @@ new Vue({
       error => {
         if (error.response.status === 401) {
           if (window.location.pathname !== '/login') {
-            // this.$bvToast.toast('Expiro el tiempo de su autenticación. Por favor vuelva a identificarse.', {
-            //   title: 'Autenticación',
-            //   variant: 'warning',
-            //   solid: true,
-            // })
             this.$store.dispatch('auth/handleExpiredToken')
           }
         }
