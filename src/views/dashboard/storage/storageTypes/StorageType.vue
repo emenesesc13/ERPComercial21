@@ -40,7 +40,7 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los tipos de almacén')
-      } else {
+      } else if (data) {
         storageTypes.value.data = data
         storageTypes.value.totalRecords = 0
         if (data?.length) {
