@@ -37,11 +37,10 @@
         externalQuery: serverParams.columnFilters }"
       :pagination-options="{
         enabled: true,
-        perPage: serverParams.perPage
       }"
       :total-rows="dataTable.totalRecords"
       @on-page-change="onPageChange"
-      @on-per-page-change="onPerPageChange"
+      @on-per-page-change="onPageChange"
     >
       <template slot="loadingContent">
         <img
@@ -256,14 +255,24 @@ export default {
       serverParams.value = { ...serverParams.value, ...newProps }
     }
 
-    const onPerPageChange = params => {
-      updateParams({ perPage: Number(params.currentPerPage) })
-      loadTable()
-    }
+    // const onPerPageChange = params => {
+    //   updateParams({ perPage: params.currentPerPage })
+    //   loadTable()
+    // }
+
+    // const onPageChange = params => {
+    //   updateParams({ page: params.currentPage })
+    //   loadTable()
+    // }
 
     const onPageChange = params => {
-      updateParams({ page: Number(params.currentPage) })
-      loadTable()
+      if (serverParams.value.page !== params.currentPage) {
+        updateParams({ page: params.currentPage, perPage: params.currentPerPage })
+        loadTable()
+      } else if (params.currentPage === 1) {
+        updateParams({ page: params.currentPage, perPage: params.currentPerPage })
+        loadTable()
+      }
     }
 
     const changeStatus = async rowSelected => {
@@ -324,7 +333,7 @@ export default {
       openModal,
       openModalForEdit,
       openModalSearch,
-      onPerPageChange,
+      // onPerPageChange,
       onPageChange,
       changeStatus,
       deleteRow,
@@ -341,5 +350,10 @@ export default {
   }
   [dir] .vgt-table.condensed td, [dir] .vgt-table.condensed th.vgt-row-header {
     padding: 0.1em 0.4em;
+  }
+  .vgt-loading .vgt-center-align {
+    margin-top: 0;
+    top: 40%;
+    transform: translateY(-50%);
   }
 </style>
