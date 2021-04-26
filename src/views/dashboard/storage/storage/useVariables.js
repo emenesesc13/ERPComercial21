@@ -32,11 +32,19 @@ const useVariables = () => {
     perPage: 10,
   })
 
+  const optionsColumnsFilter = [
+    {
+      title: 'Nombre',
+      field: 'a.nombre',
+    },
+  ]
+
   return {
     storages,
     storage,
     resetStorage,
     serverParams,
+    optionsColumnsFilter,
   }
 }
 

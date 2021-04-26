@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Almacen</h1>
+    <modal-search-storage />
     <b-card>
       <table-storage />
     </b-card>
@@ -12,6 +12,7 @@ import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import TableStorage from './TableStorage.vue'
+import ModalSearchStorage from './ModalSearchStorage.vue'
 import useVariables from './useVariables'
 
 export default {
@@ -19,10 +20,11 @@ export default {
   components: {
     BCard,
     TableStorage,
+    ModalSearchStorage,
   },
   setup() {
     const {
-      storages, storage, resetStorage, serverParams,
+      storages, storage, resetStorage, serverParams, optionsColumnsFilter,
     } = useVariables()
 
     const messageToast = inject('messageToast')
@@ -55,6 +57,7 @@ export default {
     provide('serverParams', serverParams)
     provide('loadStorages', loadStorages)
     provide('resetStorage', resetStorage)
+    provide('optionsColumnsFilter', optionsColumnsFilter)
   },
 }
 </script>
