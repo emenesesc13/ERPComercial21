@@ -14,6 +14,21 @@ const storageRoutes = [
       ],
     },
   },
+  {
+    path: '/almacen',
+    name: 'storage',
+    component: () => import('@/views/dashboard/storage/storage/Storage.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Almacén',
+      breadcrumb: [
+        {
+          text: 'Almacén',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default storageRoutes
