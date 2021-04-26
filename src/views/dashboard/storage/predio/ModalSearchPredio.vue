@@ -1,12 +1,12 @@
 <template>
   <b-form @submit.prevent="sendSearch">
     <b-modal
-      id="modal-unit-measure-search"
+      id="modal-predio-search"
       ok-only
       ok-title="Accept"
       modal-class="modal-primary"
       centered
-      title="Buscar Unidad Medida"
+      title="Buscar Predio"
     >
       <b-row>
 
@@ -88,22 +88,22 @@ export default {
   },
   methods: {
     sendSearch() {
-      this.loadUnitsMeasure()
-      this.$bvModal.hide('modal-unit-measure-search')
+      this.loadPredios()
+      this.$bvModal.hide('modal-predio-search')
     },
     clearSearch() {
       this.serverParams.columnFilters.field = ''
       this.serverParams.columnFilters.value = ''
-      this.loadUnitsMeasure()
-      this.$bvModal.hide('modal-unit-measure-search')
+      this.loadPredios()
+      this.$bvModal.hide('modal-predio-search')
     },
   },
   setup() {
-    const loadUnitsMeasure = inject('loadUnitsMeasure')
+    const loadPredios = inject('loadPredios')
     const serverParams = inject('serverParams')
     const optionsColumnsFilter = inject('optionsColumnsFilter')
     return {
-      loadUnitsMeasure,
+      loadPredios,
       serverParams,
       optionsColumnsFilter,
     }

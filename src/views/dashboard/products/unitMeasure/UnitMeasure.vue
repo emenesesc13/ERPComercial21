@@ -41,7 +41,7 @@ export default {
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {
-        messageToast('danger', 'Error', 'Error al momento de cargar los detalle característica')
+        messageToast('danger', 'Error', 'Error al momento de cargar las unidades de medida')
       } else if (data) {
         unitsMeasure.value.data = data
         unitsMeasure.value.totalRecords = 0

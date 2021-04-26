@@ -68,7 +68,7 @@ export default {
         messageToast('danger', 'Error', 'Ocurrio un Error')
         return false
       }
-      row.value = data
+      row.value = { ...row.value, ...data }
       return true
     }
 
