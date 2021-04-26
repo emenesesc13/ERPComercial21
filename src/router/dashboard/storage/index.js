@@ -24,11 +24,11 @@ const storageRoutes = [
       breadcrumb: [
         {
           text: 'Almacén',
-        }
+        },
       ],
-     },
-   },
-   {
+    },
+  },
+  {
     path: '/predio',
     name: 'predio',
     component: () => import('@/views/dashboard/storage/predio/Predio.vue'),
