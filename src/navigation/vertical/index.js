@@ -52,4 +52,14 @@ export default [
       },
     ],
   },
+  {
+    title: 'Socios',
+    icon: 'UsersIcon',
+    children: [
+      {
+        title: 'Socios',
+        route: 'partner',
+      },
+    ],
+  },
 ]
