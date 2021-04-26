@@ -40,10 +40,10 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los tipos de producto')
-      } else {
+      } else if (data) {
         productTypes.value.data = data
         productTypes.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) productTypes.value.totalRecords = data[0].numberRow
         }
       }

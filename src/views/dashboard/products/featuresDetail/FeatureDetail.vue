@@ -42,10 +42,10 @@ export default {
       const { data, error } = await useFetch(url)
       if (error) {
         messageToast('danger', 'Error', 'Error al momento de cargar los detalle característica')
-      } else {
+      } else if (data) {
         featuresDetail.value.data = data
         featuresDetail.value.totalRecords = 0
-        if (data.length > 0) {
+        if (data?.length) {
           if (data[0]?.numberRow) featuresDetail.value.totalRecords = data[0].numberRow
         }
       }
