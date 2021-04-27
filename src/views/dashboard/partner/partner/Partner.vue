@@ -1,7 +1,10 @@
 <template>
-  <b-card>
-    <table-partner />
-  </b-card>
+  <div>
+    <modal-partner />
+    <b-card>
+      <table-partner />
+    </b-card>
+  </div>
 </template>
 
 <script>
@@ -10,12 +13,14 @@ import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import useVariables from './useVariables'
 import TablePartner from './TablePartner.vue'
+import ModalPartner from './ModalPartner.vue'
 
 export default {
   name: 'Partner',
   components: {
     BCard,
     TablePartner,
+    ModalPartner,
   },
   setup() {
     const {
@@ -45,6 +50,7 @@ export default {
 
     onMounted(() => {
       loadPartners()
+      loadComboBoxes(combos.value, ['documentType'], '/combo/documento/1', 'Ocurrio un Error al momento de cargar los Tipos de Documento')
       loadComboBoxes(combos.value, ['departament'], '/ComboUbigeo/Departamento', 'Ocurrio un Error al momento de cargar los Departamentos')
     })
 
