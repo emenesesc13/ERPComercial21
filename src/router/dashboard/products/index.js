@@ -8,6 +8,10 @@ const productsRoutes = [
       pageTitle: 'Articulos',
       breadcrumb: [
         {
+          text: 'Productos',
+          active: true,
+        },
+        {
           text: 'Articulos',
           active: true,
         },
@@ -22,6 +26,10 @@ const productsRoutes = [
       auth: true,
       pageTitle: 'Características',
       breadcrumb: [
+        {
+          text: 'Productos',
+          active: true,
+        },
         {
           text: 'Características',
           active: true,
@@ -38,6 +46,10 @@ const productsRoutes = [
       pageTitle: 'Detalle Característica',
       breadcrumb: [
         {
+          text: 'Productos',
+          active: true,
+        },
+        {
           text: 'Detalle Característica',
           active: true,
         },
@@ -52,6 +64,10 @@ const productsRoutes = [
       auth: true,
       pageTitle: 'Tipo Producto',
       breadcrumb: [
+        {
+          text: 'Productos',
+          active: true,
+        },
         {
           text: 'Tipo Producto',
           active: true,
@@ -68,6 +84,10 @@ const productsRoutes = [
       pageTitle: 'Unidad Medida',
       breadcrumb: [
         {
+          text: 'Productos',
+          active: true,
+        },
+        {
           text: 'Unidad Medida',
           active: true,
         },
@@ -82,6 +102,10 @@ const productsRoutes = [
       auth: true,
       pageTitle: 'Grupo Unidad',
       breadcrumb: [
+        {
+          text: 'Productos',
+          active: true,
+        },
         {
           text: 'Grupo Unidad',
           active: true,

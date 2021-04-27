@@ -11,6 +11,10 @@ const partnerRoutes = [
           text: 'Socios',
           active: true,
         },
+        {
+          text: 'Inicio',
+          active: true,
+        },
       ],
     },
   },

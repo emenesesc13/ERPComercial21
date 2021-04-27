@@ -8,6 +8,10 @@ const storageRoutes = [
       pageTitle: 'Tipo Almacén',
       breadcrumb: [
         {
+          text: 'Almacén',
+          active: true,
+        },
+        {
           text: 'Tipo Almacén',
           active: true,
         },
@@ -24,6 +28,11 @@ const storageRoutes = [
       breadcrumb: [
         {
           text: 'Almacén',
+          active: true,
+        },
+        {
+          text: 'Inicio',
+          active: true,
         },
       ],
     },
@@ -36,6 +45,10 @@ const storageRoutes = [
       auth: true,
       pageTitle: 'Predio',
       breadcrumb: [
+        {
+          text: 'Almacén',
+          active: true,
+        },
         {
           text: 'Predio',
           active: true,
