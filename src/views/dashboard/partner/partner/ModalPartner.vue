@@ -1,7 +1,7 @@
 <template>
   <validation-observer
     ref="modal-partner"
-    v-slot="{ handleSubmit }"
+    v-slot="{ handleSubmit, invalid }"
   >
     <b-form @submit.prevent="handleSubmit(sendForm)">
       <b-modal
@@ -15,7 +15,7 @@
         no-close-on-backdrop
       >
 
-        <b-tabs>
+        <b-tabs v-model="tabIndex">
 
           <!-- Headers Partner -->
 
@@ -54,6 +54,7 @@
                       :loading="combos.documentType.loading"
                       :disabled="combos.documentType.disabled"
                       :clearable="false"
+                      @option:selected="selectedDocumentType"
                     >
                       <template v-slot:no-options>
                         No se encontraron resultados.
@@ -81,12 +82,27 @@
                     <b-input-group>
                       <b-form-input
                         id="documentNumber"
-                        v-model="partner.numberoDocumento"
+                        v-model="partner.numeroDocumento"
+                        type="number"
                         :state="errors.length > 0 ? false:null"
+                        :disabled="loadingGetDni"
+                        min="0"
+                        @keypress.enter="getDataByNumberDocument"
                       />
                       <b-input-group-append>
-                        <b-button variant="primary">
-                          <feather-icon icon="SearchIcon" />
+                        <b-button
+                          variant="primary"
+                          :disabled="!dniSelected || loadingGetDni"
+                          @click="getDataByNumberDocument"
+                        >
+                          <b-spinner
+                            v-if="loadingGetDni"
+                            small
+                          />
+                          <feather-icon
+                            v-else
+                            icon="SearchIcon"
+                          />
                         </b-button>
                       </b-input-group-append>
                     </b-input-group>
@@ -206,7 +222,9 @@
                     <b-form-input
                       id="phone"
                       v-model="partner.telefono"
+                      type="number"
                       :state="errors.length > 0 ? false:null"
+                      min="0"
                     />
                     <small class="text-danger">{{ errors[0] }}</small>
                   </validation-provider>
@@ -246,11 +264,26 @@
                       <b-form-input
                         id="ruc"
                         v-model="partner.numeroRuc"
+                        type="number"
                         :state="errors.length > 0 ? false:null"
+                        :disabled="loadingGetRuc"
+                        min="0"
+                        @keypress.enter="getDataByRuc"
                       />
                       <b-input-group-append>
-                        <b-button variant="primary">
-                          <feather-icon icon="SearchIcon" />
+                        <b-button
+                          variant="primary"
+                          :disabled="loadingGetRuc"
+                          @click="getDataByRuc"
+                        >
+                          <b-spinner
+                            v-if="loadingGetRuc"
+                            small
+                          />
+                          <feather-icon
+                            v-else
+                            icon="SearchIcon"
+                          />
                         </b-button>
                       </b-input-group-append>
                     </b-input-group>
@@ -262,24 +295,32 @@
               <b-col
                 cols="12"
                 md="7"
-                class="d-flex justify-content-between align-items-center mb-1 mb-md-0"
-                style="height: 72px"
               >
-                <b-form-checkbox
-                  v-model="partner.cliente"
+                <b-form-group
+                  label-for="typePartner"
+                  label="Tipo de Socio"
+                  style="height: 58px"
                 >
-                  Cliente
-                </b-form-checkbox>
-                <b-form-checkbox
-                  v-model="partner.proveedor"
-                >
-                  Proveedor
-                </b-form-checkbox>
-                <b-form-checkbox
-                  v-model="partner.transportista"
-                >
-                  Transportista
-                </b-form-checkbox>
+                  <div class="d-flex align-items-center mt-1">
+                    <b-form-checkbox
+                      v-model="partner.cliente"
+                      class="mr-1"
+                    >
+                      Cliente
+                    </b-form-checkbox>
+                    <b-form-checkbox
+                      v-model="partner.proveedor"
+                      class="mr-1"
+                    >
+                      Proveedor
+                    </b-form-checkbox>
+                    <b-form-checkbox
+                      v-model="partner.transportista"
+                    >
+                      Transportista
+                    </b-form-checkbox>
+                  </div>
+                </b-form-group>
               </b-col>
 
               <!-- Razón Social -->
@@ -351,7 +392,7 @@
                 cols="12"
                 colsm="12"
                 colmd="6"
-                collg="4"
+                collg="6"
                 @selected-district="selectedDistrict"
               />
 
@@ -412,7 +453,9 @@
                     <b-form-input
                       id="telefonoMovil"
                       v-model="partner.telefonoContacto"
+                      type="number"
                       :state="errors.length > 0 ? false:null"
+                      min="0"
                     />
                     <small class="text-danger">{{ errors[0] }}</small>
                   </validation-provider>
@@ -450,11 +493,12 @@
 
         <template #modal-footer>
           <b-button
+            v-if="tabIndex"
             type="button"
             variant="outline-primary"
-            @click="closeForm"
+            @click="tabIndex--"
           >
-            Cerrar
+            Atrás
           </b-button>
           <b-overlay
             :show="partner.loading"
@@ -464,8 +508,18 @@
             rounded="sm"
           >
             <b-button
+              v-if="tabIndex !== 3"
               type="submit"
               variant="primary"
+              @click="tabIndex++"
+            >
+              Siguiente
+            </b-button>
+            <b-button
+              v-else
+              type="submit"
+              variant="primary"
+              :disabled="invalid"
               @click="handleSubmit(sendForm)"
             >
               Guardar
@@ -481,15 +535,16 @@
 <script>
 /* eslint no-underscore-dangle: 0 */
 import {
-  BRow, BForm, BButton, BModal, BOverlay, BCol, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BFormCheckbox, BTabs, BTab,
+  BRow, BForm, BButton, BModal, BOverlay, BCol, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BFormCheckbox, BTabs, BTab, BSpinner,
 } from 'bootstrap-vue'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
-import { inject } from '@vue/composition-api'
+import { ref, inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
 import store from '@/store'
 import useFetch from '@/hooks/useFetch'
+import useApiPeru from '@/hooks/useApiPeru'
 import UbigeoComponent from '@/components/UbigeoComponent.vue'
 
 export default {
@@ -508,6 +563,7 @@ export default {
     BFormCheckbox,
     BTabs,
     BTab,
+    BSpinner,
     ValidationObserver,
     ValidationProvider,
     UbigeoComponent,
@@ -527,10 +583,79 @@ export default {
     })
   },
   setup(props, context) {
+    const dniSelected = ref(false)
+    const loadingGetDni = ref(false)
+    const loadingGetRuc = ref(false)
     const partner = inject('partner')
     const combos = inject('combos')
-    const messageToast = inject('messageToast')
+    const ubigeoSelected = inject('ubigeoSelected')
     const loadPartners = inject('loadPartners')
+    const messageToast = inject('messageToast')
+    const loadComboBoxes = inject('loadComboBoxes')
+    const resetCombo = inject('resetCombo')
+    const tabIndex = inject('tabIndex')
+
+    const selectedDocumentType = ({ nombre }) => {
+      if (nombre.toLowerCase().trim() === 'dni') dniSelected.value = true
+      else dniSelected.value = false
+    }
+
+    const getDataByNumberDocument = async () => {
+      if (dniSelected.value) {
+        if (partner.value.numeroDocumento.trim().length !== 8) {
+          messageToast('warning', 'Advertencia', 'El N° de Documento Debe contener 8 dígitos')
+        } else {
+          loadingGetDni.value = true
+          const { error, data } = await useApiPeru(partner.value.numeroDocumento)
+          if (error) {
+            messageToast('warning', 'Advertencia', error)
+            loadingGetDni.value = false
+          } else if (data) {
+            partner.value.apellidoPaterno = ''
+            partner.value.apellidoMaterno = ''
+            partner.value.nombres = ''
+            partner.value.apellidoPaterno = data.apellido_paterno
+            partner.value.apellidoMaterno = data.apellido_materno
+            partner.value.nombres = data.nombres
+            loadingGetDni.value = false
+          }
+        }
+      }
+    }
+
+    const getDataByRuc = async () => {
+      if (partner.value.numeroRuc.trim().length !== 11) {
+        messageToast('warning', 'Advertencia', 'El N° RUC Debe contener 11 dígitos')
+      } else {
+        loadingGetRuc.value = true
+        const { error, data } = await useApiPeru(partner.value.numeroRuc, 'ruc')
+        if (error) {
+          messageToast('warning', 'Advertencia', error)
+          loadingGetRuc.value = false
+        } else if (data) {
+          partner.value.razonSocial = ''
+          partner.value.direccion = ''
+          ubigeoSelected.value.departament = 0
+          ubigeoSelected.value.province = 0
+          ubigeoSelected.value.district = 0
+          resetCombo(combos.value, ['province', 'district'])
+          partner.value.razonSocial = data.nombre_o_razon_social
+          if (data.direccion) partner.value.direccion = data.direccion
+          if (data.ubigeo[0] !== '-') {
+            ubigeoSelected.value.departament = Number(data.ubigeo[0])
+            await loadComboBoxes(combos.value, ['province'], `/ComboUbigeo/Provincia/${ubigeoSelected.value.departament}`, 'Ocurrio un Error al momento de cargar las Provincias')
+            const idProvince = Number(data.ubigeo[1].slice(-2))
+            ubigeoSelected.value.province = idProvince
+            await loadComboBoxes(combos.value, ['district'], `/ComboUbigeo/Distrito/${ubigeoSelected.value.departament}/${ubigeoSelected.value.province}`, 'Ocurrio un Error al momento de cargar los Distritos')
+            const idDistrict = Number(data.ubigeo[2].slice(-2))
+            const districtObject = combos.value.district.data.find(district => district.id === idDistrict)
+            ubigeoSelected.value.district = districtObject._id
+            partner.value.idUbigeo = districtObject._id
+          }
+          loadingGetRuc.value = false
+        }
+      }
+    }
 
     const selectedDistrict = idUbigeo => {
       partner.value.idUbigeo = idUbigeo
@@ -539,6 +664,9 @@ export default {
     const sendForm = async () => {
       partner.value.loading = true
       partner.value.accion = partner.value._id ? 2 : 1
+      partner.value.cliente = partner.value.cliente ? 1 : 0
+      partner.value.proveedor = partner.value.proveedor ? 1 : 0
+      partner.value.transportista = partner.value.transportista ? 1 : 0
       partner.value.idUsuario = store.state.auth.user._id
       const { error, data } = await useFetch('/socio', partner.value, 'POST')
       if (error) {
@@ -559,13 +687,20 @@ export default {
       }
     }
 
-    const closeForm = () => {
+    const closeForm = async () => {
       context.root.$bvModal.hide('modal-partner')
     }
 
     return {
       partner,
+      tabIndex,
       combos,
+      dniSelected,
+      getDataByNumberDocument,
+      loadingGetDni,
+      selectedDocumentType,
+      getDataByRuc,
+      loadingGetRuc,
       selectedDistrict,
       sendForm,
       closeForm,

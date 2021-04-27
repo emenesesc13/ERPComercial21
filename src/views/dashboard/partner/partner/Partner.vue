@@ -24,7 +24,7 @@ export default {
   },
   setup() {
     const {
-      partners, partner, resetPartner, ubigeoSelected, resetUbigeoSelected, combos, resetCombo, optionsColumnsFilter, serverParams,
+      partners, partner, resetPartner, ubigeoSelected, resetUbigeoSelected, combos, resetCombo, optionsColumnsFilter, serverParams, tabIndex,
     } = useVariables()
     const messageToast = inject('messageToast')
     const loadComboBoxes = inject('loadComboBoxes')
@@ -33,7 +33,7 @@ export default {
       partners.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/socio/?_id=0&tabla=grupo&pinicio=${page}&pfin=${perPage}`
+      let url = `/socio/?_id=0&tabla=socios&pinicio=${page}&pfin=${perPage}`
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {
@@ -57,6 +57,7 @@ export default {
     provide('partners', partners)
     provide('loadPartners', loadPartners)
     provide('partner', partner)
+    provide('tabIndex', tabIndex)
     provide('ubigeoSelected', ubigeoSelected)
     provide('resetUbigeoSelected', resetUbigeoSelected)
     provide('combos', combos)

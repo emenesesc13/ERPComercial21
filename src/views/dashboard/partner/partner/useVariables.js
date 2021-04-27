@@ -36,6 +36,8 @@ const useVariables = () => {
     })
   }
 
+  const tabIndex = ref(0)
+
   const initialPartner = {
     _id: 0, // int
     apellidoPaterno: '', // string
@@ -57,6 +59,7 @@ const useVariables = () => {
     observaciones: '', // string
     idUsuario: 0, // int
     accion: 0, // int
+    loading: false,
   }
 
   const partner = ref({ ...initialPartner })
@@ -86,6 +89,7 @@ const useVariables = () => {
     partner,
     ubigeoSelected,
     resetUbigeoSelected,
+    tabIndex,
     combos,
     resetCombo,
     resetPartner,
