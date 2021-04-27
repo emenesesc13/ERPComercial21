@@ -166,7 +166,7 @@ export default {
             messageToast('warning', 'Advertencia', mensaje)
           } else {
             predio.value._id = id
-            messageToast('success', 'Característica', mensaje)
+            messageToast('success', 'Predio', mensaje)
             context.root.$bvModal.hide('modal-predio')
             loadPredios()
           }
