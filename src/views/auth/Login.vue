@@ -172,7 +172,6 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import useFetch from '@/hooks/useFetch'
-// import useLogin from './useLogin'
 
 export default {
   components: {
@@ -234,11 +233,6 @@ export default {
       const success = await this.$refs.loginValidation.validate()
       if (success && !this.sendLoading) {
         this.sendLoading = true
-        // const { handleLogin } = useLogin()
-        // const { error } = await handleLogin({
-        //   usuario: this.user,
-        //   clave: this.password,
-        // })
         const payload = {
           usuario: this.user,
           clave: this.password,
