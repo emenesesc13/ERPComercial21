@@ -104,6 +104,8 @@ export default {
       return res
     }
 
+    const urlForExportData = '/socio/?_id=0&tabla=socios'
+
     provide('columns', columns)
     provide('data', partners)
     provide('row', partner)
@@ -113,6 +115,10 @@ export default {
     provide('loadTable', loadPartners)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('columnsAvailableForExport', [...columns])
+    provide('urlForExportData', urlForExportData)
   },
 }
 </script>
