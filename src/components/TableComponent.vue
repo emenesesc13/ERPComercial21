@@ -10,16 +10,29 @@
           variant="primary"
           @click="openModal"
         >
-          Nuevo
+          <feather-icon
+            icon="PlusCircleIcon"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">
+            Nuevo
+          </span>
         </b-button>
       </div>
-      <div>
+      <div class="d-flex">
+        <export-table class="mr-1" />
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
           @click="openModalSearch"
         >
-          Buscar Por ...
+          <feather-icon
+            icon="FilterIcon"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">
+            Filtrar
+          </span>
         </b-button>
       </div>
     </div>
@@ -180,6 +193,7 @@ import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
 import useFetch from '@/hooks/useFetch'
+import ExportTable from './ExportTable.vue'
 
 export default {
   name: 'TableComponent',
@@ -191,6 +205,7 @@ export default {
     BDropdownItem,
     BButton,
     BBadge,
+    ExportTable,
   },
   directives: {
     'b-modal': VBModal,
