@@ -81,7 +81,6 @@ const useExportPdf = (columnsForExport = [], dataForExport = [], title = 'LISTAD
 
   let descriptionFilters = ''
   if (withFilters && serverParams) {
-    console.log(serverParams)
     descriptionFilters = `FILTROS: ${serverParams.field} (${serverParams.value})`
     doc.setFont('times')
     doc.setFontSize(8)

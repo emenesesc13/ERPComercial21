@@ -213,7 +213,6 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error)
         messageToast('danger', 'Error', 'Error al momento de obtener todos los datos')
       }
       loadingDowloand.value = false
