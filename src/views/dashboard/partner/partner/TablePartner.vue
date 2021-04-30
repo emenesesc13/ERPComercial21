@@ -119,6 +119,7 @@ export default {
     // Provide for Export to Document (PDF, EXCEL)
     provide('columnsAvailableForExport', [...columns])
     provide('urlForExportData', urlForExportData)
+    provide('titleForPdf', 'Reporte de Socios')
   },
 }
 </script>

@@ -27,11 +27,11 @@
           @click="openModalSearch"
         >
           <feather-icon
-            icon="SearchIcon"
+            icon="FilterIcon"
             class="mr-0 mr-sm-50"
           />
           <span class="d-none d-sm-inline">
-            Buscar
+            Filtrar
           </span>
         </b-button>
       </div>

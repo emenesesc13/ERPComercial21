@@ -20,17 +20,17 @@
             <div class="demo-inline-spacing mb-75">
               <b-form-checkbox
                 v-model="documentTypesSelected"
-                value="EXCEL"
-                class="mt-50"
-              >
-                Excel
-              </b-form-checkbox>
-              <b-form-checkbox
-                v-model="documentTypesSelected"
                 value="PDF"
                 class="mt-50"
               >
                 Pdf
+              </b-form-checkbox>
+              <b-form-checkbox
+                v-model="documentTypesSelected"
+                value="EXCEL"
+                class="mt-50"
+              >
+                Excel
               </b-form-checkbox>
             </div>
           </b-form-group>
@@ -41,22 +41,22 @@
           md="6"
         >
           <b-form-group
-            label="Selecciona el Orientación"
+            label="Selecciona la Orientación"
           >
+            <b-form-radio
+              v-model="orientationSelected"
+              value="p"
+              class="mt-50"
+            >
+              Vertical
+            </b-form-radio>
             <div class="demo-inline-spacing mb-75">
               <b-form-radio
                 v-model="orientationSelected"
-                value="HORIZONTAL"
+                value="l"
                 class="mt-50"
               >
                 Horizontal
-              </b-form-radio>
-              <b-form-radio
-                v-model="orientationSelected"
-                value="VERTICAL"
-                class="mt-50"
-              >
-                Vertical
               </b-form-radio>
             </div>
           </b-form-group>
@@ -73,7 +73,7 @@
               id="count"
               v-model="numberOfRecordsToExport"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="['Todos', 'Página actual']"
+              :options="['Todos los datos', 'Con filtro actual']"
               :clearable="false"
             >
               <template v-slot:no-options>
@@ -90,32 +90,19 @@
           <b-form-group
             label="Selecciona las Columnas"
           >
-            <draggable
-              v-model="columnsAvailableForExport"
-              tag="ul"
-              class="list-group list-group-flush cursor-move"
-            >
-              <transition-group
-                type="transition"
-                name="flip-list"
-              >
-                <b-list-group-item
-                  v-for="column in columnsAvailableForExport"
+            <div class="list-group-item checkbox-grid">
+              <template v-for="(column, index) in columnsAvailableForExport">
+                <b-form-checkbox
+                  v-if="column.field !== 'action'"
                   :key="column.field"
-                  tag="li"
+                  v-model="columnsSelected"
+                  :value="{ index, field: column.field, label: column.label }"
+                  class="mt-50"
                 >
-                  <b-form-checkbox
-                    v-model="columnsSelected"
-                    :value="column.field"
-                    class="mt-50"
-                  >
-                    {{ column.label }}
-                  </b-form-checkbox>
-                </b-list-group-item>
-              </transition-group>
-            </draggable>
-            <!-- <div class="checkbox-grid mb-75">
-            </div> -->
+                  {{ column.label }}
+                </b-form-checkbox>
+              </template>
+            </div>
           </b-form-group>
         </b-col>
 
@@ -125,19 +112,29 @@
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
+          :disabled="!documentTypesSelected.length || !columnsSelected.length || loadingDowloand"
           @click="dowloandDataInDocument"
         >
-          <feather-icon
-            icon="DownloadIcon"
-            class="mr-25"
-          />
-          Descargar
+          <template v-if="!loadingDowloand">
+            <feather-icon
+              icon="DownloadIcon"
+              class="mr-25"
+            />
+            Descargar
+          </template>
+          <template v-else>
+            <b-spinner
+              small
+              class="mr-50"
+            />
+            Descargando...
+          </template>
         </b-button>
       </template>
 
     </b-modal>
     <b-button
-      v-if="dataForExport.data.length && columnsAvailableForExport.length"
+      v-if="dataForExport.data.length && columnsAvailableForExport.length && urlForExportData"
       v-ripple.400="'rgba(255, 255, 255, 0.15)'"
       variant="primary"
       @click="openModalExportData"
@@ -155,17 +152,17 @@
 
 <script>
 import { ref, inject } from '@vue/composition-api'
-import draggable from 'vuedraggable'
 import {
-  BRow, BCol, BModal, BFormGroup, BButton, BFormCheckbox, BFormRadio, BListGroupItem,
+  BRow, BCol, BModal, BFormGroup, BButton, BFormCheckbox, BFormRadio, BSpinner,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
+import useFetch from '@/hooks/useFetch'
+import useExportPdf from '@/hooks/useExportPdf'
 
 export default {
   name: 'ExportTable',
   components: {
-    draggable,
     BRow,
     BCol,
     BModal,
@@ -173,28 +170,53 @@ export default {
     BButton,
     BFormCheckbox,
     BFormRadio,
-    BListGroupItem,
+    BSpinner,
     vSelect,
   },
   directives: {
     Ripple,
   },
   setup(props, context) {
-    const documentTypesSelected = ref([])
-    const orientationSelected = ref('')
-    const numberOfRecordsToExport = ref('')
-    const columnsAvailableForExport = ref(inject('columnsAvailableForExport', []))
-    const columnsSelected = ref([])
+    const loadingDowloand = ref(false)
+    const documentTypesSelected = ref(['PDF'])
+    const orientationSelected = ref('p')
+    const numberOfRecordsToExport = ref('Con filtro actual')
     const dataForExport = inject('data', [{ data: [] }])
     const urlForExportData = inject('urlForExportData', null)
+    const serverParams = inject('serverParams')
+    const messageToast = inject('messageToast')
+    const dataForSendToExport = ref([])
+    const columnsAvailableForExport = inject('columnsAvailableForExport', [])
+    const columnsSelected = ref([])
+    const titleForPdf = inject('titleForPdf', 'Listado')
 
     const openModalExportData = () => {
       context.refs['modal-export'].show()
     }
 
-    const dowloandDataInDocument = () => {
-      console.log(urlForExportData)
-      console.log(dataForExport.value.data)
+    const dowloandDataInDocument = async () => {
+      loadingDowloand.value = true
+      try {
+        const { columnFilters } = serverParams.value
+        const { field, value } = columnFilters
+        const urlWithFilters = `${urlForExportData}&campofiltro=${field}&filtro=${value}`
+        const url = numberOfRecordsToExport.value === 'Con filtro actual' ? urlWithFilters : urlForExportData
+        const { error, data } = await useFetch(url)
+        columnsSelected.value.sort((n1, n2) => n1.index - n2.index)
+        if (error) {
+          throw error
+        } else if (data) {
+          if (numberOfRecordsToExport.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
+            useExportPdf(columnsSelected.value, data, titleForPdf, orientationSelected.value, true, serverParams.value.columnFilters)
+          } else {
+            useExportPdf(columnsSelected.value, data, titleForPdf, orientationSelected.value)
+          }
+        }
+      } catch (error) {
+        console.log(error)
+        messageToast('danger', 'Error', 'Error al momento de obtener todos los datos')
+      }
+      loadingDowloand.value = false
     }
 
     return {
@@ -202,11 +224,13 @@ export default {
       documentTypesSelected,
       orientationSelected,
       numberOfRecordsToExport,
-      columnsAvailableForExport,
-      columnsSelected,
       dataForExport,
       urlForExportData,
       dowloandDataInDocument,
+      dataForSendToExport,
+      columnsAvailableForExport,
+      columnsSelected,
+      loadingDowloand,
     }
   },
 }

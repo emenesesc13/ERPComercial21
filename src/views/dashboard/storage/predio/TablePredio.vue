@@ -86,6 +86,8 @@ export default {
       return res
     }
 
+    const urlForExportData = '/predio/?_id=0&tabla=predios'
+
     provide('columns', columns)
     provide('data', predios)
     provide('row', predio)
@@ -95,6 +97,11 @@ export default {
     provide('loadTable', loadPredios)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('columnsAvailableForExport', [...columns])
+    provide('urlForExportData', urlForExportData)
+    provide('titleForPdf', 'Reporte de Predios')
   },
 }
 </script>
