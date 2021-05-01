@@ -3,10 +3,9 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import store from '@/store'
 
-const useExportPdf = (columnsForExport = [], dataForExport = [], title = 'LISTADO', orientation = 'p', withFilters = false, serverParams, subtitle = 'Subtitulo') => {
+const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle = 'Subtitulo') => {
   const doc = new jsPDF(orientation, 'pt', 'a4')
-  const columns = columnsForExport.map(column => column.field !== 'action' && ({ header: column.label.toUpperCase(), dataKey: column.field }))
-  const body = dataForExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
+  const body = dataExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
 
   const partColumn = doc.internal.pageSize.getWidth() / 4 - 80
   const lineHeight = 12
@@ -80,7 +79,7 @@ const useExportPdf = (columnsForExport = [], dataForExport = [], title = 'LISTAD
   let topFourLine = topThirdLine
 
   let descriptionFilters = ''
-  if (withFilters && serverParams) {
+  if (serverParams) {
     descriptionFilters = `FILTROS: ${serverParams.field} (${serverParams.value})`
     doc.setFont('times')
     doc.setFontSize(8)
@@ -182,7 +181,7 @@ const useExportPdf = (columnsForExport = [], dataForExport = [], title = 'LISTAD
       // ================================ TERCERA LINEA ===================================
       // ==================================================================================
 
-      if (withFilters && serverParams) {
+      if (serverParams) {
         doc.setFont('times')
         doc.setFontSize(8)
         doc.setTextColor('#444')

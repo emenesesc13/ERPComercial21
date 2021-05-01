@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -30,54 +33,63 @@ export default {
         field: 'action',
         width: '85px',
         thClass: 'align-middle',
+        pdf: false,
       },
       {
         label: 'Id',
         field: '_id',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
-        label: 'Ap. Paterno',
+        label: 'Ape. Paterno',
         field: 'apellidoPaterno',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
-        label: 'Ap. Materno',
+        label: 'Ape. Materno',
         field: 'apellidoMaterno',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Nombres',
         field: 'nombres',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Razón Social',
         field: 'razonSocial',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'N° Ruc',
         field: 'numeroRuc',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'N° Doc',
         field: 'numeroDocumento',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
     ]
 
@@ -117,9 +129,8 @@ export default {
     provide('loadDataForEdit', loadDataForEdit)
 
     // Provide for Export to Document (PDF, EXCEL)
-    provide('columnsAvailableForExport', [...columns])
     provide('urlForExportData', urlForExportData)
-    provide('titleForPdf', 'Reporte de Socios')
+    provide('titleForExport', 'Reporte de Socios')
   },
 }
 </script>

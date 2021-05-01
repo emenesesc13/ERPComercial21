@@ -4,7 +4,7 @@
       id="modal-export"
       ref="modal-export"
       centered
-      title="Exportar Datos"
+      title="Exportar en PDF"
       no-close-on-esc
       no-close-on-backdrop
     >
@@ -12,45 +12,18 @@
 
         <b-col
           cols="12"
-          md="6"
-        >
-          <b-form-group
-            label="Selecciona el Documento"
-          >
-            <div class="demo-inline-spacing mb-75">
-              <b-form-checkbox
-                v-model="documentTypesSelected"
-                value="PDF"
-                class="mt-50"
-              >
-                Pdf
-              </b-form-checkbox>
-              <b-form-checkbox
-                v-model="documentTypesSelected"
-                value="EXCEL"
-                class="mt-50"
-              >
-                Excel
-              </b-form-checkbox>
-            </div>
-          </b-form-group>
-        </b-col>
-
-        <b-col
-          cols="12"
-          md="6"
         >
           <b-form-group
             label="Selecciona la Orientación"
           >
-            <b-form-radio
-              v-model="orientationSelected"
-              value="p"
-              class="mt-50"
-            >
-              Vertical
-            </b-form-radio>
             <div class="demo-inline-spacing mb-75">
+              <b-form-radio
+                v-model="orientationSelected"
+                value="p"
+                class="mt-50"
+              >
+                Vertical
+              </b-form-radio>
               <b-form-radio
                 v-model="orientationSelected"
                 value="l"
@@ -63,7 +36,6 @@
         </b-col>
 
         <b-col
-          v-if="urlForExportData"
           cols="12"
         >
           <b-form-group
@@ -71,7 +43,7 @@
           >
             <v-select
               id="count"
-              v-model="numberOfRecordsToExport"
+              v-model="exportWithFilters"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="['Todos los datos', 'Con filtro actual']"
               :clearable="false"
@@ -84,19 +56,17 @@
         </b-col>
 
         <b-col
-          v-if="columnsAvailableForExport.length"
           cols="12"
         >
           <b-form-group
             label="Selecciona las Columnas"
           >
             <div class="list-group-item checkbox-grid">
-              <template v-for="(column, index) in columnsAvailableForExport">
+              <template v-for="(column) in columns">
                 <b-form-checkbox
                   v-if="column.field !== 'action'"
                   :key="column.field"
-                  v-model="columnsSelected"
-                  :value="{ index, field: column.field, label: column.label }"
+                  v-model="column.pdf"
                   class="mt-50"
                 >
                   {{ column.label }}
@@ -112,8 +82,8 @@
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
-          :disabled="!documentTypesSelected.length || !columnsSelected.length || loadingDowloand"
-          @click="dowloandDataInDocument"
+          :disabled="loadingDowloand"
+          @click="dowloandPdf"
         >
           <template v-if="!loadingDowloand">
             <feather-icon
@@ -134,17 +104,17 @@
 
     </b-modal>
     <b-button
-      v-if="dataForExport.data.length && columnsAvailableForExport.length && urlForExportData"
+      v-if="columns.length && urlForExportData"
       v-ripple.400="'rgba(255, 255, 255, 0.15)'"
       variant="primary"
       @click="openModalExportData"
     >
       <feather-icon
-        icon="ExternalLinkIcon"
+        icon="ClipboardIcon"
         class="mr-0 mr-sm-50"
       />
       <span class="d-none d-sm-inline">
-        Exportar
+        PDF
       </span>
     </b-button>
   </div>
@@ -161,7 +131,7 @@ import useFetch from '@/hooks/useFetch'
 import useExportPdf from '@/hooks/useExportPdf'
 
 export default {
-  name: 'ExportTable',
+  name: 'ExportPdf',
   components: {
     BRow,
     BCol,
@@ -177,58 +147,58 @@ export default {
     Ripple,
   },
   setup(props, context) {
-    const loadingDowloand = ref(false)
-    const documentTypesSelected = ref(['PDF'])
+    const messageToast = inject('messageToast')
+    const titleForExport = inject('titleForExport', 'Listado')
     const orientationSelected = ref('p')
-    const numberOfRecordsToExport = ref('Con filtro actual')
-    const dataForExport = inject('data', [{ data: [] }])
+    const exportWithFilters = ref('Con filtro actual')
     const urlForExportData = inject('urlForExportData', null)
     const serverParams = inject('serverParams')
-    const messageToast = inject('messageToast')
-    const dataForSendToExport = ref([])
-    const columnsAvailableForExport = inject('columnsAvailableForExport', [])
-    const columnsSelected = ref([])
-    const titleForPdf = inject('titleForPdf', 'Listado')
+    const columns = inject('columns', null)
+    const dataExport = ref([])
+    const loadingDowloand = ref(false)
 
     const openModalExportData = () => {
       context.refs['modal-export'].show()
     }
 
-    const dowloandDataInDocument = async () => {
+    const dowloandPdf = async () => {
       loadingDowloand.value = true
       try {
         const { columnFilters } = serverParams.value
         const { field, value } = columnFilters
         const urlWithFilters = `${urlForExportData}&campofiltro=${field}&filtro=${value}`
-        const url = numberOfRecordsToExport.value === 'Con filtro actual' ? urlWithFilters : urlForExportData
+        const url = exportWithFilters.value === 'Con filtro actual' ? urlWithFilters : urlForExportData
         const { error, data } = await useFetch(url)
-        columnsSelected.value.sort((n1, n2) => n1.index - n2.index)
         if (error) {
           throw error
         } else if (data) {
-          if (numberOfRecordsToExport.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
-            useExportPdf(columnsSelected.value, data, titleForPdf, orientationSelected.value, true, serverParams.value.columnFilters)
+          if (data.length) {
+            const columnsSelected = columns.filter(column => column.pdf)
+            const renameColumns = columnsSelected.map(column => ({ header: column.label, dataKey: column.field }))
+            dataExport.value = data
+            if (exportWithFilters.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
+              useExportPdf(renameColumns, dataExport.value, titleForExport, orientationSelected.value, serverParams.value.columnFilters)
+            } else {
+              useExportPdf(renameColumns, dataExport.value, titleForExport, orientationSelected.value)
+            }
           } else {
-            useExportPdf(columnsSelected.value, data, titleForPdf, orientationSelected.value)
+            messageToast('warning', 'Advertencia', 'No hay datos para exportar')
           }
         }
       } catch (error) {
-        messageToast('danger', 'Error', 'Error al momento de obtener todos los datos')
+        messageToast('danger', 'Error', 'Error al momento de obtener los datos')
       }
       loadingDowloand.value = false
     }
 
     return {
       openModalExportData,
-      documentTypesSelected,
       orientationSelected,
-      numberOfRecordsToExport,
-      dataForExport,
+      exportWithFilters,
+      dataExport,
       urlForExportData,
-      dowloandDataInDocument,
-      dataForSendToExport,
-      columnsAvailableForExport,
-      columnsSelected,
+      dowloandPdf,
+      columns,
       loadingDowloand,
     }
   },
