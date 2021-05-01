@@ -20,7 +20,14 @@
         </b-button>
       </div>
       <div class="d-flex">
-        <export-table class="mr-1" />
+        <export-excel
+          v-if="exportExcel"
+          class="mr-1"
+        />
+        <export-pdf
+          v-if="exportPdf"
+          class="mr-1"
+        />
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
@@ -193,7 +200,8 @@ import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
 import useFetch from '@/hooks/useFetch'
-import ExportTable from './ExportTable.vue'
+import ExportPdf from './ExportPdf.vue'
+import ExportExcel from './ExportExcel.vue'
 
 export default {
   name: 'TableComponent',
@@ -205,11 +213,22 @@ export default {
     BDropdownItem,
     BButton,
     BBadge,
-    ExportTable,
+    ExportPdf,
+    ExportExcel,
   },
   directives: {
     'b-modal': VBModal,
     Ripple,
+  },
+  props: {
+    exportExcel: {
+      type: Boolean,
+      default: false,
+    },
+    exportPdf: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
