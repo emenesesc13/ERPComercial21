@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -30,42 +33,49 @@ export default {
         field: 'action',
         width: '85px',
         thClass: 'align-middle',
+        pdf: false,
       },
       {
         label: 'Id',
         field: '_id',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Nombre',
         field: 'nombre',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Predio',
         field: 'nombrePredio',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Tipo Almacén',
         field: 'nombreTipoAlmacen',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Observación',
         field: 'observacion',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
     ]
 
@@ -91,6 +101,7 @@ export default {
       return true
     }
 
+    const urlForExportData = '/almacen/?_id=0&tabla=almacen'
     provide('columns', columns)
     provide('data', storages)
     provide('row', storage)
@@ -102,6 +113,10 @@ export default {
     provide('loadDataForEdit', loadDataForEdit)
     provide('loadDataForRegister', loadDataForRegister)
     provide('loadSubStoragesByStorageID', loadSubStoragesByStorageID)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Almacén')
   },
 }
 </script>
