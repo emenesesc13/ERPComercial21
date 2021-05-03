@@ -23,7 +23,7 @@
 
             <template #title>
               <feather-icon icon="UserIcon" />
-              <span>Datos</span>
+              <span class="d-none d-sm-inline">Datos</span>
             </template>
 
             <b-row>
@@ -241,7 +241,7 @@
 
             <template #title>
               <feather-icon icon="FileTextIcon" />
-              <span>Fiscales</span>
+              <span class="d-none d-sm-inline">Fiscales</span>
             </template>
 
             <b-row>
@@ -357,7 +357,7 @@
 
             <template #title>
               <feather-icon icon="MapPinIcon" />
-              <span>Ubicación</span>
+              <span class="d-none d-sm-inline">Ubicación</span>
             </template>
 
             <b-row>
@@ -406,7 +406,7 @@
 
             <template #title>
               <feather-icon icon="PhoneIcon" />
-              <span>Contacto</span>
+              <span class="d-none d-sm-inline">Contacto</span>
             </template>
 
             <b-row>
@@ -583,7 +583,7 @@ export default {
     })
   },
   setup(props, context) {
-    const dniSelected = ref(false)
+    const dniSelected = inject('dniSelected')
     const loadingGetDni = ref(false)
     const loadingGetRuc = ref(false)
     const partner = inject('partner')

@@ -38,6 +38,8 @@ const useVariables = () => {
 
   const tabIndex = ref(0)
 
+  const dniSelected = ref(true)
+
   const initialPartner = {
     _id: 0, // int
     apellidoPaterno: '', // string
@@ -45,7 +47,7 @@ const useVariables = () => {
     nombres: '', // string
     razonSocial: '', // string
     numeroRuc: '', // string
-    idDocumento: 0, // int
+    idDocumento: 13, // int
     numeroDocumento: '', // string
     idUbigeo: 0, // int
     direccion: '', // string
@@ -86,6 +88,7 @@ const useVariables = () => {
 
   return {
     partners,
+    dniSelected,
     partner,
     ubigeoSelected,
     resetUbigeoSelected,

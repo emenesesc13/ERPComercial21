@@ -24,7 +24,7 @@ export default {
   },
   setup() {
     const {
-      partners, partner, resetPartner, ubigeoSelected, resetUbigeoSelected, combos, resetCombo, optionsColumnsFilter, serverParams, tabIndex,
+      partners, partner, dniSelected, resetPartner, ubigeoSelected, resetUbigeoSelected, combos, resetCombo, optionsColumnsFilter, serverParams, tabIndex,
     } = useVariables()
     const messageToast = inject('messageToast')
     const loadComboBoxes = inject('loadComboBoxes')
@@ -57,6 +57,7 @@ export default {
     provide('partners', partners)
     provide('loadPartners', loadPartners)
     provide('partner', partner)
+    provide('dniSelected', dniSelected)
     provide('tabIndex', tabIndex)
     provide('ubigeoSelected', ubigeoSelected)
     provide('resetUbigeoSelected', resetUbigeoSelected)

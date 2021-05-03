@@ -9,7 +9,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { inject, provide } from '@vue/composition-api'
 import TableComponent from '@/components/TableComponent.vue'
-import useFetch from '@/hooks/useFetch'
 
 export default {
   name: 'TablePartner',
@@ -18,15 +17,17 @@ export default {
   },
   setup() {
     const partner = inject('partner')
+    const tabIndex = inject('tabIndex')
+    const dniSelected = inject('dniSelected')
     const partners = inject('partners')
     const loadPartners = inject('loadPartners')
     const ubigeoSelected = inject('ubigeoSelected')
     const combos = inject('combos')
     const resetCombo = inject('resetCombo')
+    const resetUbigeoSelected = inject('resetUbigeoSelected')
     const loadComboBoxes = inject('loadComboBoxes')
     const resetPartner = inject('resetPartner')
     const serverParams = inject('serverParams')
-    const messageToast = inject('messageToast')
     const columns = [
       {
         label: 'Acción',
@@ -96,23 +97,33 @@ export default {
     const idModal = 'modal-partner'
     const url = '/socio'
 
+    const loadDataForRegister = async () => {
+      partner.value.idDocumento = 13
+      tabIndex.value = 0
+      resetUbigeoSelected()
+      resetCombo(combos.value, ['province', 'district'])
+      return true
+    }
+
     const loadDataForEdit = async (rowSelected, row) => {
-      let res = false
-      const { error, data } = await useFetch(`/socio/${rowSelected._id}`)
-      if (error) {
-        messageToast('danger', 'Error', 'Ocurrio un Error')
-        res = false
-      } else if (data) {
-        ubigeoSelected.value.departament = data.codigoDepartamento
-        resetCombo(combos.value, ['province', 'district'])
-        await loadComboBoxes(combos.value, ['province'], `/ComboUbigeo/Provincia/${ubigeoSelected.value.departament}`, 'Ocurrio un Error al momento de cargar las Provincias')
-        ubigeoSelected.value.province = data.codigoProvincia
-        resetCombo(combos.value, ['district'])
-        await loadComboBoxes(combos.value, ['district'], `/ComboUbigeo/Distrito/${ubigeoSelected.value.departament}/${ubigeoSelected.value.province}`, 'Ocurrio un Error al momento de cargar las Provincias')
-        ubigeoSelected.value.district = data.idUbigeo
-        row.value = { ...row.value, ...data }
-        res = true
+      const res = true
+      if (rowSelected.idDocumento === 13) {
+        dniSelected.value = true
+      } else {
+        dniSelected.value = false
       }
+      ubigeoSelected.value.departament = rowSelected.codigoDepartamento
+      resetCombo(combos.value, ['province', 'district'])
+      await loadComboBoxes(combos.value, ['province'], `/ComboUbigeo/Provincia/${ubigeoSelected.value.departament}`, 'Ocurrio un Error al momento de cargar las Provincias')
+      ubigeoSelected.value.province = rowSelected.codigoProvincia
+      resetCombo(combos.value, ['district'])
+      await loadComboBoxes(combos.value, ['district'], `/ComboUbigeo/Distrito/${ubigeoSelected.value.departament}/${ubigeoSelected.value.province}`, 'Ocurrio un Error al momento de cargar las Provincias')
+      ubigeoSelected.value.district = rowSelected.idUbigeo
+      row.value = { ...row.value, ...rowSelected }
+      row.value.cliente = !!rowSelected.cliente
+      row.value.transportista = !!rowSelected.transportista
+      row.value.proveedor = !!rowSelected.proveedor
+      tabIndex.value = 0
       return res
     }
 
@@ -126,6 +137,7 @@ export default {
     provide('serverParams', serverParams)
     provide('loadTable', loadPartners)
     provide('idModal', idModal)
+    provide('loadDataForRegister', loadDataForRegister)
     provide('loadDataForEdit', loadDataForEdit)
 
     // Provide for Export to Document (PDF, EXCEL)
