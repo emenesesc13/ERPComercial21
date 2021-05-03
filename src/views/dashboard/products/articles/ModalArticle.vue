@@ -502,11 +502,13 @@
               >
                 <span v-if="props.column.field === 'action'">
                   <b-button
-                    variant="danger"
-                    size="sm"
+                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                    variant="outline-primary"
+                    title="Eliminar"
+                    class="btn-icon rounded-circle"
                     @click="deleteRow(props.row)"
                   >
-                    Remover
+                    <feather-icon icon="Trash2Icon" />
                   </b-button>
                 </span>
               </template>
