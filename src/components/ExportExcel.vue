@@ -19,7 +19,7 @@
       class="d-none"
       :data="dataExport"
       :columns="newColumns"
-      :filename="titleForExport"
+      :filename="`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${titleForExport} ${(new Date()).toLocaleTimeString()}`"
       :sheetname="titleForExport"
     />
   </div>
@@ -57,7 +57,18 @@ export default {
         messageToast('warning', 'Advertencia', 'Error al momento de obtener los datos')
       } else if (data) {
         if (data.length) {
-          dataExport.value = data
+          dataExport.value = data.map(row => {
+            const fila = { ...row }
+            columns.forEach(col => {
+              if (col?.type === 'boolean') {
+                fila[col.field] = row[col.field] ? 'SI' : 'NO'
+              }
+              if (col?.field === 'activo') {
+                fila[col.field] = row[col.field] ? 'ACTIVO' : 'DESACTIVO'
+              }
+            })
+            return fila
+          })
           setTimeout(() => {
             context.refs.exportExcel.$el.click()
           }, 0)

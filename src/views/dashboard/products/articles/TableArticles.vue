@@ -107,6 +107,7 @@ export default {
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
         pdf: true,
+        type: 'boolean',
       },
       {
         label: 'Servicio',
@@ -114,6 +115,7 @@ export default {
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
         pdf: true,
+        type: 'boolean',
       },
       {
         label: 'Stock min.',
