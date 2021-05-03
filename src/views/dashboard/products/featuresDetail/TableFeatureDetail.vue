@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -26,30 +29,35 @@ export default {
         field: 'action',
         width: '85px',
         thClass: 'align-middle',
+        pdf: false,
       },
       {
         label: 'Id',
         field: '_id',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Nombre',
         field: 'nombre',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Característica',
         field: 'nombreCaracteristica',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
     ]
 
@@ -66,6 +74,7 @@ export default {
       return true
     }
 
+    const urlForExportData = '/dcaracteristica/?_id=0&tabla=dcaracteristica'
     provide('columns', columns)
     provide('data', featuresDetail)
     provide('row', featureDetail)
@@ -75,6 +84,10 @@ export default {
     provide('loadTable', loadFeaturesDetail)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Detalle características')
   },
 }
 </script>

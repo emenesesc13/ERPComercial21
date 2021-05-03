@@ -1,5 +1,8 @@
 <template>
-  <table-component>
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  >
     <template #custom="{ props }">
       <!-- Column: flgStock -->
       <span v-if="props.column.field === 'flgStock'">
@@ -52,30 +55,35 @@ export default {
         field: 'action',
         width: '85px',
         thClass: 'align-middle',
+        pdf: false,
       },
       {
         label: 'Id',
         field: '_id',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Nombre',
         field: 'nombre',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Tipo',
         field: 'nombreTipoProducto',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Unidad',
         field: 'nombreGrupoUnidad',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Precio Venta',
@@ -83,6 +91,7 @@ export default {
         thClass: 'align-middle',
         tdClass: 'align-middle text-right',
         formatFn: value => `S/. ${value.toFixed(2)}`,
+        pdf: true,
       },
       {
         label: 'Precio min. Venta',
@@ -90,36 +99,42 @@ export default {
         thClass: 'align-middle',
         tdClass: 'align-middle text-right',
         formatFn: value => `S/. ${value.toFixed(2)}`,
+        pdf: true,
       },
       {
         label: 'Stock',
         field: 'flgStock',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
       {
         label: 'Servicio',
         field: 'flgServicio',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
       {
         label: 'Stock min.',
         field: 'stockMinimo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-right',
+        pdf: true,
       },
       {
         label: 'Stock max.',
         field: 'stockMaximo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-right',
+        pdf: true,
       },
       {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
     ]
 
@@ -151,6 +166,8 @@ export default {
       return true
     }
 
+    const urlForExportData = '/articulos/?_id=0&tabla=articulos'
+
     provide('columns', columns)
     provide('data', articles)
     provide('row', article)
@@ -161,6 +178,10 @@ export default {
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
     provide('loadDataForRegister', loadDataForRegister)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Artículos')
   },
 }
 </script>

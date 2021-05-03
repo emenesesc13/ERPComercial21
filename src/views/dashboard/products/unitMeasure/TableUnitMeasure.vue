@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -26,36 +29,42 @@ export default {
         field: 'action',
         width: '85px',
         thClass: 'align-middle',
+        pdf: false,
       },
       {
         label: 'Id',
         field: '_id',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Nombre',
         field: 'nombre',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Grupo Unidad',
         field: 'nombreGrupoUnidad',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Unidad Sunat',
         field: 'nombreUnidadSunat',
         thClass: 'align-middle',
         tdClass: 'align-middle',
+        pdf: true,
       },
       {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',
         tdClass: 'align-middle text-center',
+        pdf: true,
       },
     ]
 
@@ -72,6 +81,7 @@ export default {
       return true
     }
 
+    const urlForExportData = '/unidadmedida/?_id=0&tabla=unidad'
     provide('columns', columns)
     provide('data', unitsMeasure)
     provide('row', unitMeasure)
@@ -81,6 +91,10 @@ export default {
     provide('loadTable', loadUnitsMeasure)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Unidade de medida')
   },
 }
 </script>

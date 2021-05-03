@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import store from '@/store'
 
-const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle = 'Subtitulo') => {
+const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle) => {
   const doc = new jsPDF(orientation, 'pt', 'a4')
   const body = dataExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
 
