@@ -61,7 +61,7 @@
           <b-form-group
             label="Selecciona las Columnas"
           >
-            <div class="list-group-item checkbox-grid">
+            <div class="list-group list-group-flush checkbox-grid p-2 border">
               <template v-for="(column) in columns">
                 <b-form-checkbox
                   v-if="column.field !== 'action'"
