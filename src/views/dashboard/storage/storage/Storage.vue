@@ -1,5 +1,6 @@
 <template>
   <div>
+    <modal-storage />
     <modal-search-storage />
     <b-card>
       <table-storage />
@@ -12,6 +13,7 @@ import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import TableStorage from './TableStorage.vue'
+import ModalStorage from './ModalStorage.vue'
 import ModalSearchStorage from './ModalSearchStorage.vue'
 import useVariables from './useVariables'
 
@@ -21,13 +23,15 @@ export default {
     BCard,
     TableStorage,
     ModalSearchStorage,
+    ModalStorage,
   },
   setup() {
     const {
-      storages, storage, resetStorage, serverParams, optionsColumnsFilter,
+      storages, storage, resetStorage, serverParams, optionsColumnsFilter, resetSubStorage, subStorage, combos, resetCombos, resetSubStorages, subStorages,
     } = useVariables()
 
     const messageToast = inject('messageToast')
+    const loadComboBoxes = inject('loadComboBoxes')
 
     const loadStorages = async () => {
       storages.value.loading = true
@@ -48,8 +52,22 @@ export default {
       storages.value.loading = false
     }
 
+    const loadSubStoragesByStorageID = async storageId => {
+      subStorages.value.loading = true
+      const url = `/dalmacen/?_id=0&tabla=dalmacen&campo=a.idAlmacen&indice=${storageId}`
+      const { data, error } = await useFetch(url)
+      if (error) {
+        messageToast('danger', 'Error', 'Error al momento de cargar los sub Almacenes')
+      } else {
+        subStorages.value.data = data
+      }
+      subStorages.value.loading = false
+    }
+
     onMounted(() => {
       loadStorages()
+      loadComboBoxes(combos.value, ['estates'], '/combo/predios/1', 'Error al momento de cargar los Predios')
+      loadComboBoxes(combos.value, ['storageTypes'], '/combo/tipoalmacen/1', 'Error al momento de cargar los Predios')
     })
 
     provide('storages', storages)
@@ -57,7 +75,14 @@ export default {
     provide('serverParams', serverParams)
     provide('loadStorages', loadStorages)
     provide('resetStorage', resetStorage)
+    provide('loadSubStoragesByStorageID', loadSubStoragesByStorageID)
+    provide('resetSubStorage', resetSubStorage)
+    provide('subStorage', subStorage)
     provide('optionsColumnsFilter', optionsColumnsFilter)
+    provide('combos', combos)
+    provide('resetCombos', resetCombos)
+    provide('resetSubStorages', resetSubStorages)
+    provide('subStorages', subStorages)
   },
 }
 </script>

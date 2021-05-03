@@ -20,6 +20,9 @@ export default {
     const resetStorage = inject('resetStorage')
     const serverParams = inject('serverParams')
     const messageToast = inject('messageToast')
+    const resetSubStorages = inject('resetSubStorages')
+    const resetSubStorage = inject('resetSubStorage')
+    const loadSubStoragesByStorageID = inject('loadSubStoragesByStorageID')
 
     const columns = [
       {
@@ -69,14 +72,22 @@ export default {
     const idModal = 'modal-storage'
     const url = '/almacen'
 
+    const loadDataForRegister = async () => {
+      resetSubStorage()
+      resetSubStorages()
+      return true
+    }
+
     const loadDataForEdit = async (rowSelected, row) => {
       resetStorage()
+      resetSubStorages()
       const { error, data } = await useFetch(`/almacen/${rowSelected._id}`)
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un Error')
         return false
       }
       row.value = data
+      await loadSubStoragesByStorageID(row.value._id)
       return true
     }
 
@@ -89,6 +100,8 @@ export default {
     provide('loadTable', loadStorages)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+    provide('loadDataForRegister', loadDataForRegister)
+    provide('loadSubStoragesByStorageID', loadSubStoragesByStorageID)
   },
 }
 </script>
