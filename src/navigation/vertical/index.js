@@ -62,4 +62,18 @@ export default [
       },
     ],
   },
+  {
+    title: 'Seguridad',
+    icon: 'LockIcon',
+    children: [
+      {
+        title: 'Usuarios',
+        route: 'users',
+      },
+      {
+        title: 'Roles',
+        route: 'roles',
+      },
+    ],
+  },
 ]

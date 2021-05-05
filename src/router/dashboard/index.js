@@ -1,6 +1,7 @@
 import productsRoutes from './products'
 import storageRoutes from './storage'
 import partnerRoutes from './partner'
+import securityRoutes from './security'
 
 const dashboardRoutes = [
   {
@@ -21,6 +22,7 @@ const dashboardRoutes = [
   ...productsRoutes,
   ...storageRoutes,
   ...partnerRoutes,
+  ...securityRoutes,
 ]
 
 export default dashboardRoutes
