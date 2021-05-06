@@ -37,6 +37,25 @@ const securityRoutes = [
       ],
     },
   },
+  {
+    path: '/colaboradores',
+    name: 'collaborators',
+    component: () => import('@/views/dashboard/security/collaborator/Collaborator.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Colaboradores',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Colaboradores',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default securityRoutes

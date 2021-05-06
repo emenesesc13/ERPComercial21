@@ -180,7 +180,6 @@
             >
               <flat-pickr
                 id="fin"
-                :parseDate="value => new Date(value).toISOString()"
                 v-model="user.fin"
                 class="form-control"
                 :config="{ enableTime: true, enableSeconds: true, dateFormat: 'Y-m-d H:i:s', minuteIncrement: 1}"
