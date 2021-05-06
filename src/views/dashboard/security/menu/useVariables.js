@@ -1,33 +1,41 @@
 import { ref } from '@vue/composition-api'
 
 const useVariables = () => {
-  const collaborators = ref({
+  const menus = ref({
     loading: false,
     data: [],
     totalRecords: 0,
   })
 
-  const initialCollaborator = {
+  const initialMenu = {
     _id: 0,
+    idModulo: 0,
     nombre: '',
-    apellidoPaterno: '',
-    apellidoMaterno: '',
+    orden: 0,
+    icono: '',
+    ruta: '',
     accion: 0,
     idUsuario: null,
     loading: false,
   }
 
-  const collaborator = ref({ ...initialCollaborator })
+  const menu = ref({ ...initialMenu })
 
-  const resetCollaborator = () => {
-    collaborator.value = { ...initialCollaborator }
+  const resetMenu = () => {
+    menu.value = { ...initialMenu }
   }
 
+  const initialStateCombo = {
+    disabled: true,
+    loading: false,
+    data: [],
+  }
+
+  const combos = ref({
+    modules: { ...initialStateCombo },
+  })
+
   const optionsColumnsFilter = [
-    {
-      title: 'Id',
-      field: '_id',
-    },
     {
       title: 'Nombre',
       field: 'a.nombre',
@@ -44,9 +52,10 @@ const useVariables = () => {
   })
 
   return {
-    collaborators,
-    collaborator,
-    resetCollaborator,
+    menus,
+    menu,
+    resetMenu,
+    combos,
     optionsColumnsFilter,
     serverParams,
   }

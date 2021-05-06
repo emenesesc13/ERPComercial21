@@ -78,6 +78,10 @@ export default [
         title: 'Colaboradores',
         route: 'collaborators',
       },
+      {
+        title: 'Menús',
+        route: 'menus',
+      },
     ],
   },
 ]

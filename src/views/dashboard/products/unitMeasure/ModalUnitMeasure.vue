@@ -203,7 +203,7 @@ export default {
             messageToast('warning', 'Advertencia', mensaje)
           } else {
             unitMeasure.value._id = id
-            messageToast('success', 'Característica', mensaje)
+            messageToast('success', 'Unidad de Medida', mensaje)
             context.root.$bvModal.hide('modal-unit-measure')
             loadUnitsMeasure()
           }
