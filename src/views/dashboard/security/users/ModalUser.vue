@@ -285,13 +285,15 @@ export default {
               messageToast('warning', 'Advertencia', mensaje)
             } else {
               user.value._id = id
-              messageToast('success', 'Característica', mensaje)
+              messageToast('success', 'Usuario', mensaje)
               context.root.$bvModal.hide('modal-user')
               loadUsers()
             }
           })
           user.value.loading = false
         }
+      } else {
+        messageToast('warning', 'Advertencia', 'Debe ingresar la fecha fin')
       }
     }
 

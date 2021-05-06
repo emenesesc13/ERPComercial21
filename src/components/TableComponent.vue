@@ -122,6 +122,10 @@
                 />
                 <span>Editar</span>
               </b-dropdown-item>
+              <slot
+                name="options-row"
+                :props="props"
+              />
               <b-dropdown-item @click="deleteRow(props.row)">
                 <feather-icon
                   icon="TrashIcon"
