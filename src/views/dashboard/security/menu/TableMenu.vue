@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -94,6 +97,11 @@ export default {
     provide('loadTable', loadMenus)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    const urlForExportData = '/menu/?_id=0&tabla=menu'
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Menús del Sistema')
   },
 }
 </script>
