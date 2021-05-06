@@ -1,10 +1,21 @@
 <template>
-  <table-component />
+  <table-component>
+    <template #options-row="{ props }">
+      <b-dropdown-item @click="openModalForChangePassword(props.row)">
+        <feather-icon
+          icon="LockIcon"
+          class="mr-50"
+        />
+        <span>Cambiar Clave</span>
+      </b-dropdown-item>
+    </template>
+  </table-component>
 </template>
 
 <script>
 /* eslint no-underscore-dangle: 0 */
 import { inject, provide } from '@vue/composition-api'
+import { BDropdownItem } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import TableComponent from '@/components/TableComponent.vue'
 
@@ -12,8 +23,9 @@ export default {
   name: 'TableUser',
   components: {
     TableComponent,
+    BDropdownItem,
   },
-  setup() {
+  setup(props, context) {
     const users = inject('users')
     const loadUsers = inject('loadUsers')
     const user = inject('user')
@@ -100,6 +112,12 @@ export default {
       return true
     }
 
+    const openModalForChangePassword = row => {
+      resetUser()
+      user.value._id = row._id
+      context.root.$bvModal.show('modal-user-clave')
+    }
+
     provide('columns', columns)
     provide('data', users)
     provide('row', user)
@@ -109,6 +127,10 @@ export default {
     provide('loadTable', loadUsers)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    return {
+      openModalForChangePassword,
+    }
   },
 }
 </script>
