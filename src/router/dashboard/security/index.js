@@ -56,6 +56,25 @@ const securityRoutes = [
       ],
     },
   },
+  {
+    path: '/menus',
+    name: 'menus',
+    component: () => import('@/views/dashboard/security/menu/Menu.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Menús',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Menús',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default securityRoutes
