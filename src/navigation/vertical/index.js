@@ -74,6 +74,10 @@ export default [
         title: 'Roles',
         route: 'roles',
       },
+      {
+        title: 'Colaboradores',
+        route: 'collaborators',
+      },
     ],
   },
 ]
