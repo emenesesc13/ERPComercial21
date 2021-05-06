@@ -1,5 +1,8 @@
 <template>
-  <table-component />
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  />
 </template>
 
 <script>
@@ -83,6 +86,11 @@ export default {
     provide('loadTable', loadCollaborators)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    const urlForExportData = '/colaborador/?_id=0&tabla=colaborador'
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Colaboradores')
   },
 }
 </script>

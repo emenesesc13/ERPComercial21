@@ -1,5 +1,8 @@
 <template>
-  <table-component>
+  <table-component
+    :export-pdf="true"
+    :export-excel="true"
+  >
     <template #options-row="{ props }">
       <b-dropdown-item @click="openModalForChangePassword(props.row)">
         <feather-icon
@@ -127,6 +130,11 @@ export default {
     provide('loadTable', loadUsers)
     provide('idModal', idModal)
     provide('loadDataForEdit', loadDataForEdit)
+
+    // Provide for Export to Document (PDF, EXCEL)
+    const urlForExportData = '/usuario/?_id=0&tabla=usuarios'
+    provide('urlForExportData', urlForExportData)
+    provide('titleForExport', 'Reporte de Usuarios')
 
     return {
       openModalForChangePassword,

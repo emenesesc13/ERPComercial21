@@ -87,17 +87,17 @@
         >
           <template v-if="!loadingDowloand">
             <feather-icon
-              icon="DownloadIcon"
+              icon="PrinterIcon"
               class="mr-25"
             />
-            Descargar
+            Imprimir
           </template>
           <template v-else>
             <b-spinner
               small
               class="mr-50"
             />
-            Descargando...
+            Cargando...
           </template>
         </b-button>
       </template>
@@ -174,7 +174,7 @@ export default {
         } else if (data) {
           if (data.length) {
             const columnsSelected = columns.filter(column => column.pdf)
-            const renameColumns = columnsSelected.map(column => ({ header: column.label, dataKey: column.field }))
+            const renameColumns = columnsSelected.map(column => ({ header: column.label, dataKey: column.field, type: column.type }))
             dataExport.value = data
             if (exportWithFilters.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
               useExportPdf(renameColumns, dataExport.value, titleForExport, orientationSelected.value, serverParams.value.columnFilters)

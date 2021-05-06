@@ -92,6 +92,7 @@ export default {
         tdClass: 'align-middle text-right',
         formatFn: value => `S/. ${value.toFixed(2)}`,
         pdf: true,
+        type: 'numberMoney',
       },
       {
         label: 'Precio min. Venta',
@@ -100,6 +101,7 @@ export default {
         tdClass: 'align-middle text-right',
         formatFn: value => `S/. ${value.toFixed(2)}`,
         pdf: true,
+        type: 'numberMoney',
       },
       {
         label: 'Stock',

@@ -6,6 +6,16 @@ import store from '@/store'
 const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle) => {
   const doc = new jsPDF(orientation, 'pt', 'a4')
   const body = dataExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
+  body.forEach(row => {
+    columns.forEach(column => {
+      if (column.type === 'boolean') {
+        row[column.dataKey] = row[column.dataKey] ? 'SI' : 'NO'
+      }
+      if (column.type === 'numberMoney') {
+        row[column.dataKey] = `S./ ${row[column.dataKey].toFixed(2)}`
+      }
+    })
+  })
 
   const partColumn = doc.internal.pageSize.getWidth() / 4 - 80
   const lineHeight = 12
@@ -108,9 +118,8 @@ const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientat
     theme: 'plain',
     margin: {
       bottom: 60,
-      top: 80,
+      top: topFourLine,
     },
-    startY: topFourLine,
     columns,
     body,
     cellWidth: 'wrap',
@@ -201,7 +210,8 @@ const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientat
       doc.text(`CÓDIGO: ${store.state.auth.user.secret}`, 40, doc.internal.pageSize.getHeight() - 38)
     },
   })
-  doc.save(`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf`)
+  doc.autoPrint()
+  doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
 }
 
 export default useExportPdf
