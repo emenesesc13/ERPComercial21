@@ -93,6 +93,10 @@ const useVariables = () => {
       field: 'a._id',
     },
     {
+      title: 'SKU',
+      field: 'sku',
+    },
+    {
       title: 'Nombre',
       field: 'a.nombre',
     },
