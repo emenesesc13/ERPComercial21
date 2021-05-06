@@ -11,6 +11,7 @@ const useVariables = () => {
     _id: 0,
     idModulo: 0,
     nombre: '',
+    formulario: '',
     orden: 0,
     icono: '',
     ruta: '',
