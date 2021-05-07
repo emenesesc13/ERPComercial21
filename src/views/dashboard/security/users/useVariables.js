@@ -27,6 +27,8 @@ const useVariables = () => {
     user.value = { ...initialUser }
   }
 
+  const confirmClave = ref('')
+
   const initialStateCombo = {
     disabled: true,
     loading: false,
@@ -68,6 +70,7 @@ const useVariables = () => {
     users,
     user,
     resetUser,
+    confirmClave,
     combos,
     resetCombos,
     optionsColumnsFilter,

@@ -33,6 +33,7 @@ export default {
     const loadUsers = inject('loadUsers')
     const user = inject('user')
     const resetUser = inject('resetUser')
+    const confirmClave = inject('confirmClave')
     const serverParams = inject('serverParams')
     const messageToast = inject('messageToast')
 
@@ -117,6 +118,7 @@ export default {
 
     const openModalForChangePassword = row => {
       resetUser()
+      confirmClave.value = ''
       user.value._id = row._id
       context.root.$bvModal.show('modal-user-clave')
     }
