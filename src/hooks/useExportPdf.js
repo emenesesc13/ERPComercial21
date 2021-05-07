@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import store from '@/store'
 
-const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle) => {
+const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle) => {
   const doc = new jsPDF(orientation, 'pt', 'a4')
   const body = dataExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
   body.forEach(row => {
@@ -210,8 +210,12 @@ const useExportPdf = (columns = [], dataExport = [], title = 'LISTADO', orientat
       doc.text(`CÓDIGO: ${store.state.auth.user.secret}`, 40, doc.internal.pageSize.getHeight() - 38)
     },
   })
-  doc.autoPrint()
-  doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
+  if (mode === 'download') {
+    doc.save(`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf`)
+  } else if (mode === 'print') {
+    doc.autoPrint()
+    doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
+  }
 }
 
 export default useExportPdf
