@@ -272,6 +272,7 @@ export default {
       user.value.loading = true
       user.value.accion = user.value._id ? 2 : 1
       user.value.idUsuario = store.state.auth.user._id
+      if (user.value.accion === 2) delete user.value.clave
       if (user.value.idColaborador && user.value.idRol) {
         user.value.inicio = new Date(user.value.inicio).toISOString()
         user.value.fin = new Date(user.value.fin).toISOString()
