@@ -82,10 +82,10 @@
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
-          :disabled="loadingDowloand"
-          @click="dowloandPdf"
+          :disabled="loadingPrint"
+          @click="generatePdf('print')"
         >
-          <template v-if="!loadingDowloand">
+          <template v-if="!loadingPrint">
             <feather-icon
               icon="PrinterIcon"
               class="mr-25"
@@ -98,6 +98,27 @@
               class="mr-50"
             />
             Cargando...
+          </template>
+        </b-button>
+        <b-button
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          variant="primary"
+          :disabled="loadingDownload"
+          @click="generatePdf('download')"
+        >
+          <template v-if="!loadingDownload">
+            <feather-icon
+              icon="DownloadIcon"
+              class="mr-25"
+            />
+            Descargar
+          </template>
+          <template v-else>
+            <b-spinner
+              small
+              class="mr-50"
+            />
+            Descargando...
           </template>
         </b-button>
       </template>
@@ -155,14 +176,16 @@ export default {
     const serverParams = inject('serverParams')
     const columns = inject('columns', null)
     const dataExport = ref([])
-    const loadingDowloand = ref(false)
+    const loadingDownload = ref(false)
+    const loadingPrint = ref(false)
 
     const openModalExportData = () => {
       context.refs['modal-export'].show()
     }
 
-    const dowloandPdf = async () => {
-      loadingDowloand.value = true
+    const generatePdf = async mode => {
+      if (mode === 'download') loadingDownload.value = true
+      else if (mode === 'print') loadingPrint.value = true
       try {
         const { columnFilters } = serverParams.value
         const { field, value } = columnFilters
@@ -177,9 +200,9 @@ export default {
             const renameColumns = columnsSelected.map(column => ({ header: column.label, dataKey: column.field, type: column.type }))
             dataExport.value = data
             if (exportWithFilters.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
-              useExportPdf(renameColumns, dataExport.value, titleForExport, orientationSelected.value, serverParams.value.columnFilters)
+              useExportPdf(mode, renameColumns, dataExport.value, titleForExport, orientationSelected.value, serverParams.value.columnFilters)
             } else {
-              useExportPdf(renameColumns, dataExport.value, titleForExport, orientationSelected.value)
+              useExportPdf(mode, renameColumns, dataExport.value, titleForExport, orientationSelected.value)
             }
           } else {
             messageToast('warning', 'Advertencia', 'No hay datos para exportar')
@@ -188,7 +211,8 @@ export default {
       } catch (error) {
         messageToast('danger', 'Error', 'Error al momento de obtener los datos')
       }
-      loadingDowloand.value = false
+      if (mode === 'download') loadingDownload.value = false
+      else if (mode === 'print') loadingPrint.value = false
     }
 
     return {
@@ -197,9 +221,10 @@ export default {
       exportWithFilters,
       dataExport,
       urlForExportData,
-      dowloandPdf,
+      generatePdf,
       columns,
-      loadingDowloand,
+      loadingDownload,
+      loadingPrint,
     }
   },
 }
