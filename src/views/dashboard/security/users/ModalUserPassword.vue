@@ -77,14 +77,14 @@
                     v-model="confirmClave"
                     :state="errors.length > 0 ? false:null"
                     class="form-control-merge"
-                    :type="passwordFieldType"
+                    :type="passwordFieldTypeConfirm"
                     placeholder="············"
                   />
                   <b-input-group-append is-text>
                     <feather-icon
                       class="cursor-pointer"
                       :icon="confirmPasswordToggleIcon"
-                      @click="togglePasswordVisibility"
+                      @click="togglePasswordConfirmVisibility"
                     />
                   </b-input-group-append>
                 </b-input-group>
@@ -131,9 +131,8 @@ import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import { required } from '@validations'
-import { ref, inject } from '@vue/composition-api'
+import { inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
 import store from '@/store'
 import useFetch from '@/hooks/useFetch'
@@ -157,10 +156,11 @@ export default {
   directives: {
     Ripple,
   },
-  mixins: [togglePasswordVisibility],
   data() {
     return {
       required,
+      passwordFieldType: 'password',
+      passwordFieldTypeConfirm: 'password',
     }
   },
   computed: {
@@ -168,7 +168,7 @@ export default {
       return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
     },
     confirmPasswordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
+      return this.passwordFieldTypeConfirm === 'password' ? 'EyeIcon' : 'EyeOffIcon'
     },
   },
   created() {
@@ -180,10 +180,18 @@ export default {
       message: 'No coinciden las claves',
     })
   },
+  methods: {
+    togglePasswordVisibility() {
+      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+    },
+    togglePasswordConfirmVisibility() {
+      this.passwordFieldTypeConfirm = this.passwordFieldTypeConfirm === 'password' ? 'text' : 'password'
+    },
+  },
   setup(props, context) {
     const user = inject('user')
     const messageToast = inject('messageToast')
-    const confirmClave = ref('')
+    const confirmClave = inject('confirmClave')
 
     const sendForm = async () => {
       user.value.loading = true

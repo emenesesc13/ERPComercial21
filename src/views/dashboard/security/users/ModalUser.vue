@@ -21,7 +21,7 @@
           <!-- Usuario -->
           <b-col
             cols="12"
-            md="6"
+            lg="6"
           >
             <b-form-group
               label-for="user"
@@ -45,7 +45,7 @@
           <!-- Colaborador -->
           <b-col
             cols="12"
-            md="6"
+            lg="6"
           >
             <validation-provider
               #default="{ errors }"
@@ -79,7 +79,7 @@
           <!-- Rol -->
           <b-col
             cols="12"
-            md="6"
+            lg="6"
           >
             <validation-provider
               #default="{ errors }"
@@ -122,7 +122,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="email"
-                rules="required"
+                rules="required|email"
               >
                 <b-form-input
                   id="email"
@@ -149,11 +149,26 @@
                 name="clave"
                 rules="required"
               >
-                <b-form-input
-                  id="clave"
-                  v-model="user.clave"
-                  :state="errors.length > 0 ? false:null"
-                />
+                <b-input-group
+                  class="input-group-merge"
+                  :class="errors.length > 0 ? 'is-invalid':null"
+                >
+                  <b-form-input
+                    id="clave"
+                    v-model="user.clave"
+                    :state="errors.length > 0 ? false:null"
+                    class="form-control-merge"
+                    :type="passwordFieldType"
+                    placeholder="············"
+                  />
+                  <b-input-group-append is-text>
+                    <feather-icon
+                      class="cursor-pointer"
+                      :icon="passwordToggleIcon"
+                      @click="togglePasswordVisibility"
+                    />
+                  </b-input-group-append>
+                </b-input-group>
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
@@ -222,11 +237,12 @@
 <script>
 /* eslint no-underscore-dangle: 0 */
 import {
-  BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
+  BRow, BCol, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
 import flatPickr from 'vue-flatpickr-component'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required } from '@validations'
+import { togglePasswordVisibility } from '@core/mixins/ui/forms'
+import { required, email } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
@@ -240,6 +256,8 @@ export default {
     BCol,
     BForm,
     BFormGroup,
+    BInputGroup,
+    BInputGroupAppend,
     BFormInput,
     BModal,
     BButton,
@@ -252,14 +270,24 @@ export default {
   directives: {
     Ripple,
   },
+  mixins: [togglePasswordVisibility],
   data() {
     return {
       required,
+      email,
     }
+  },
+  computed: {
+    passwordToggleIcon() {
+      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
+    },
   },
   created() {
     extend('required', {
       message: 'Es requerido',
+    })
+    extend('email', {
+      message: 'El correo electrónico no es válido',
     })
   },
   setup(props, context) {

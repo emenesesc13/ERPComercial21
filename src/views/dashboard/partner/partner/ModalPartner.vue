@@ -185,7 +185,8 @@
 
               <!-- Email -->
               <b-col
-                cols="8"
+                cols="12"
+                md="8"
               >
                 <b-form-group
                   label-for="email"
@@ -194,7 +195,7 @@
                   <validation-provider
                     #default="{ errors }"
                     name="Email"
-                    rules="required"
+                    rules="required|email"
                   >
                     <b-form-input
                       id="email"
@@ -208,7 +209,8 @@
 
               <!-- Phone -->
               <b-col
-                cols="4"
+                cols="12"
+                md="4"
               >
                 <b-form-group
                   label-for="phone"
@@ -299,9 +301,12 @@
                 <b-form-group
                   label-for="typePartner"
                   label="Tipo de Socio"
-                  style="height: 58px"
+                  style="min-height: 58px"
                 >
-                  <div class="d-flex align-items-center mt-1">
+                  <div
+                    class="d-flex flex-wrap align-items-center mt-1"
+                    style="gap: 1em;"
+                  >
                     <b-form-checkbox
                       v-model="partner.cliente"
                       class="mr-1"
@@ -538,7 +543,7 @@ import {
   BRow, BForm, BButton, BModal, BOverlay, BCol, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BFormCheckbox, BTabs, BTab, BSpinner,
 } from 'bootstrap-vue'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
-import { required } from '@validations'
+import { required, email } from '@validations'
 import vSelect from 'vue-select'
 import { ref, inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
@@ -575,11 +580,15 @@ export default {
   data() {
     return {
       required,
+      email,
     }
   },
   created() {
     extend('required', {
       message: 'Es requerido',
+    })
+    extend('email', {
+      message: 'El correo electrónico no es válido',
     })
   },
   setup(props, context) {

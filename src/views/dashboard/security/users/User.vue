@@ -30,7 +30,7 @@ export default {
   },
   setup() {
     const {
-      user, users, resetUser, combos, resetCombos, optionsColumnsFilter, serverParams,
+      user, users, resetUser, confirmClave, combos, resetCombos, optionsColumnsFilter, serverParams,
     } = useVariables()
     const messageToast = inject('messageToast')
     const loadComboBoxes = inject('loadComboBoxes')
@@ -64,6 +64,7 @@ export default {
     provide('loadUsers', loadUsers)
     provide('user', user)
     provide('resetUser', resetUser)
+    provide('confirmClave', confirmClave)
     provide('combos', combos)
     provide('resetCombos', resetCombos)
     provide('optionsColumnsFilter', optionsColumnsFilter)
