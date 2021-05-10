@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- search input -->
-    <div class="custom-search d-flex justify-content-between mb-1 flex-wrap">
+    <div
+      v-if="buttonsEnabled"
+      class="custom-search d-flex justify-content-between mb-1 flex-wrap"
+    >
       <div
         class="d-flex align-items-start"
       >
@@ -58,9 +61,14 @@
       :pagination-options="{
         enabled: true,
       }"
+      :sort-options="{
+        enabled: false,
+      }"
       :total-rows="dataTable.totalRecords"
+      :row-style-class="clickable ? 'clickable' : ''"
       @on-page-change="onPageChange"
       @on-per-page-change="onPageChange"
+      @on-row-click="onRowClick"
     >
       <template slot="loadingContent">
         <img
@@ -233,6 +241,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    buttonsEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    clickable: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -254,14 +270,14 @@ export default {
   setup(props, context) {
     const columns = inject('columns')
     const dataTable = inject('data')
-    const row = inject('row')
-    const resetRow = inject('resetRow')
-    const url = inject('url')
+    const row = inject('row', null)
+    const resetRow = inject('resetRow', null)
+    const url = inject('url', null)
     const serverParams = inject('serverParams')
     const loadTable = inject('loadTable')
-    const idModal = inject('idModal')
+    const idModal = inject('idModal', null)
     const loadDataForRegister = inject('loadDataForRegister', null)
-    const loadDataForEdit = inject('loadDataForEdit')
+    const loadDataForEdit = inject('loadDataForEdit', null)
     const messageToast = inject('messageToast')
     const confirmSwal = inject('confirmSwal')
 
@@ -311,6 +327,10 @@ export default {
         updateParams({ page: params.currentPage, perPage: params.currentPerPage })
         loadTable()
       }
+    }
+
+    const onRowClick = params => {
+      context.emit('on-row-click', params)
     }
 
     const changeStatus = async rowSelected => {
@@ -373,6 +393,7 @@ export default {
       openModalSearch,
       // onPerPageChange,
       onPageChange,
+      onRowClick,
       changeStatus,
       deleteRow,
     }
