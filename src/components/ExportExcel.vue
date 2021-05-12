@@ -1,19 +1,11 @@
 <template>
-  <div>
-    <b-button
+  <fragment>
+    <b-dropdown-item
       v-if="newColumns.length && urlForExportData"
-      v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-      variant="primary"
       @click="dowloandExcel"
     >
-      <feather-icon
-        icon="FileTextIcon"
-        class="mr-0 mr-sm-50"
-      />
-      <span class="d-none d-sm-inline">
-        Excel
-      </span>
-    </b-button>
+      <span>Excel</span>
+    </b-dropdown-item>
     <vue-excel-xlsx
       ref="exportExcel"
       class="d-none"
@@ -22,19 +14,21 @@
       :filename="`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${titleForExport} ${(new Date()).toLocaleTimeString()}`"
       :sheetname="titleForExport"
     />
-  </div>
+  </fragment>
 </template>
 
 <script>
 import { ref, inject } from '@vue/composition-api'
-import { BButton } from 'bootstrap-vue'
+import { Fragment } from 'vue-fragment'
+import { BDropdownItem } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import useFetch from '@/hooks/useFetch'
 
 export default {
   name: 'ExportExcel',
   components: {
-    BButton,
+    Fragment,
+    BDropdownItem,
   },
   directives: {
     Ripple,

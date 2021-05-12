@@ -1,150 +1,145 @@
 <template>
-  <div>
-    <b-modal
-      id="modal-export"
-      ref="modal-export"
-      centered
-      title="Exportar en PDF"
-      no-close-on-esc
-      no-close-on-backdrop
-    >
-      <b-row>
+  <fragment>
+    <div>
+      <b-modal
+        id="modal-export"
+        ref="modal-export"
+        centered
+        title="Exportar en PDF"
+        no-close-on-esc
+        no-close-on-backdrop
+      >
+        <b-row>
 
-        <b-col
-          cols="12"
-        >
-          <b-form-group
-            label="Selecciona la Orientación"
+          <b-col
+            cols="12"
           >
-            <div class="demo-inline-spacing mb-75">
-              <b-form-radio
-                v-model="orientationSelected"
-                value="p"
-                class="mt-50"
-              >
-                Vertical
-              </b-form-radio>
-              <b-form-radio
-                v-model="orientationSelected"
-                value="l"
-                class="mt-50"
-              >
-                Horizontal
-              </b-form-radio>
-            </div>
-          </b-form-group>
-        </b-col>
-
-        <b-col
-          cols="12"
-        >
-          <b-form-group
-            label="¿Qué datos deseas exportar?"
-          >
-            <v-select
-              id="count"
-              v-model="exportWithFilters"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="['Todos los datos', 'Con filtro actual']"
-              :clearable="false"
+            <b-form-group
+              label="Selecciona la Orientación"
             >
-              <template v-slot:no-options>
-                No se encontraron resultados.
-              </template>
-            </v-select>
-          </b-form-group>
-        </b-col>
-
-        <b-col
-          cols="12"
-        >
-          <b-form-group
-            label="Selecciona las Columnas"
-          >
-            <div class="list-group list-group-flush checkbox-grid p-2 border">
-              <template v-for="(column) in columns">
-                <b-form-checkbox
-                  v-if="column.field !== 'action'"
-                  :key="column.field"
-                  v-model="column.pdf"
+              <div class="demo-inline-spacing mb-75">
+                <b-form-radio
+                  v-model="orientationSelected"
+                  value="p"
                   class="mt-50"
                 >
-                  {{ column.label }}
-                </b-form-checkbox>
-              </template>
-            </div>
-          </b-form-group>
-        </b-col>
+                  Vertical
+                </b-form-radio>
+                <b-form-radio
+                  v-model="orientationSelected"
+                  value="l"
+                  class="mt-50"
+                >
+                  Horizontal
+                </b-form-radio>
+              </div>
+            </b-form-group>
+          </b-col>
 
-      </b-row>
+          <b-col
+            cols="12"
+          >
+            <b-form-group
+              label="¿Qué datos deseas exportar?"
+            >
+              <v-select
+                id="count"
+                v-model="exportWithFilters"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="['Todos los datos', 'Con filtro actual']"
+                :clearable="false"
+              >
+                <template v-slot:no-options>
+                  No se encontraron resultados.
+                </template>
+              </v-select>
+            </b-form-group>
+          </b-col>
 
-      <template #modal-footer>
-        <b-button
-          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="primary"
-          :disabled="loadingPrint"
-          @click="generatePdf('print')"
-        >
-          <template v-if="!loadingPrint">
-            <feather-icon
-              icon="PrinterIcon"
-              class="mr-25"
-            />
-            Imprimir
-          </template>
-          <template v-else>
-            <b-spinner
-              small
-              class="mr-50"
-            />
-            Cargando...
-          </template>
-        </b-button>
-        <b-button
-          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="primary"
-          :disabled="loadingDownload"
-          @click="generatePdf('download')"
-        >
-          <template v-if="!loadingDownload">
-            <feather-icon
-              icon="DownloadIcon"
-              class="mr-25"
-            />
-            Descargar
-          </template>
-          <template v-else>
-            <b-spinner
-              small
-              class="mr-50"
-            />
-            Descargando...
-          </template>
-        </b-button>
-      </template>
+          <b-col
+            cols="12"
+          >
+            <b-form-group
+              label="Selecciona las Columnas"
+            >
+              <div class="list-group list-group-flush checkbox-grid p-2 border">
+                <template v-for="(column) in columns">
+                  <b-form-checkbox
+                    v-if="column.field !== 'action'"
+                    :key="column.field"
+                    v-model="column.pdf"
+                    class="mt-50"
+                  >
+                    {{ column.label }}
+                  </b-form-checkbox>
+                </template>
+              </div>
+            </b-form-group>
+          </b-col>
 
-    </b-modal>
-    <b-button
+        </b-row>
+
+        <template #modal-footer>
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="primary"
+            :disabled="loadingPrint"
+            @click="generatePdf('print')"
+          >
+            <template v-if="!loadingPrint">
+              <feather-icon
+                icon="PrinterIcon"
+                class="mr-25"
+              />
+              Imprimir
+            </template>
+            <template v-else>
+              <b-spinner
+                small
+                class="mr-50"
+              />
+              Cargando...
+            </template>
+          </b-button>
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="primary"
+            :disabled="loadingDownload"
+            @click="generatePdf('download')"
+          >
+            <template v-if="!loadingDownload">
+              <feather-icon
+                icon="DownloadIcon"
+                class="mr-25"
+              />
+              Descargar
+            </template>
+            <template v-else>
+              <b-spinner
+                small
+                class="mr-50"
+              />
+              Descargando...
+            </template>
+          </b-button>
+        </template>
+
+      </b-modal>
+    </div>
+    <b-dropdown-item
       v-if="columns.length && urlForExportData"
-      v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-      variant="primary"
       @click="openModalExportData"
     >
-      <feather-icon
-        icon="ClipboardIcon"
-        class="mr-0 mr-sm-50"
-      />
-      <span class="d-none d-sm-inline">
-        PDF
-      </span>
-    </b-button>
-  </div>
+      <span>PDF</span>
+    </b-dropdown-item>
+  </fragment>
 </template>
 
 <script>
 import { ref, inject } from '@vue/composition-api'
+import { Fragment } from 'vue-fragment'
 import {
-  BRow, BCol, BModal, BFormGroup, BButton, BFormCheckbox, BFormRadio, BSpinner,
+  BRow, BCol, BModal, BFormGroup, BButton, BFormCheckbox, BFormRadio, BSpinner, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
@@ -154,6 +149,7 @@ import useExportPdf from '@/hooks/useExportPdf'
 export default {
   name: 'ExportPdf',
   components: {
+    Fragment,
     BRow,
     BCol,
     BModal,
@@ -162,6 +158,7 @@ export default {
     BFormCheckbox,
     BFormRadio,
     BSpinner,
+    BDropdownItem,
     vSelect,
   },
   directives: {

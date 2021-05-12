@@ -18,10 +18,22 @@ const useVariables = () => {
     featuresArticle.value = { ...initialFeaturesArticle }
   }
 
+  const initialRecetasArticle = {
+    loading: false,
+    data: [],
+  }
+
+  const recetasArticle = ref({ ...initialRecetasArticle })
+
+  const resetRecetasArticle = () => {
+    recetasArticle.value = initialRecetasArticle
+  }
+
   const initialArticle = {
     _id: 0,
     nombre: '',
     idGrupoUnidad: 15,
+    nombreGrupoUnidad: '',
     idUnidadInventario: 11,
     idUnidadVenta: 11,
     idTipoProducto: 0,
@@ -33,6 +45,8 @@ const useVariables = () => {
     stockMaximo: 0,
     flgStock: 1,
     flgServicio: 0,
+    flgReceta: 0,
+    flgSelected: 'stock',
     accion: 0,
     idUsuario: null,
     loading: false,
@@ -66,6 +80,26 @@ const useVariables = () => {
     featureArticle.value = { ...initialFeatureArticle }
   }
 
+  const initialRecetaArticle = {
+    _id: 0,
+    idArticulo: 0,
+    nombreArticulo: '',
+    idReceta: 0,
+    idGrupoUnidad: 0,
+    nombreGrupoUnidad: '',
+    idUnidad: 0,
+    cantidad: 0,
+    accion: 0,
+    idUsuario: null,
+    loading: false,
+  }
+
+  const recetaArticle = ref({ ...initialRecetaArticle })
+
+  const resetRecetaArticle = () => {
+    recetaArticle.value = { ...initialRecetaArticle }
+  }
+
   const initialStateCombo = {
     disabled: true,
     loading: false,
@@ -79,6 +113,7 @@ const useVariables = () => {
     unitSale: { ...initialStateCombo },
     features: { ...initialStateCombo },
     valuesByFeature: { ...initialStateCombo },
+    unitMeasure: { ...initialStateCombo },
   })
 
   const resetCombos = (nameCombos = []) => {
@@ -86,6 +121,9 @@ const useVariables = () => {
       combos.value[name] = { ...initialStateCombo }
     })
   }
+
+  const tabIndex = ref(0)
+  const limitTab = ref(0)
 
   const optionsColumnsFilter = [
     {
@@ -133,9 +171,15 @@ const useVariables = () => {
     resetFeaturesArticle,
     featureArticle,
     resetFeatureArticle,
+    recetasArticle,
+    resetRecetasArticle,
+    recetaArticle,
+    resetRecetaArticle,
     initialStateCombo,
     combos,
     resetCombos,
+    tabIndex,
+    limitTab,
     serverParams,
     optionsColumnsFilter,
   }

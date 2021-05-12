@@ -23,14 +23,18 @@
         </b-button>
       </div>
       <div class="d-flex">
-        <export-excel
-          v-if="exportExcel"
+        <b-dropdown
+          v-if="exportExcel && exportPdf"
+          id="dropdown-right"
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          right
+          text="Exportar"
+          variant="primary"
           class="mr-1"
-        />
-        <export-pdf
-          v-if="exportPdf"
-          class="mr-1"
-        />
+        >
+          <export-excel v-if="exportExcel" />
+          <export-pdf v-if="exportPdf" />
+        </b-dropdown>
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
