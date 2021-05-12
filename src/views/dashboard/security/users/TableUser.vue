@@ -37,6 +37,14 @@ export default {
     const serverParams = inject('serverParams')
     const messageToast = inject('messageToast')
 
+    const formatDate = value => {
+      const date = new Date(value)
+      const day = `00${date.getDate()}`
+      const month = `00${date.getMonth() + 1}`
+      const year = `0000${date.getFullYear()}`
+      return `${day.slice(-2)}/${month.slice(-2)}/${year.slice(-4)}`
+    }
+
     const columns = [
       {
         label: 'Acción',
@@ -78,9 +86,7 @@ export default {
         field: 'inicio',
         thClass: 'align-middle',
         tdClass: 'align-middle',
-        formatFn: value => new Date(value).toLocaleString('es-ES', {
-          year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', hour12: 'false', minute: 'numeric', second: 'numeric',
-        }),
+        formatFn: formatDate,
         pdf: true,
       },
       {
@@ -88,9 +94,7 @@ export default {
         field: 'fin',
         thClass: 'align-middle',
         tdClass: 'align-middle',
-        formatFn: value => new Date(value).toLocaleString('es-ES', {
-          year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', hour12: 'false', minute: 'numeric', second: 'numeric',
-        }),
+        formatFn: formatDate,
         pdf: true,
       },
       {
