@@ -35,17 +35,19 @@ export default {
   },
   setup() {
     const article = inject('article')
-    const selectedStockOrService = inject('selectedStockOrService')
     const articles = inject('articles')
     const loadFeaturesArticleByArticleId = inject('loadFeaturesArticleByArticleId')
+    const loadRecetasArticleByArticleId = inject('loadRecetasArticleByArticleId')
     const loadArticles = inject('loadArticles')
     const resetArticle = inject('resetArticle')
     const resetFeatureArticle = inject('resetFeatureArticle')
     const resetFeaturesArticle = inject('resetFeaturesArticle')
-    const resetSelectedStockOrService = inject('resetSelectedStockOrService')
+    const resetRecetaArticle = inject('resetRecetaArticle')
+    const resetRecetasArticle = inject('resetRecetasArticle')
     const serverParams = inject('serverParams')
     const messageToast = inject('messageToast')
     const combos = inject('combos')
+    const tabIndex = inject('tabIndex')
     const resetCombos = inject('resetCombos')
     const loadComboBoxes = inject('loadComboBoxes')
 
@@ -146,27 +148,35 @@ export default {
     const url = '/articulos'
 
     const loadDataForRegister = async () => {
+      tabIndex.value = 0
       resetFeatureArticle()
-      resetCombos(['valuesByFeature'])
+      resetCombos(['valuesByFeature', 'unitMeasure'])
       resetFeaturesArticle()
-      resetSelectedStockOrService()
+      resetRecetaArticle()
+      resetRecetasArticle()
       await loadComboBoxes(combos.value, ['inventoryUnit', 'unitSale'], `/combo/grupounidad/${article.value.idGrupoUnidad}`, 'Error al momento de cargar las Unidades por Grupo')
       return true
     }
 
     const loadDataForEdit = async (rowSelected, row) => {
+      tabIndex.value = 0
       resetFeatureArticle()
-      resetCombos(['valuesByFeature'])
+      resetRecetaArticle()
+      resetCombos(['valuesByFeature', 'unitMeasure'])
       const { error, data } = await useFetch(`/articulos/${rowSelected._id}`)
       if (error) {
         messageToast('danger', 'Error', 'Ocurrio un Error')
         return false
       }
-      row.value = data
-      selectedStockOrService.value = row.value.flgStock ? 'stock' : 'service'
+      row.value = { ...row.value, ...data }
+      if (row.value.flgStock) row.value.flgSelected = 'stock'
+      else if (row.value.flgServicio) row.value.flgSelected = 'servicio'
+      else if (row.value.flgReceta) row.value.flgSelected = 'receta'
+      row.value.nombreGrupoUnidad = rowSelected.nombreGrupoUnidad
 
       await loadComboBoxes(combos.value, ['inventoryUnit', 'unitSale'], `/combo/grupounidad/${row.value.idGrupoUnidad}`, 'Error al momento de cargar las Unidades por Grupo')
       await loadFeaturesArticleByArticleId(row.value._id)
+      await loadRecetasArticleByArticleId(row.value._id)
       return true
     }
 

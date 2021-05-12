@@ -27,7 +27,7 @@ export default {
   },
   setup() {
     const {
-      articles, article, resetArticle, selectedStockOrService, resetSelectedStockOrService, featuresArticle, resetFeaturesArticle, featureArticle, resetFeatureArticle, serverParams, combos, resetCombos, optionsColumnsFilter,
+      articles, article, resetArticle, selectedStockOrService, resetSelectedStockOrService, featuresArticle, resetFeaturesArticle, featureArticle, resetFeatureArticle, recetasArticle, resetRecetasArticle, recetaArticle, resetRecetaArticle, serverParams, combos, tabIndex, limitTab, resetCombos, optionsColumnsFilter,
     } = useVariables()
 
     const messageToast = inject('messageToast')
@@ -64,6 +64,18 @@ export default {
       featuresArticle.value.loading = false
     }
 
+    const loadRecetasArticleByArticleId = async articleId => {
+      recetasArticle.value.loading = true
+      const url = `/articulosreceta/?_id=0&tabla=RECETA&campo=a.idarticulo&indice=${articleId}`
+      const { data, error } = await useFetch(url)
+      if (error) {
+        messageToast('danger', 'Error', 'Error al momento de cargar las recetas')
+      } else {
+        recetasArticle.value.data = data
+      }
+      recetasArticle.value.loading = false
+    }
+
     onMounted(() => {
       loadArticles()
       loadComboBoxes(combos.value, ['productTypes'], '/combo/tipoproducto/1', 'Error al momento de cargar los Tipos de Producto')
@@ -80,9 +92,16 @@ export default {
     provide('loadFeaturesArticleByArticleId', loadFeaturesArticleByArticleId)
     provide('featureArticle', featureArticle)
     provide('resetFeatureArticle', resetFeatureArticle)
+    provide('recetasArticle', recetasArticle)
+    provide('resetRecetasArticle', resetRecetasArticle)
+    provide('loadRecetasArticleByArticleId', loadRecetasArticleByArticleId)
+    provide('recetaArticle', recetaArticle)
+    provide('resetRecetaArticle', resetRecetaArticle)
     provide('optionsColumnsFilter', optionsColumnsFilter)
     provide('serverParams', serverParams)
     provide('combos', combos)
+    provide('tabIndex', tabIndex)
+    provide('limitTab', limitTab)
     provide('resetCombos', resetCombos)
     provide('selectedStockOrService', selectedStockOrService)
     provide('resetSelectedStockOrService', resetSelectedStockOrService)

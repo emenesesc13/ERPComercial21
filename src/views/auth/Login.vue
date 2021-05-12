@@ -69,6 +69,7 @@
                   <b-form-input
                     id="login-user"
                     v-model="user"
+                    :disabled="sendLoading"
                     :state="errors.length > 0 ? false:null"
                     name="login-user"
                     placeholder="Ejemplo"
@@ -94,6 +95,7 @@
                     <b-form-input
                       id="login-password"
                       v-model="password"
+                      :disabled="sendLoading"
                       :state="errors.length > 0 ? false:null"
                       class="form-control-merge"
                       :type="passwordFieldType"
@@ -124,26 +126,23 @@
               </b-form-group>
 
               <!-- submit buttons -->
-              <b-overlay
-                :show="sendLoading"
-                :variant="variant"
-                :opacity="opacity"
-                :blur="blur"
-                rounded="sm"
+              <b-button
+                variant="primary"
+                block
+                :disabled="sendLoading"
+                @click="validationForm"
               >
-                <b-button
-                  type="submit"
-                  variant="primary"
-                  block
-                  @click="validationForm"
-                >
-                  <span
-                    v-if="sendLoading"
-                    class="p-2"
+                <template v-if="sendLoading">
+                  <b-spinner
+                    class="mr-25"
+                    small
                   />
-                  <span v-else>Ingresar</span>
-                </b-button>
-              </b-overlay>
+                  Cargando...
+                </template>
+                <template v-else>
+                  Ingresar
+                </template>
+              </b-button>
             </b-form>
           </validation-observer>
 
@@ -165,7 +164,7 @@
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BOverlay,
+  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BSpinner,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
@@ -188,7 +187,7 @@ export default {
     BImg,
     BForm,
     BButton,
-    BOverlay,
+    BSpinner,
     ValidationProvider,
     ValidationObserver,
   },
