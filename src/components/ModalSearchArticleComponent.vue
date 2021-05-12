@@ -10,6 +10,25 @@
     <b-row>
       <b-col
         cols="12"
+        md="4"
+      >
+        <b-form-group
+          label="Campo"
+          label-for="field"
+        >
+          <v-select
+            v-model="serverParamsSearchArticle.columnFilters.field"
+            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+            :reduce="option => option.field"
+            label="title"
+            :options="optionsColumnsFilter"
+            @option:selected="searchArticle"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col
+        cols="12"
+        md="8"
       >
         <b-form-group
           label="Buscador"
@@ -49,7 +68,7 @@ import {
 import {
   inject, provide,
 } from '@vue/composition-api'
-// import useFetch from '@/hooks/useFetch'
+import vSelect from 'vue-select'
 import TableComponent from './TableComponent.vue'
 
 export default {
@@ -61,6 +80,7 @@ export default {
     BFormInput,
     BModal,
     TableComponent,
+    vSelect,
   },
   setup(props, context) {
     let timer = null
@@ -77,6 +97,33 @@ export default {
       {
         label: 'Articulo',
         field: 'nombre',
+      },
+    ]
+
+    const optionsColumnsFilter = [
+      {
+        title: 'Id',
+        field: 'a._id',
+      },
+      {
+        title: 'SKU',
+        field: 'sku',
+      },
+      {
+        title: 'Nombre',
+        field: 'a.nombre',
+      },
+      {
+        title: 'Tipo de Producto',
+        field: 'a.nombreTipoProducto',
+      },
+      {
+        title: 'Grupo Unidad',
+        field: 'a.nombreGrupoUnidad',
+      },
+      {
+        title: 'Unidad Venta',
+        field: 'a.nombreUnidadVenta',
       },
     ]
 
@@ -100,6 +147,7 @@ export default {
 
     return {
       serverParamsSearchArticle,
+      optionsColumnsFilter,
       searchArticle,
       onRowClick,
     }
