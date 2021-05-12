@@ -124,6 +124,21 @@
             </b-form-group>
           </b-col>
 
+          <!-- Icon -->
+          <b-col
+            cols="12"
+          >
+            <b-form-group
+              label-for="form"
+              label="Formulario"
+            >
+              <b-form-input
+                id="form"
+                v-model="menu.formulario"
+              />
+            </b-form-group>
+          </b-col>
+
           <!-- Route -->
           <b-col
             cols="12"
