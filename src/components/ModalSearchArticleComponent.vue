@@ -22,7 +22,8 @@
             :reduce="option => option.field"
             label="title"
             :options="optionsColumnsFilter"
-            @option:selected="searchArticle"
+            :clearable="false"
+            @option:selected="searchColumnFilter"
           />
         </b-form-group>
       </b-col>
@@ -36,6 +37,7 @@
         >
           <b-form-input
             id="value"
+            ref="serverParamsValueArticle"
             v-model="serverParamsSearchArticle.columnFilters.value"
             placeholder="Escribe el nombre del articulo para buscar"
             @keyup="searchArticle"
@@ -135,6 +137,12 @@ export default {
       }, timeForLoad)
     }
 
+    const searchColumnFilter = async () => {
+      serverParamsSearchArticle.value.columnFilters.value = ''
+      await searchArticle()
+      context.refs.serverParamsValueArticle.focus()
+    }
+
     const onRowClick = ({ row }) => {
       context.emit('selected-article', row)
       context.root.$bvModal.hide('modal-search-article-component')
@@ -149,6 +157,7 @@ export default {
       serverParamsSearchArticle,
       optionsColumnsFilter,
       searchArticle,
+      searchColumnFilter,
       onRowClick,
     }
   },
