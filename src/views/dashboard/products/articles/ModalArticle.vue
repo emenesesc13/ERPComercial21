@@ -1157,6 +1157,8 @@ export default {
     }
 
     const openModalSearchArticleComponent = () => {
+      serverParamsSearchArticle.value.columnFilters.field = 'a.nombre'
+      serverParamsSearchArticle.value.columnFilters.value = ''
       loadArticlesForSearch()
       context.root.$bvModal.show('modal-search-article-component')
     }
