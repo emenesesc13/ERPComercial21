@@ -183,11 +183,10 @@
                 id="inicio"
                 v-model="user.inicio"
                 class="form-control"
-                :config="{ enableTime: true, enableSeconds: true, dateFormat: 'Y-m-d H:i:s', minuteIncrement: 1}"
+                :config="config"
               />
             </b-form-group>
           </b-col>
-
           <b-col md="6">
             <b-form-group
               label="Fin"
@@ -197,7 +196,7 @@
                 id="fin"
                 v-model="user.fin"
                 class="form-control"
-                :config="{ enableTime: true, enableSeconds: true, dateFormat: 'Y-m-d H:i:s', minuteIncrement: 1}"
+                :config="config"
               />
             </b-form-group>
           </b-col>
@@ -239,6 +238,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
+import { Spanish } from 'flatpickr/dist/l10n/es'
 import flatPickr from 'vue-flatpickr-component'
 import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
@@ -275,6 +275,15 @@ export default {
     return {
       required,
       email,
+      config: {
+        wrap: true, // set wrap to true only when using 'input-group'
+        altInput: true,
+        locale: Spanish, // locale for this instance only
+        enableTime: true,
+        enableSeconds: true,
+        dateFormat: 'Y-m-d H:i:s',
+        minuteIncrement: 1,
+      },
     }
   },
   computed: {
@@ -296,14 +305,25 @@ export default {
     const loadUsers = inject('loadUsers')
     const combos = inject('combos')
 
+    const formatDateTime = dateTime => {
+      const date = new Date(dateTime)
+      const year = `0000${date.getFullYear()}`.slice(-4)
+      const month = `00${date.getMonth() + 1}`.slice(-2)
+      const day = `00${date.getDate()}`.slice(-2)
+      const hour = `00${date.getHours()}`.slice(-2)
+      const minute = `00${date.getMinutes()}`.slice(-2)
+      const second = `00${date.getSeconds()}`.slice(-2)
+      return `${year}-${month}-${day}T${hour}:${minute}:${second}`
+    }
+
     const sendForm = async () => {
       user.value.loading = true
       user.value.accion = user.value._id ? 2 : 1
       user.value.idUsuario = store.state.auth.user._id
       if (user.value.accion === 2) delete user.value.clave
       if (user.value.idColaborador && user.value.idRol) {
-        user.value.inicio = new Date(user.value.inicio).toISOString()
-        user.value.fin = new Date(user.value.fin).toISOString()
+        user.value.inicio = formatDateTime(user.value.inicio)
+        user.value.fin = formatDateTime(user.value.fin)
         const { error, data } = await useFetch('/usuario', user.value, 'POST')
         if (error) {
           messageToast('danger', 'Error', 'Ocurrio un error')

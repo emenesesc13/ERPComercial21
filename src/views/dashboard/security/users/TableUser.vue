@@ -33,16 +33,20 @@ export default {
     const loadUsers = inject('loadUsers')
     const user = inject('user')
     const resetUser = inject('resetUser')
-    const confirmClave = inject('confirmClave')
     const serverParams = inject('serverParams')
     const messageToast = inject('messageToast')
+    const userForChangePassword = inject('userForChangePassword')
+    const resetUserForChangePassword = inject('resetUserForChangePassword')
 
     const formatDate = value => {
       const date = new Date(value)
       const day = `00${date.getDate()}`
       const month = `00${date.getMonth() + 1}`
       const year = `0000${date.getFullYear()}`
-      return `${day.slice(-2)}/${month.slice(-2)}/${year.slice(-4)}`
+      const hour = `00${date.getHours()}`
+      const minute = `00${date.getMinutes()}`
+      const second = `00${date.getSeconds()}`
+      return `${day.slice(-2)}/${month.slice(-2)}/${year.slice(-4)} ${hour.slice(-2)}:${minute.slice(-2)}:${second.slice(-2)}`
     }
 
     const columns = [
@@ -120,11 +124,15 @@ export default {
       return true
     }
 
-    const openModalForChangePassword = row => {
-      resetUser()
-      confirmClave.value = ''
-      user.value._id = row._id
-      context.root.$bvModal.show('modal-user-clave')
+    const openModalForChangePassword = async row => {
+      resetUserForChangePassword()
+      const { error, data } = await useFetch(`/usuario/${row._id}`)
+      if (error) {
+        messageToast('danger', 'Error', 'Ocurrio un Error')
+      } else {
+        userForChangePassword.value = { ...userForChangePassword.value, ...data, clave: '' }
+        context.root.$bvModal.show('modal-user-clave')
+      }
     }
 
     provide('columns', columns)

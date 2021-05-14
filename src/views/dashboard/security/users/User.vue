@@ -1,7 +1,6 @@
 <template>
   <div>
     <modal-user />
-    <modal-user-password />
     <modal-search-user />
     <b-card>
       <table-user />
@@ -14,7 +13,6 @@ import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
 import ModalUser from './ModalUser.vue'
-import ModalUserPassword from './ModalUserPassword.vue'
 import ModalSearchUser from './ModalSearchUser.vue'
 import TableUser from './TableUser.vue'
 import useVariables from './useVariables'
@@ -24,7 +22,6 @@ export default {
   components: {
     BCard,
     ModalUser,
-    ModalUserPassword,
     ModalSearchUser,
     TableUser,
   },
