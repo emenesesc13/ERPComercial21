@@ -127,6 +127,7 @@
 
               <!-- submit buttons -->
               <b-button
+                type="submit"
                 variant="primary"
                 block
                 :disabled="sendLoading"

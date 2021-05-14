@@ -46,6 +46,18 @@
 
         <b-dropdown-item
           link-class="d-flex align-items-center"
+          @click="openModalForChangePassword"
+        >
+          <feather-icon
+            size="16"
+            icon="LockIcon"
+            class="mr-50"
+          />
+          <span>Cambiar clave</span>
+        </b-dropdown-item>
+
+        <b-dropdown-item
+          link-class="d-flex align-items-center"
           @click="handleLogout"
         >
           <feather-icon
@@ -61,11 +73,15 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import {
   BLink, BNavbarNav, BNavItemDropdown, BDropdownItem, BAvatar,
 } from 'bootstrap-vue'
+import { inject } from '@vue/composition-api'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import { mapState } from 'vuex'
+import store from '@/store'
+import useFetch from '@/hooks/useFetch'
 
 export default {
   components: {
@@ -91,6 +107,25 @@ export default {
     handleLogout() {
       this.$store.dispatch('auth/handleLogout')
     },
+  },
+  setup(props, context) {
+    const userForChangePassword = inject('userForChangePassword')
+    const resetUserForChangePassword = inject('resetUserForChangePassword')
+    const messageToast = inject('messageToast')
+
+    const openModalForChangePassword = async () => {
+      resetUserForChangePassword()
+      const { error, data } = await useFetch(`/usuario/${store.state.auth.user._id}`)
+      if (error) {
+        messageToast('danger', 'Error', 'Ocurrio un Error')
+      } else {
+        userForChangePassword.value = { ...userForChangePassword.value, ...data, clave: '' }
+        context.root.$bvModal.show('modal-user-clave')
+      }
+    }
+    return {
+      openModalForChangePassword,
+    }
   },
 }
 </script>
