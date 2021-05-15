@@ -75,6 +75,63 @@ const securityRoutes = [
       ],
     },
   },
+  {
+    path: '/opciones',
+    name: 'options',
+    component: () => import('@/views/dashboard/security/options/Option.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Opciones',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Opciones',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/opciones-menu',
+    name: 'optionsMenu',
+    component: () => import('@/views/dashboard/security/optionsMenu/OptionMenu.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Opciones del Menú',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Opciones del Menú',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/modulos',
+    name: 'modules',
+    component: () => import('@/views/dashboard/security/modules/Module.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Modulos',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Modulos',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default securityRoutes
