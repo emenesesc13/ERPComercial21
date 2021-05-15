@@ -82,6 +82,18 @@ export default [
         title: 'Menús',
         route: 'menus',
       },
+      {
+        title: 'Opciones',
+        route: 'options',
+      },
+      {
+        title: 'Opciones Menú',
+        route: 'optionsMenu',
+      },
+      {
+        title: 'Modulos',
+        route: 'modules',
+      },
     ],
   },
 ]
