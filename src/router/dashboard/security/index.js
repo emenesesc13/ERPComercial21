@@ -96,8 +96,8 @@ const securityRoutes = [
   },
   {
     path: '/opciones-menu',
-    name: 'optionsMenu',
-    component: () => import('@/views/dashboard/security/optionsMenu/OptionMenu.vue'),
+    name: 'menuOptions',
+    component: () => import('@/views/dashboard/security/menuOptions/MenuOption.vue'),
     meta: {
       auth: true,
       pageTitle: 'Opciones del Menú',
