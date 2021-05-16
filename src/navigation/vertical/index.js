@@ -88,7 +88,7 @@ export default [
       },
       {
         title: 'Opciones Menú',
-        route: 'optionsMenu',
+        route: 'menuOptions',
       },
       {
         title: 'Modulos',
