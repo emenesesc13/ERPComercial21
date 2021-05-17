@@ -27,11 +27,11 @@
           >
             <b-form-group
               label-for="userName"
-              label="Usuario actual"
+              label="Usuario actual *"
             >
               <b-form-input
                 id="userName"
-                :value="$store.state.auth.user.fullname"
+                :value="$store.state.auth.user.usuario"
                 readonly
               />
             </b-form-group>
@@ -42,7 +42,7 @@
             cols="12"
           >
             <b-form-group
-              label="Clave del usuario actual para verificar"
+              label="Clave del usuario actual para verificar *"
               label-for="claveValidate"
             >
               <validation-provider
@@ -80,12 +80,12 @@
             cols="12"
           >
             <b-form-group
-              label="Clave"
+              label="Nueva clave *"
               label-for="clave"
             >
               <validation-provider
                 #default="{ errors }"
-                name="clave"
+                name="nueva clave"
                 rules="required"
               >
                 <b-input-group
@@ -118,12 +118,12 @@
             cols="12"
           >
             <b-form-group
-              label="Confirmar clave"
+              label="Confirmar nueva clave *"
               label-for="confirmClave"
             >
               <validation-provider
                 #default="{ errors }"
-                name="clave"
+                name="confirmar nueva clave"
                 rules="required|confirmClave"
               >
                 <b-input-group
@@ -247,9 +247,6 @@ export default {
   },
   created() {
     // Extender reglas de validación personalizando el mensaje en caso de no pasar la validación
-    extend('required', {
-      message: 'Es requerido',
-    })
     extend('confirmClave', {
       validate: value => value === this.userForChangePassword.clave,
       message: 'No coinciden las claves',

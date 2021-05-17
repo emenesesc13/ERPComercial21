@@ -44,6 +44,13 @@ export default {
         pdf: true,
       },
       {
+        label: 'Icono',
+        field: 'icono',
+        thClass: 'align-middle',
+        tdClass: 'align-middle',
+        pdf: true,
+      },
+      {
         label: 'Estado',
         field: 'activo',
         thClass: 'align-middle',

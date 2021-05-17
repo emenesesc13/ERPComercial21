@@ -30,7 +30,7 @@
           >
             <b-form-group
               label-for="direction"
-              label="Dirección"
+              label="Dirección *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -53,7 +53,7 @@
           >
             <b-form-group
               label-for="observation"
-              label="Observación"
+              label="Observación *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -107,7 +107,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import { inject } from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
@@ -137,11 +137,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const predio = inject('predio')

@@ -27,11 +27,11 @@
           >
             <b-form-group
               label-for="Nombe"
-              label="Nombre"
+              label="Nombre *"
             >
               <validation-provider
                 #default="{ errors }"
-                name="Nombre Almacén"
+                name="nombre"
                 rules="required"
               >
                 <b-form-input
@@ -52,11 +52,11 @@
             <validation-provider
               #default="{ errors }"
               name="predio"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="estates"
-                label="Predio"
+                label="Predio *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -67,6 +67,7 @@
                   label="nombre"
                   :options="combos.estates.data"
                   :loading="combos.estates.loading"
+                  :clearable="false"
                   :disabled="combos.estates.loading"
                 >
                   <template v-slot:no-options>
@@ -84,12 +85,12 @@
           >
             <validation-provider
               #default="{ errors }"
-              name="tipo Almacen"
-              rules="required"
+              name="tipo almacén"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="storageType"
-                label="Tipo Almacen"
+                label="Tipo Almacen *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -124,7 +125,8 @@
                 id="observation"
                 v-model="storage.observacion"
                 placeholder=""
-                max-rows="6"
+                rows="3"
+                no-resize
               />
             </b-form-group>
           </b-col>
@@ -324,7 +326,7 @@ import {
   BRow,
   BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay, BFormTextarea, BDropdown, BDropdownItem, BBadge,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -391,11 +393,6 @@ export default {
       this.dir = false
       return this.dir
     },
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const storage = inject('storage')

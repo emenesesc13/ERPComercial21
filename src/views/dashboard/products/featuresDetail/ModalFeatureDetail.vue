@@ -27,11 +27,11 @@
             <validation-provider
               #default="{ errors }"
               name="característica"
-              rules="required"
+              rules="requiredComboVueSelect"
             >
               <b-form-group
                 label-for="feature"
-                label="Característica"
+                label="Característica *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -42,6 +42,7 @@
                   label="nombre"
                   :options="combos.features.data"
                   :loading="combos.features.loading"
+                  :clearable="false"
                   :disabled="combos.features.disabled"
                 >
                   <template v-slot:no-options>
@@ -59,7 +60,7 @@
           >
             <b-form-group
               label-for="name"
-              label="Nombre"
+              label="Nombre *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -113,7 +114,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -143,11 +144,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const featureDetail = inject('featureDetail')

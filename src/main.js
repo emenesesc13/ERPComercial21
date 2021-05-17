@@ -3,6 +3,9 @@ import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 import VueExcelXlsx from 'vue-excel-xlsx'
 
+import { extend, localize } from 'vee-validate'
+import es from 'vee-validate/dist/locale/es.json'
+import * as rules from 'vee-validate/dist/rules'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -33,6 +36,22 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
+
+localize('es', es)
+
+Object.keys(rules).forEach(rule => {
+  extend(rule, rules[rule])
+})
+extend('requiredComboVueSelect', {
+  validate(value) {
+    if (value) return true
+    return false
+  },
+  params: ['genero'],
+  message(fieldName, placeholders) {
+    return `Debe seleccionar ${placeholders.genero === 'm' ? 'un' : 'una'} ${fieldName}`
+  },
+})
 
 new Vue({
   router,

@@ -163,11 +163,11 @@
 
 <script>
 /* eslint-disable global-require */
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BSpinner,
 } from 'bootstrap-vue'
-import { required, email } from '@validations'
+import { required } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -202,7 +202,6 @@ export default {
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
-      email,
       variant: 'white',
       opacity: '0.85',
       blur: '3px',
@@ -222,11 +221,6 @@ export default {
       }
       return this.sideImg
     },
-  },
-  beforeCreate() {
-    extend('required', {
-      message: 'El campo {_field_} es requerido',
-    })
   },
   methods: {
     async validationForm() {

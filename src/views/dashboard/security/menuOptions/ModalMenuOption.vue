@@ -27,7 +27,7 @@
             <validation-provider
               #default="{ errors }"
               name="menú"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="menu"
@@ -42,6 +42,7 @@
                   label="nombre"
                   :options="combos.menus.data"
                   :loading="combos.menus.loading"
+                  :clearable="false"
                   :disabled="combos.menus.disabled"
                 >
                   <template v-slot:no-options>
@@ -61,7 +62,7 @@
             <validation-provider
               #default="{ errors }"
               name="opción"
-              rules="required"
+              rules="requiredComboVueSelect"
             >
               <b-form-group
                 label-for="option"
@@ -76,6 +77,7 @@
                   label="nombre"
                   :options="combos.options.data"
                   :loading="combos.options.loading"
+                  :clearable="false"
                   :disabled="combos.options.disabled"
                 >
                   <template v-slot:no-options>
@@ -124,7 +126,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -153,11 +155,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const menuOption = inject('menuOption')

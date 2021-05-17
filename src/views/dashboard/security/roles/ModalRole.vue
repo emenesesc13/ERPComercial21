@@ -27,11 +27,11 @@
             <validation-provider
               #default="{ errors }"
               name="Predio"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="predio"
-                label="Predio"
+                label="Predio *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -42,6 +42,7 @@
                   label="nombre"
                   :options="combos.predio.data"
                   :loading="combos.predio.loading"
+                  :clearable="false"
                   :disabled="combos.predio.disabled"
                 >
                   <template v-slot:no-options>
@@ -61,11 +62,11 @@
             <validation-provider
               #default="{ errors }"
               name="Almacen"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="storage"
-                label="Almacen"
+                label="Almacen *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -76,6 +77,7 @@
                   label="nombre"
                   :options="combos.storage.data"
                   :loading="combos.storage.loading"
+                  :clearable="false"
                   :disabled="combos.storage.disabled"
                 >
                   <template v-slot:no-options>
@@ -93,7 +95,7 @@
           >
             <b-form-group
               label-for="name"
-              label="Nombre"
+              label="Nombre *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -147,7 +149,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -177,11 +179,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const role = inject('role')

@@ -25,7 +25,7 @@
           >
             <b-form-group
               label-for="name"
-              label="Nombre"
+              label="Nombre *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -50,11 +50,11 @@
             <validation-provider
               #default="{ errors }"
               name="grupo unidad"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="unitGroup"
-                label="Grupo Unidad"
+                label="Grupo Unidad *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -65,6 +65,7 @@
                   label="nombre"
                   :options="combos.unitGroup.data"
                   :loading="combos.unitGroup.loading"
+                  :clearable="false"
                   :disabled="combos.unitGroup.disabled"
                 >
                   <template v-slot:no-options>
@@ -84,11 +85,11 @@
             <validation-provider
               #default="{ errors }"
               name="unidad sunat"
-              rules="required"
+              rules="requiredComboVueSelect"
             >
               <b-form-group
                 label-for="unitSunat"
-                label="Unidad Sunat"
+                label="Unidad Sunat *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -99,6 +100,7 @@
                   label="nombre"
                   :options="combos.unitSunat.data"
                   :loading="combos.unitSunat.loading"
+                  :clearable="false"
                   :disabled="combos.unitSunat.disabled"
                 >
                   <template v-slot:no-options>
@@ -147,7 +149,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -177,11 +179,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const unitMeasure = inject('unitMeasure')

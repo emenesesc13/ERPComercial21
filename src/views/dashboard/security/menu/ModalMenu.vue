@@ -27,11 +27,11 @@
             <validation-provider
               #default="{ errors }"
               name="modulo"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="module"
-                label="Modulo"
+                label="Modulo *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -42,6 +42,7 @@
                   label="nombre"
                   :options="combos.modules.data"
                   :loading="combos.modules.loading"
+                  :clearable="false"
                   :disabled="combos.modules.disabled"
                 >
                   <template v-slot:no-options>
@@ -59,7 +60,7 @@
           >
             <b-form-group
               label-for="name"
-              label="Nombre"
+              label="Nombre *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -82,12 +83,12 @@
           >
             <b-form-group
               label-for="order"
-              label="Orden"
+              label="Orden *"
             >
               <validation-provider
                 #default="{ errors }"
                 name="orden"
-                rules="required"
+                rules="required|min_value:0"
               >
                 <b-form-input
                   id="order"
@@ -107,7 +108,7 @@
           >
             <b-form-group
               label-for="icon"
-              label="Icono"
+              label="Icono *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -124,7 +125,7 @@
             </b-form-group>
           </b-col>
 
-          <!-- Icon -->
+          <!-- Form -->
           <b-col
             cols="12"
           >
@@ -145,7 +146,7 @@
           >
             <b-form-group
               label-for="route"
-              label="Ruta"
+              label="Ruta *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -199,7 +200,7 @@
 import {
   BRow, BCol, BForm, BFormGroup, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import { inject } from '@vue/composition-api'
@@ -229,11 +230,6 @@ export default {
     return {
       required,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const menu = inject('menu')
