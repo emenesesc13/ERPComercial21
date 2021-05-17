@@ -36,7 +36,7 @@
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Tipo documento"
+                  name="Tipo documento *"
                   rules="required"
                 >
                   <b-form-group
@@ -72,7 +72,7 @@
               >
                 <b-form-group
                   label-for="documentNumber"
-                  label="N° Documento"
+                  label="N° Documento *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -119,7 +119,7 @@
               >
                 <b-form-group
                   label-for="apellidoPaterno"
-                  label="Apellido Paterno"
+                  label="Apellido Paterno *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -143,7 +143,7 @@
               >
                 <b-form-group
                   label-for="apellidoMaterno"
-                  label="Apellido Materno"
+                  label="Apellido Materno *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -166,7 +166,7 @@
               >
                 <b-form-group
                   label-for="fullName"
-                  label="Nombre"
+                  label="Nombre *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -190,7 +190,7 @@
               >
                 <b-form-group
                   label-for="email"
-                  label="Email"
+                  label="Email *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -214,7 +214,7 @@
               >
                 <b-form-group
                   label-for="phone"
-                  label="Teléfono"
+                  label="Teléfono *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -255,7 +255,7 @@
               >
                 <b-form-group
                   label-for="ruc"
-                  label="Ruc"
+                  label="Ruc *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -300,7 +300,7 @@
               >
                 <b-form-group
                   label-for="typePartner"
-                  label="Tipo de Socio"
+                  label="Tipo de Socio *"
                   style="min-height: 58px"
                 >
                   <div
@@ -335,7 +335,7 @@
               >
                 <b-form-group
                   label-for="razonSocial"
-                  label="Razón Social"
+                  label="Razón Social *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -374,7 +374,7 @@
               >
                 <b-form-group
                   label-for="direccion"
-                  label="Dirección"
+                  label="Dirección *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -423,7 +423,7 @@
               >
                 <b-form-group
                   label-for="nombreContacto"
-                  label="Nombre Contacto"
+                  label="Nombre Contacto *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -448,7 +448,7 @@
               >
                 <b-form-group
                   label-for="telefonoMovil"
-                  label="Teléfono/Movil"
+                  label="Teléfono/Movil *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -474,7 +474,7 @@
               >
                 <b-form-group
                   label-for="observacion"
-                  label="Observación"
+                  label="Observación *"
                 >
                   <validation-provider
                     #default="{ errors }"
@@ -542,7 +542,7 @@
 import {
   BRow, BForm, BButton, BModal, BOverlay, BCol, BFormGroup, BFormInput, BInputGroup, BInputGroupAppend, BFormCheckbox, BTabs, BTab, BSpinner,
 } from 'bootstrap-vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required, email } from '@validations'
 import vSelect from 'vue-select'
 import { ref, inject } from '@vue/composition-api'
@@ -582,14 +582,6 @@ export default {
       required,
       email,
     }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
-    extend('email', {
-      message: 'El correo electrónico no es válido',
-    })
   },
   setup(props, context) {
     const dniSelected = inject('dniSelected')

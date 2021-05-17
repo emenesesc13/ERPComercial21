@@ -25,7 +25,7 @@
           >
             <b-form-group
               label-for="user"
-              label="Usuario"
+              label="Usuario *"
             >
               <validation-provider
                 #default="{ errors }"
@@ -36,6 +36,7 @@
                   id="user"
                   v-model="user.usuario"
                   :state="errors.length > 0 ? false:null"
+                  :readonly="!!user._id"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
@@ -50,11 +51,11 @@
             <validation-provider
               #default="{ errors }"
               name="colaborador"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="collaborator"
-                label="Colaborador"
+                label="Colaborador *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -65,6 +66,7 @@
                   label="nombre"
                   :options="combos.collaborators.data"
                   :loading="combos.collaborators.loading"
+                  :clearable="false"
                   :disabled="combos.collaborators.loading"
                 >
                   <template v-slot:no-options>
@@ -84,11 +86,11 @@
             <validation-provider
               #default="{ errors }"
               name="rol"
-              rules="required"
+              rules="requiredComboVueSelect:m"
             >
               <b-form-group
                 label-for="role"
-                label="Rol"
+                label="Rol *"
                 :state="errors.length > 0 ? false:null"
               >
                 <v-select
@@ -99,6 +101,7 @@
                   label="nombre"
                   :options="combos.roles.data"
                   :loading="combos.roles.loading"
+                  :clearable="false"
                   :disabled="combos.roles.loading"
                 >
                   <template v-slot:no-options>
@@ -116,8 +119,8 @@
             lg="6"
           >
             <b-form-group
-              label="Email"
-              label-for="email"
+              label="Email *"
+              label-for="emailUser"
             >
               <validation-provider
                 #default="{ errors }"
@@ -125,7 +128,7 @@
                 rules="required|email"
               >
                 <b-form-input
-                  id="email"
+                  id="emailUser"
                   v-model="user.correo"
                   :state="errors.length > 0 ? false:null"
                 />
@@ -141,8 +144,8 @@
             lg="6"
           >
             <b-form-group
-              label="Clave"
-              label-for="clave"
+              label="Clave *"
+              label-for="claveUser"
             >
               <validation-provider
                 #default="{ errors }"
@@ -154,7 +157,7 @@
                   :class="errors.length > 0 ? 'is-invalid':null"
                 >
                   <b-form-input
-                    id="clave"
+                    id="claveUser"
                     v-model="user.clave"
                     :state="errors.length > 0 ? false:null"
                     class="form-control-merge"
@@ -174,31 +177,50 @@
             </b-form-group>
           </b-col>
 
+          <!-- Inicio -->
           <b-col md="6">
-            <b-form-group
-              label="Inicio"
-              label-for="inicio"
+            <validation-provider
+              #default="{ errors }"
+              name="inicio"
+              rules="required"
             >
-              <flat-pickr
-                id="inicio"
-                v-model="user.inicio"
-                class="form-control"
-                :config="config"
-              />
-            </b-form-group>
+              <b-form-group
+                label="Inicio *"
+                label-for="inicio"
+                :state="errors.length > 0 ? false:null"
+              >
+                <flat-pickr
+                  id="inicio"
+                  v-model="user.inicio"
+                  class="form-control"
+                  :config="config"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </b-form-group>
+            </validation-provider>
           </b-col>
+
+          <!-- Fin -->
           <b-col md="6">
-            <b-form-group
-              label="Fin"
-              label-for="fin"
+            <validation-provider
+              #default="{ errors }"
+              name="fin"
+              rules="required"
             >
-              <flat-pickr
-                id="fin"
-                v-model="user.fin"
-                class="form-control"
-                :config="config"
-              />
-            </b-form-group>
+              <b-form-group
+                label="Fin *"
+                label-for="fin"
+                :state="errors.length > 0 ? false:null"
+              >
+                <flat-pickr
+                  id="fin"
+                  v-model="user.fin"
+                  class="form-control"
+                  :config="config"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </b-form-group>
+            </validation-provider>
           </b-col>
 
         </b-row>
@@ -240,7 +262,7 @@ import {
 } from 'bootstrap-vue'
 import { Spanish } from 'flatpickr/dist/l10n/es'
 import flatPickr from 'vue-flatpickr-component'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import { required, email } from '@validations'
 import vSelect from 'vue-select'
@@ -290,14 +312,6 @@ export default {
     passwordToggleIcon() {
       return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
     },
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
-    extend('email', {
-      message: 'El correo electrónico no es válido',
-    })
   },
   setup(props, context) {
     const user = inject('user')

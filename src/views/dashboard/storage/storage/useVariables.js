@@ -9,8 +9,9 @@ const useVariables = () => {
 
   const initialStorage = {
     _id: 0,
-    idPredio: 0,
     nombre: '',
+    idPredio: 0,
+    idTipoAlmacen: 0,
     nombreTipoAlmacen: '',
     observacion: '',
     accion: 0,

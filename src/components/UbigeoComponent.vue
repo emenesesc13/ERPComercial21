@@ -10,11 +10,11 @@
       <validation-provider
         #default="{ errors }"
         name="departamento"
-        rules="required"
+        rules="requiredComboVueSelect:m"
       >
         <b-form-group
           label-for="department"
-          label="Departamento"
+          label="Departamento *"
           :state="errors.length > 0 ? false:null"
         >
           <v-select
@@ -47,11 +47,11 @@
       <validation-provider
         #default="{ errors }"
         name="provincia"
-        rules="required"
+        rules="requiredComboVueSelect"
       >
         <b-form-group
           label-for="province"
-          label="Provincia"
+          label="Provincia *"
           :state="errors.length > 0 ? false:null"
         >
           <v-select
@@ -70,8 +70,8 @@
               No se encontraron resultados.
             </template>
           </v-select>
+          <small class="text-danger">{{ errors[0] }}</small>
         </b-form-group>
-        <small class="text-danger">{{ errors[0] }}</small>
       </validation-provider>
     </b-col>
 
@@ -84,11 +84,11 @@
       <validation-provider
         #default="{ errors }"
         name="distrito"
-        rules="required"
+        rules="requiredComboVueSelect:m"
       >
         <b-form-group
           label-for="district"
-          label="Distrito"
+          label="Distrito *"
           :state="errors.length > 0 ? false:null"
         >
           <v-select
@@ -107,8 +107,8 @@
               No se encontraron resultados.
             </template>
           </v-select>
+          <small class="text-danger">{{ errors[0] }}</small>
         </b-form-group>
-        <small class="text-danger">{{ errors[0] }}</small>
       </validation-provider>
     </b-col>
 
@@ -119,8 +119,7 @@
 import { ref, inject } from '@vue/composition-api'
 import { Fragment } from 'vue-fragment'
 import { BCol, BFormGroup } from 'bootstrap-vue'
-import { ValidationProvider, extend } from 'vee-validate'
-import { required } from '@validations'
+import { ValidationProvider } from 'vee-validate'
 import vSelect from 'vue-select'
 
 export default {
@@ -149,16 +148,6 @@ export default {
       type: String,
       default: '12',
     },
-  },
-  data() {
-    return {
-      required,
-    }
-  },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
   },
   setup(props, context) {
     const loadComboBoxes = inject('loadComboBoxes')

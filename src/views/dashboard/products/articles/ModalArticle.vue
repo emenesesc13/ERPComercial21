@@ -2,9 +2,8 @@
   <div>
     <validation-observer
       ref="modal-article"
-      v-slot="{ handleSubmit }"
     >
-      <b-form @submit.prevent="handleSubmit(sendForm)">
+      <b-form @submit.prevent="sendForm">
         <b-modal
           id="modal-article"
           ok-only
@@ -23,7 +22,7 @@
 
               <template #title>
                 <feather-icon icon="HomeIcon" />
-                <span>Artículo</span>
+                <span class="d-none d-sm-inline">Artículo</span>
               </template>
 
               <!-- Headers Article -->
@@ -54,11 +53,11 @@
                   <validation-provider
                     #default="{ errors }"
                     name="tipo producto"
-                    rules="required"
+                    rules="requiredComboVueSelect:m"
                   >
                     <b-form-group
                       label-for="productType"
-                      label="Tipo Producto"
+                      label="Tipo Producto *"
                       :state="errors.length > 0 ? false:null"
                     >
                       <v-select
@@ -69,6 +68,7 @@
                         label="nombre"
                         :options="combos.productTypes.data"
                         :loading="combos.productTypes.loading"
+                        :clearable="false"
                         :disabled="combos.productTypes.loading"
                       >
                         <template v-slot:no-options>
@@ -86,7 +86,7 @@
                   lg="7"
                 >
                   <b-form-group
-                    label="Articulo"
+                    label="Artículo *"
                     label-for="articleName"
                   >
                     <validation-provider
@@ -164,10 +164,10 @@
                     <validation-provider
                       #default="{ errors }"
                       name="grupo unidad"
-                      rules="required"
+                      rules="requiredComboVueSelect"
                     >
                       <b-form-group
-                        label="Grupo Unidad"
+                        label="Grupo Unidad *"
                         label-for="unitGroup"
                         :state="errors.length > 0 ? false:null"
                       >
@@ -193,7 +193,7 @@
                   </template>
                   <template v-else>
                     <b-form-group
-                      label="Grupo Unidad"
+                      label="Grupo Unidad *"
                       label-for="unitGroup"
                     >
                       <b-form-input
@@ -214,10 +214,10 @@
                   <validation-provider
                     #default="{ errors }"
                     name="unidad inventario"
-                    rules="required"
+                    rules="requiredComboVueSelect"
                   >
                     <b-form-group
-                      label="Unidad Inventario"
+                      label="Unidad Inventario *"
                       label-for="inventoryUnit"
                       :state="errors.length > 0 ? false:null"
                     >
@@ -229,6 +229,7 @@
                         label="nombre"
                         :options="combos.inventoryUnit.data"
                         :loading="combos.inventoryUnit.loading"
+                        :clearable="false"
                         :disabled="combos.inventoryUnit.disabled"
                       >
                         <template v-slot:no-options>
@@ -249,10 +250,10 @@
                   <validation-provider
                     #default="{ errors }"
                     name="unidad venta"
-                    rules="required"
+                    rules="requiredComboVueSelect"
                   >
                     <b-form-group
-                      label="Unidad Venta"
+                      label="Unidad Venta *"
                       label-for="unitSale"
                       :state="errors.length > 0 ? false:null"
                     >
@@ -264,6 +265,7 @@
                         label="nombre"
                         :options="combos.unitSale.data"
                         :loading="combos.unitSale.loading"
+                        :clearable="false"
                         :disabled="combos.unitSale.disabled"
                       >
                         <template v-slot:no-options>
@@ -282,19 +284,20 @@
                   lg="2"
                 >
                   <b-form-group
-                    label="Precio Compra"
+                    label="Precio Compra *"
                     label-for="purchasePrice"
                   >
                     <validation-provider
                       #default="{ errors }"
                       name="precio compra"
-                      rules="required"
+                      rules="required|min_value:1"
                     >
                       <b-form-input
                         id="purchasePrice"
                         v-model.number="article.precioCompra"
                         type="number"
                         :state="errors.length > 0 ? false:null"
+                        min="0"
                       />
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
@@ -308,19 +311,20 @@
                   lg="2"
                 >
                   <b-form-group
-                    label="Precio Venta"
+                    label="Precio Venta *"
                     label-for="salePrice"
                   >
                     <validation-provider
                       #default="{ errors }"
                       name="precio venta"
-                      rules="required"
+                      rules="required|min_value:1"
                     >
                       <b-form-input
                         id="salePrice"
                         v-model.number="article.precioVenta"
                         type="number"
                         :state="errors.length > 0 ? false:null"
+                        min="0"
                       />
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
@@ -334,19 +338,20 @@
                   lg="2"
                 >
                   <b-form-group
-                    label="Precio min. Venta"
+                    label="Precio min. Venta *"
                     label-for="minimumSalePrice"
                   >
                     <validation-provider
                       #default="{ errors }"
                       name="precio min. venta"
-                      rules="required"
+                      rules="required|min_value:1"
                     >
                       <b-form-input
                         id="minimumSalePrice"
                         v-model.number="article.precioMinimoVenta"
                         type="number"
                         :state="errors.length > 0 ? false:null"
+                        min="0"
                       />
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
@@ -361,19 +366,20 @@
                   offset-lg="2"
                 >
                   <b-form-group
-                    label="Stock min."
+                    label="Stock min. *"
                     label-for="minimumStock"
                   >
                     <validation-provider
                       #default="{ errors }"
                       name="stock min."
-                      rules="required"
+                      rules="required|min_value:1"
                     >
                       <b-form-input
                         id="minimumStock"
                         v-model.number="article.stockMinimo"
                         type="number"
                         :state="errors.length > 0 ? false:null"
+                        min="0"
                       />
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
@@ -387,19 +393,20 @@
                   lg="2"
                 >
                   <b-form-group
-                    label="Stock Max."
+                    label="Stock Max. *"
                     label-for="maximumStock"
                   >
                     <validation-provider
                       #default="{ errors }"
                       name="stock max."
-                      rules="required"
+                      rules="required|min_value:1"
                     >
                       <b-form-input
                         id="maximumStock"
                         v-model.number="article.stockMaximo"
                         type="number"
                         :state="errors.length > 0 ? false:null"
+                        min="0"
                       />
                       <small class="text-danger">{{ errors[0] }}</small>
                     </validation-provider>
@@ -414,7 +421,7 @@
 
               <template #title>
                 <feather-icon icon="ArchiveIcon" />
-                <span>Características</span>
+                <span class="d-none d-sm-inline">Características</span>
               </template>
 
               <!-- Features Article -->
@@ -469,6 +476,7 @@
                       label="nombre"
                       :options="combos.valuesByFeature.data"
                       :loading="combos.valuesByFeature.loading"
+                      :clearable="false"
                       :disabled="combos.valuesByFeature.disabled"
                     >
                       <template v-slot:no-options>
@@ -491,7 +499,7 @@
                     variant="primary"
                     class="btn-icon mt-50"
                     :disabled="featureArticle.loading"
-                    @click="handleSubmit(addFeatureArticle)"
+                    @click="addFeatureArticle"
                   >
                     <feather-icon
                       v-if="!featureArticle.loading"
@@ -561,7 +569,7 @@
 
               <template #title>
                 <feather-icon icon="FileTextIcon" />
-                <span>Receta</span>
+                <span class="d-none d-sm-inline">Receta</span>
               </template>
 
               <!-- Receta Article -->
@@ -624,34 +632,26 @@
                   sm="6"
                   lg="4"
                 >
-                  <validation-provider
-                    #default="{ errors }"
-                    name="unidad de medida"
-                    rules="required"
+                  <b-form-group
+                    label="Unidad Medida"
+                    label-for="unitMeasure"
                   >
-                    <b-form-group
-                      label="Unidad Medida"
-                      label-for="unitMeasure"
-                      :state="errors.length > 0 ? false:null"
+                    <v-select
+                      id="unitMeasure"
+                      v-model="recetaArticle.idUnidad"
+                      :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                      :reduce="unit => unit._id"
+                      label="nombre"
+                      :options="combos.unitMeasure.data"
+                      :loading="combos.unitMeasure.loading"
+                      :disabled="combos.unitMeasure.disabled"
+                      :clearable="false"
                     >
-                      <v-select
-                        id="unitMeasure"
-                        v-model="recetaArticle.idUnidad"
-                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :reduce="unit => unit._id"
-                        label="nombre"
-                        :options="combos.unitMeasure.data"
-                        :loading="combos.unitMeasure.loading"
-                        :disabled="combos.unitMeasure.disabled"
-                        :clearable="false"
-                      >
-                        <template v-slot:no-options>
-                          No se encontraron resultados.
-                        </template>
-                      </v-select>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                    </b-form-group>
-                  </validation-provider>
+                      <template v-slot:no-options>
+                        No se encontraron resultados.
+                      </template>
+                    </v-select>
+                  </b-form-group>
                 </b-col>
 
                 <!-- Cantidad -->
@@ -695,7 +695,7 @@
                     variant="primary"
                     class="btn-icon mt-50"
                     :disabled="recetaArticle.loading"
-                    @click="handleSubmit(addRecetaArticle)"
+                    @click="addRecetaArticle"
                   >
                     <feather-icon
                       v-if="!recetaArticle.loading"
@@ -794,7 +794,7 @@
               type="button"
               variant="primary"
               :disabled="article.loading"
-              @click="handleSubmit(updateArticle)"
+              @click="updateArticle"
             >
               <template v-if="article.loading">
                 <b-spinner small />
@@ -823,7 +823,7 @@ import {
   BCol, BTabs, BTab, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BFormInput, BModal, BFormRadio, BButton, BSpinner,
 } from 'bootstrap-vue'
 import ModalSearchArticleComponent from '@/components/ModalSearchArticleComponent.vue'
-import { ValidationObserver, ValidationProvider, extend } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { required } from '@validations'
 import vSelect from 'vue-select'
 import {
@@ -926,11 +926,6 @@ export default {
       return this.dir
     },
   },
-  created() {
-    extend('required', {
-      message: 'Es requerido',
-    })
-  },
   setup(props, context) {
     const article = inject('article')
     const resetArticle = inject('resetArticle')
@@ -986,42 +981,48 @@ export default {
 
     const sendArticle = async (withToastSuccess = true, withButtonLoading = true) => {
       let result = false
-      if (withButtonLoading) article.value.loading = true
-      if (article.value.flgSelected === 'stock') {
-        article.value.flgStock = 1
-        article.value.flgServicio = 0
-        article.value.flgReceta = 0
-      } else if (article.value.flgSelected === 'servicio') {
-        article.value.flgStock = 0
-        article.value.flgServicio = 1
-        article.value.flgReceta = 0
-      } else if (article.value.flgSelected === 'receta') {
-        article.value.flgStock = 0
-        article.value.flgServicio = 0
-        article.value.flgReceta = 1
-      }
-      article.value.accion = article.value._id ? 2 : 1
-      article.value.idUsuario = store.state.auth.user._id
-      const { data, error } = await useFetch('/articulos', article.value, 'POST')
-      if (error) {
-        messageToast('danger', 'Error', 'Ocurrio un error')
-        result = false
+      const resultForm = await context.refs['modal-article'].validate()
+      if (resultForm) {
+        if (withButtonLoading) article.value.loading = true
+        if (article.value.flgSelected === 'stock') {
+          article.value.flgStock = 1
+          article.value.flgServicio = 0
+          article.value.flgReceta = 0
+        } else if (article.value.flgSelected === 'servicio') {
+          article.value.flgStock = 0
+          article.value.flgServicio = 1
+          article.value.flgReceta = 0
+        } else if (article.value.flgSelected === 'receta') {
+          article.value.flgStock = 0
+          article.value.flgServicio = 0
+          article.value.flgReceta = 1
+        }
+        article.value.accion = article.value._id ? 2 : 1
+        article.value.idUsuario = store.state.auth.user._id
+        const { data, error } = await useFetch('/articulos', article.value, 'POST')
+        if (error) {
+          messageToast('danger', 'Error', 'Ocurrio un error')
+          result = false
+        } else {
+          data.forEach(({ id, mensaje }) => {
+            if (id === 0) {
+              messageToast('warning', 'Advertencia', mensaje)
+              result = false
+            } else {
+              article.value._id = id
+              if (withToastSuccess) messageToast('success', 'Articulo', mensaje)
+              const unidadSeleccionada = combos.value.unitGroup.data.find(group => group._id === article.value.idGrupoUnidad)
+              article.value.nombreGrupoUnidad = unidadSeleccionada.nombre
+              loadArticles()
+              result = true
+            }
+          })
+        }
+        if (withButtonLoading) article.value.loading = false
       } else {
-        data.forEach(({ id, mensaje }) => {
-          if (id === 0) {
-            messageToast('warning', 'Advertencia', mensaje)
-            result = false
-          } else {
-            article.value._id = id
-            if (withToastSuccess) messageToast('success', 'Articulo', mensaje)
-            const unidadSeleccionada = combos.value.unitGroup.data.find(group => group._id === article.value.idGrupoUnidad)
-            article.value.nombreGrupoUnidad = unidadSeleccionada.nombre
-            loadArticles()
-            result = true
-          }
-        })
+        tabIndex.value = 0
+        result = false
       }
-      if (withButtonLoading) article.value.loading = false
       return result
     }
 
