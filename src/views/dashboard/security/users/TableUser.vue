@@ -79,6 +79,13 @@ export default {
         pdf: true,
       },
       {
+        label: 'Rol',
+        field: 'nombrerol',
+        thClass: 'align-middle',
+        tdClass: 'align-middle',
+        pdf: true,
+      },
+      {
         label: 'Correo',
         field: 'correo',
         thClass: 'align-middle',

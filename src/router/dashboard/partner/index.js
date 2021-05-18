@@ -8,11 +8,11 @@ const partnerRoutes = [
       pageTitle: 'Socios',
       breadcrumb: [
         {
-          text: 'Socios',
+          text: 'Mantenimiento',
           active: true,
         },
         {
-          text: 'Inicio',
+          text: 'Socios',
           active: true,
         },
       ],
