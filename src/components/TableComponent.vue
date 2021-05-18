@@ -28,10 +28,18 @@
           id="dropdown-right"
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           right
-          text="Exportar"
           variant="primary"
           class="mr-1"
         >
+          <template #button-content>
+            <feather-icon
+              icon="ExternalLinkIcon"
+              class="mr-0 mr-sm-50"
+            />
+            <span class="d-none d-sm-inline">
+              Exportar
+            </span>
+          </template>
           <export-excel v-if="exportExcel" />
           <export-pdf v-if="exportPdf" />
         </b-dropdown>

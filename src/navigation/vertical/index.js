@@ -53,7 +53,7 @@ export default [
     ],
   },
   {
-    title: 'Socios',
+    title: 'Mantenimiento',
     icon: 'UsersIcon',
     children: [
       {
@@ -67,6 +67,10 @@ export default [
     icon: 'LockIcon',
     children: [
       {
+        title: 'Colaboradores',
+        route: 'collaborators',
+      },
+      {
         title: 'Usuarios',
         route: 'users',
       },
@@ -75,11 +79,11 @@ export default [
         route: 'roles',
       },
       {
-        title: 'Colaboradores',
-        route: 'collaborators',
+        title: 'Modulos',
+        route: 'modules',
       },
       {
-        title: 'Menús',
+        title: 'Menú',
         route: 'menus',
       },
       {
@@ -89,10 +93,6 @@ export default [
       {
         title: 'Opciones Menú',
         route: 'menuOptions',
-      },
-      {
-        title: 'Modulos',
-        route: 'modules',
       },
     ],
   },
