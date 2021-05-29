@@ -94,6 +94,10 @@ export default [
         title: 'Opciones Menú',
         route: 'menuOptions',
       },
+      {
+        title: 'Accesos',
+        route: { path: '/accesos' },
+      },
     ],
   },
 ]

@@ -128,14 +128,20 @@
                   class="text-body align-middle mr-25"
                 />
               </template>
-              <b-dropdown-item @click="changeStatus(props.row)">
+              <b-dropdown-item
+                v-if="buttonStatus"
+                @click="changeStatus(props.row)"
+              >
                 <feather-icon
                   :icon="props.row.activo ? 'SlashIcon' : 'CheckCircleIcon'"
                   class="mr-50"
                 />
                 <span>{{ props.row.activo ? 'Desactivar' : 'Activar' }}</span>
               </b-dropdown-item>
-              <b-dropdown-item @click="openModalForEdit(props.row)">
+              <b-dropdown-item
+                v-if="buttonEdit"
+                @click="openModalForEdit(props.row)"
+              >
                 <feather-icon
                   icon="Edit2Icon"
                   class="mr-50"
@@ -254,6 +260,14 @@ export default {
       default: false,
     },
     buttonsEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    buttonEdit: {
+      type: Boolean,
+      default: true,
+    },
+    buttonStatus: {
       type: Boolean,
       default: true,
     },
