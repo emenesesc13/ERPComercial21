@@ -213,8 +213,10 @@ const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 
   if (mode === 'download') {
     doc.save(`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf`)
   } else if (mode === 'print') {
-    doc.autoPrint()
-    doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
+    // doc.autoPrint()
+    // doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
+    const blob = doc.output('blob')
+    window.open(URL.createObjectURL(blob), '_blank')
   }
 }
 

@@ -5,6 +5,14 @@ NOTE:
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
 
+:root {
+  font-size: 12px !important;
+}
+
+[dir] .main-menu ul.navigation-main {
+  padding-top: 1rem;
+}
+
 .vgt-responsive {
   min-height: 200px !important;
 }

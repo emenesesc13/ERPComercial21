@@ -132,6 +132,25 @@ const securityRoutes = [
       ],
     },
   },
+  {
+    path: '/accesos',
+    name: 'access',
+    component: () => import('@/views/dashboard/security/access/Access.vue'),
+    meta: {
+      auth: true,
+      pageTitle: 'Accesos',
+      breadcrumb: [
+        {
+          text: 'Seguridad',
+          active: true,
+        },
+        {
+          text: 'Accesos',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 export default securityRoutes
