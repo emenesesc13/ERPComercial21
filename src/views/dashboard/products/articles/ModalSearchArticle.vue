@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent="searchArticles">
+  <b-form>
     <b-modal
       id="modal-article-search"
       ok-only
@@ -91,6 +91,7 @@ export default {
   },
   methods: {
     searchArticles() {
+      this.serverParams.page = 1
       this.loadArticles()
       this.$bvModal.hide('modal-article-search')
     },

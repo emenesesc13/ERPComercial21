@@ -95,7 +95,7 @@ export default {
       this.serverParams.columnFilters.field = ''
       this.serverParams.columnFilters.value = ''
       this.loadModules()
-      this.$bvModal.hide('modal-unit-measure-search')
+      this.$bvModal.hide('modal-module-search')
     },
   },
   setup() {

@@ -9,9 +9,11 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject, provide, onMounted } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
+import store from '@/store'
 import TablePredio from './TablePredio.vue'
 import ModalSearchPredio from './ModalSearchPredio.vue'
 import useVariables from './useVariables'
@@ -36,7 +38,7 @@ export default {
       predios.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/predio/?_id=0&tabla=predios&pinicio=${page}&pfin=${perPage}`
+      let url = `/predio/?_id=0&tabla=predios&idUsuario=${store.state.auth.user._id}&idNegocio=${0}&pinicio=${page}&pfin=${perPage}`
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {

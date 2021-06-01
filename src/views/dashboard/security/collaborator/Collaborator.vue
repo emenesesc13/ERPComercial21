@@ -9,9 +9,11 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
+import store from '@/store'
 import TableCollaborator from './TableCollaborator.vue'
 import ModalCollaborator from './ModalCollaborator.vue'
 import ModalSearchCollaborator from './ModalSearchCollaborator.vue'
@@ -35,7 +37,7 @@ export default {
       collaborators.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/colaborador/?_id=0&tabla=colaborador&pinicio=${page}&pfin=${perPage}`
+      let url = `/colaborador/?_id=0&tabla=colaborador&idUsuario=${store.state.auth.user._id}&idNegocio=${0}&pinicio=${page}&pfin=${perPage}`
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {

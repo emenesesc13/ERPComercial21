@@ -3,7 +3,7 @@
     <b-row class="auth-inner m-0">
 
       <!-- Brand logo-->
-      <b-link class="brand-logo d-flex align-items-center">
+      <b-link class="d-none brand-logo d-lg-flex align-items-center">
         <b-img
           :src="require('@/assets/images/logo/ico-simsac.png')"
           alt="Simsac Perú"
@@ -32,8 +32,24 @@
       <!-- Login-->
       <b-col
         lg="4"
-        class="d-flex align-items-center auth-bg px-2 p-lg-5"
+        class="col-login d-flex flex-column flex-lg-row justify-content-center align-items-center auth-bg px-2 p-lg-5"
       >
+
+        <!-- Brand logo-->
+        <b-link
+          class="d-flex brand-logo d-lg-none justify-content-start mb-5 align-items-center"
+          style="position: static;"
+        >
+          <b-img
+            :src="require('@/assets/images/logo/ico-simsac.png')"
+            alt="Simsac Perú"
+          />
+          <h2 class="brand-text text-primary ml-1 my-0">
+            Simsac Perú
+          </h2>
+        </b-link>
+        <!-- /Brand logo-->
+
         <b-col
           sm="8"
           md="6"
@@ -262,4 +278,18 @@ export default {
 
 <style lang="scss">
 @import '@core/scss/vue/pages/page-auth.scss';
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .col-login .col-sm-8 {
+      flex: none;
+      max-width: 66.6666666667%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .col-login .col-sm-8 {
+      flex: none;
+      max-width: 50%;
+  }
+}
 </style>

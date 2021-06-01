@@ -154,6 +154,7 @@
         </b-row>
 
         <template #modal-footer>
+          <!-- Botón cerrar formulario -->
           <b-button
             type="button"
             variant="outline-primary"
@@ -161,6 +162,8 @@
           >
             Cerrar
           </b-button>
+
+          <!-- Botón para enviar el formulario -->
           <b-overlay
             :show="userForChangePassword.loading"
             variant="transparent"
@@ -310,6 +313,7 @@ export default {
       userForChangePassword.value.loading = false
     }
 
+    // Función para cerrar el modal
     const closeForm = () => {
       context.root.$bvModal.hide('modal-user-clave')
     }
