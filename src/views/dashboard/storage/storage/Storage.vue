@@ -9,9 +9,11 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
+import store from '@/store'
 import TableStorage from './TableStorage.vue'
 import ModalStorage from './ModalStorage.vue'
 import ModalSearchStorage from './ModalSearchStorage.vue'
@@ -37,7 +39,7 @@ export default {
       storages.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/almacen/?_id=0&tabla=almacen&pinicio=${page}&pfin=${perPage}`
+      let url = `/almacen/?_id=0&tabla=almacen&idUsuario=${store.state.auth.user._id}&idNegocio=${0}&pinicio=${page}&pfin=${perPage}`
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {

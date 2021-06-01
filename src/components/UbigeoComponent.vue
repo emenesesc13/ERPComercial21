@@ -1,6 +1,8 @@
 <template>
   <fragment>
 
+    <!-- Departamento -->
+
     <b-col
       :cols="cols"
       :sm="colsm"
@@ -38,6 +40,8 @@
       </validation-provider>
     </b-col>
 
+    <!-- Provincia -->
+
     <b-col
       :cols="cols"
       :sm="colsm"
@@ -74,6 +78,8 @@
         </b-form-group>
       </validation-provider>
     </b-col>
+
+    <!-- Distrito -->
 
     <b-col
       :cols="cols"
@@ -150,12 +156,14 @@ export default {
     },
   },
   setup(props, context) {
+    // Inyectando variables reactivas o funciones que nos provee un componente padre
     const loadComboBoxes = inject('loadComboBoxes')
     const combos = inject('combos')
     const resetCombo = inject('resetCombo')
     const ubigeo = inject('ubigeoSelected')
     const idUbigeo = ref(0)
 
+    // Función que se ejecuta cuando se selecciona un departamento, recibe como parametro el idDepartamento
     const selectedDepartament = async ({ id }) => {
       ubigeo.value.departament = id
       ubigeo.value.province = 0
@@ -166,6 +174,7 @@ export default {
       context.emit('selected-district', idUbigeo.value)
     }
 
+    // Función que se ejecuta cuando se selecciona una provincia, recibe como parametro el idProvincia
     const selectedProvince = async ({ id }) => {
       ubigeo.value.province = id
       ubigeo.value.district = 0
@@ -175,12 +184,14 @@ export default {
       context.emit('selected-district', idUbigeo.value)
     }
 
+    // Función que se ejecuta cuando se selecciona un distrito, recibe como parametro el idDistrito. Y a su vez emite un evento para que el componente padre que lo utilice pueda capturar el idUbigeo
     const selectedDistrict = async ({ _id }) => {
       ubigeo.value.district = _id
       idUbigeo.value = _id
       context.emit('selected-district', idUbigeo.value)
     }
 
+    // Retornando variables reactivas o funciones que se utilizan en el template
     return {
       combos,
       ubigeo,

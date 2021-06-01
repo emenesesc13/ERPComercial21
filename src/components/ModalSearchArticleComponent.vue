@@ -47,9 +47,8 @@
     </b-row>
 
     <table-component
-      :buttons-enabled="false"
+      :header-buttons-enabled="false"
       class="mb-2"
-      :clickable="true"
       @on-row-click="onRowClick"
     >
       <template #custom="{ props }">
@@ -130,6 +129,7 @@ export default {
     ]
 
     const searchArticle = async () => {
+      serverParamsSearchArticle.value.page = 1
       tableInfo.value.loading = true
       clearTimeout(timer)
       timer = setTimeout(() => {
@@ -138,6 +138,7 @@ export default {
     }
 
     const searchColumnFilter = async () => {
+      serverParamsSearchArticle.value.page = 1
       serverParamsSearchArticle.value.columnFilters.value = ''
       await searchArticle()
       context.refs.serverParamsValueArticle.focus()

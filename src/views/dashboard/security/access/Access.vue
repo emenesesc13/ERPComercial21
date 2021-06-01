@@ -9,9 +9,11 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject, provide, onMounted } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
+import store from '@/store'
 import ModalAccess from './ModalAccess.vue'
 import ModalSearchAccess from './ModalSearchAccess.vue'
 import TableAccess from './TableAccess.vue'
@@ -37,7 +39,7 @@ export default {
         messageToast('warning', 'Advertencia', 'Debe seleccionar un rol')
       } else {
         accesss.value.loading = true
-        const { data, error } = await useFetch(`/accesos/menuroles/${serverParams.value.columnFilters.value}`)
+        const { data, error } = await useFetch(`/accesos/menuroles/${serverParams.value.columnFilters.value}/?idUsuario=${store.state.auth.user._id}&idNegocio=${0}`)
         if (error) {
           messageToast('danger', 'Error', 'Error al momento de cargar los accesos')
         } else if (data) {

@@ -109,48 +109,59 @@
                   cols="12"
                   sm="6"
                   lg="5"
-                  align-self="center"
-                  class="d-flex justify-content-between"
                 >
                   <b-form-group
-                    label-for="stock"
-                    class="form-group-checkbox"
+                    label="Tipo Artículo"
+                    label-for="articleType"
                   >
-                    <b-form-radio
-                      v-model="article.flgSelected"
-                      name="some-radios"
-                      value="stock"
-                      :disabled="!!recetasArticle.data.length"
-                    >
-                      Stock
-                    </b-form-radio>
-                  </b-form-group>
 
-                  <b-form-group
-                    label-for="service"
-                    class="form-group-checkbox"
-                  >
-                    <b-form-radio
-                      v-model="article.flgSelected"
-                      name="some-radios"
-                      value="servicio"
-                      :disabled="featuresArticle.data.length || recetasArticle.data.length ? true : false"
-                    >
-                      Servicio
-                    </b-form-radio>
-                  </b-form-group>
+                    <div class="d-flex">
 
-                  <b-form-group
-                    label-for="receta"
-                    class="form-group-checkbox"
-                  >
-                    <b-form-radio
-                      v-model="article.flgSelected"
-                      name="some-radios"
-                      value="receta"
-                    >
-                      Receta
-                    </b-form-radio>
+                      <b-form-group
+                        label-for="stock"
+                        class="form-group-checkbox"
+                      >
+                        <b-form-radio
+                          v-model="article.flgSelected"
+                          name="some-radios"
+                          value="stock"
+                          class="mr-4 mr-sm-2 mr-md-3"
+                          :disabled="!!recetasArticle.data.length"
+                        >
+                          Stock
+                        </b-form-radio>
+                      </b-form-group>
+
+                      <b-form-group
+                        label-for="service"
+                        class="form-group-checkbox"
+                      >
+                        <b-form-radio
+                          v-model="article.flgSelected"
+                          name="some-radios"
+                          value="servicio"
+                          class="mr-4 mr-sm-2 mr-md-3"
+                          :disabled="featuresArticle.data.length || recetasArticle.data.length ? true : false"
+                        >
+                          Servicio
+                        </b-form-radio>
+                      </b-form-group>
+
+                      <b-form-group
+                        label-for="receta"
+                        class="form-group-checkbox"
+                      >
+                        <b-form-radio
+                          v-model="article.flgSelected"
+                          name="some-radios"
+                          value="receta"
+                        >
+                          Receta
+                        </b-form-radio>
+                      </b-form-group>
+
+                    </div>
+
                   </b-form-group>
                 </b-col>
 
@@ -1141,7 +1152,7 @@ export default {
       tableInfo.value.loading = true
       const { columnFilters, page, perPage } = serverParamsSearchArticle.value
       const { field, value } = columnFilters
-      let url = `/articulos/?_id=0&tabla=articulos&pinicio=${page}&pfin=${perPage}`
+      let url = `/articulos/?_id=0&tabla=articulos&idUsuario=${store.state.auth.user._id}&idNegocio=${0}&pinicio=${page}&pfin=${perPage}`
       url += '&opcional=a.id<>'
       url += article.value._id
       if (field) url += `&campofiltro=${field}&filtro=${value}`

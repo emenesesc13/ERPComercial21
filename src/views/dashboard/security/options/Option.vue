@@ -9,9 +9,11 @@
 </template>
 
 <script>
+/* eslint no-underscore-dangle: 0 */
 import { inject, onMounted, provide } from '@vue/composition-api'
 import { BCard } from 'bootstrap-vue'
 import useFetch from '@/hooks/useFetch'
+import store from '@/store'
 import useVariables from './useVariables'
 import TableOption from './TableOption.vue'
 import ModalOption from './ModalOption.vue'
@@ -35,7 +37,7 @@ export default {
       options.value.loading = true
       const { columnFilters, page, perPage } = serverParams.value
       const { field, value } = columnFilters
-      let url = `/opciones/?_id=0&tabla=opciones&pinicio=${page}&pfin=${perPage}`
+      let url = `/opciones/?_id=0&tabla=opciones&idUsuario=${store.state.auth.user._id}&idNegocio=${0}&pinicio=${page}&pfin=${perPage}`
       if (field) url += `&campofiltro=${field}&filtro=${value}`
       const { data, error } = await useFetch(url)
       if (error) {
