@@ -60,6 +60,10 @@ export default [
         title: 'Socios',
         route: 'partner',
       },
+      {
+        title: 'Unidad Negocio',
+        route: 'businessUnit',
+      },
     ],
   },
   {
