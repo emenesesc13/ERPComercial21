@@ -72,6 +72,7 @@
                   id="ruc"
                   v-model="businessUnit.ruc"
                   :state="errors.length > 0 ? false:null"
+                  maxlength="11"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
