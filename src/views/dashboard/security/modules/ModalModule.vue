@@ -8,7 +8,7 @@
         id="modal-module"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="moduleOne._id ? 'Modificar Modulo' : 'Registrar Modulo'"
         no-close-on-esc

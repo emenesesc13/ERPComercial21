@@ -8,7 +8,7 @@
           id="modal-article"
           ok-only
           ok-title="Accept"
-          modal-class="modal-primary"
+          modal-class="modal-primary modal--padding"
           centered
           :title="article._id ? 'Modificar Articulo' : 'Registrar Articulo'"
           size="lg"
@@ -1235,8 +1235,6 @@ export default {
     margin-top: .5rem;
   }
   #modal-article {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
     .modal-dialog {
       @media screen and (min-width: 576px) {
         max-width: 700px;

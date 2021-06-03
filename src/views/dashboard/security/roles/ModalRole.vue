@@ -8,7 +8,7 @@
         id="modal-role"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="role._id ? 'Modificar Rol' : 'Registrar Rol'"
         no-close-on-esc

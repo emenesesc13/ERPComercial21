@@ -12,7 +12,7 @@
         id="modal-user-clave"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         title="Modificar Clave"
         no-close-on-esc

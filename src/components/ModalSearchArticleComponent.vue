@@ -2,7 +2,7 @@
   <b-modal
     id="modal-search-article-component"
     hide-footer
-    modal-class="modal-primary"
+    modal-class="modal-primary modal--padding"
     centered
     title="Buscar Articulo"
     size="lg"

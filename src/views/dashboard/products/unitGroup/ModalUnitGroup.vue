@@ -8,7 +8,7 @@
         id="modal-unit-group"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="unitGroup._id ? 'Modificar Grupo Unidad' : 'Registrar Grupo Unidad'"
         no-close-on-esc
@@ -148,7 +148,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

@@ -8,7 +8,7 @@
         id="modal-menu-option"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="menuOption._id ? 'Modificar Opción del Menú' : 'Registrar Opción del Menú'"
         no-close-on-esc

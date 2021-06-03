@@ -4,7 +4,7 @@
       id="modal-module-search"
       ok-only
       ok-title="Accept"
-      modal-class="modal-primary"
+      modal-class="modal-primary modal--padding"
       centered
       title="Buscar Modulo"
     >

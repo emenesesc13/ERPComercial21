@@ -6,6 +6,7 @@
         ref="modal-export"
         centered
         title="Exportar en PDF"
+        modal-class="modal-primary modal--padding"
         no-close-on-esc
         no-close-on-backdrop
       >

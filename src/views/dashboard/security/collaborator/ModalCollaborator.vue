@@ -8,7 +8,7 @@
         id="modal-collaborator"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="collaborator._id ? 'Modificar Colaborador' : 'Registrar Colaborador'"
         no-close-on-esc

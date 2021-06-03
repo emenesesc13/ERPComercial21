@@ -8,7 +8,7 @@
         id="modal-storage"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="storage._id ? 'Modificar Almacén' : 'Registrar Almacén'"
         size="lg"
@@ -583,8 +583,6 @@ export default {
     margin-top: .5rem;
   }
   #modal-storage {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
     .modal-dialog {
       @media screen and (min-width: 576px) {
         max-width: 700px;
