@@ -8,7 +8,7 @@
         id="modal-predio"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="predio._id ? 'Modificar Predio' : 'Registrar Predio'"
         no-close-on-esc

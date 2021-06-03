@@ -8,7 +8,7 @@
         id="modal-feature"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="feature._id ? 'Modificar Característica' : 'Registrar Característica'"
         no-close-on-esc
@@ -148,7 +148,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

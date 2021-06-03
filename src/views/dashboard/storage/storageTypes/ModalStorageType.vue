@@ -8,7 +8,7 @@
         id="modal-storage-type"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="storageType._id ? 'Modificar Tipo Almacén' : 'Registrar Tipo Almacén'"
         no-close-on-esc
@@ -148,7 +148,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

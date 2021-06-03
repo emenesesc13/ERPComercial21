@@ -8,7 +8,7 @@
         id="modal-user"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="user._id ? 'Modificar Usuario' : 'Registrar Usuario'"
         size="lg"
@@ -178,7 +178,7 @@
           </b-col>
 
           <!-- Inicio -->
-          <b-col md="6">
+          <!-- <b-col md="6">
             <validation-provider
               #default="{ errors }"
               name="inicio"
@@ -198,6 +198,43 @@
                 <small class="text-danger">{{ errors[0] }}</small>
               </b-form-group>
             </validation-provider>
+          </b-col> -->
+
+          <!-- Fin -->
+          <!-- <b-col md="6">
+            <b-form-group
+              label="Fin *"
+              label-for="fin"
+            >
+              <flat-pickr
+                id="fin"
+                v-model="user.fin"
+                class="form-control"
+                :config="config"
+              />
+            </b-form-group>
+          </b-col> -->
+
+          <!-- Inicio -->
+          <b-col md="6">
+            <validation-provider
+              #default="{ errors }"
+              name="inicio"
+              rules="required"
+            >
+              <b-form-group
+                label="Inicio *"
+                label-for="inicio"
+              >
+                <b-form-datepicker
+                  id="inicio"
+                  v-model="user.inicio"
+                  :state="errors.length > 0 ? false:null"
+                  v-bind="labelsFormDate"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </b-form-group>
+            </validation-provider>
           </b-col>
 
           <!-- Fin -->
@@ -210,13 +247,12 @@
               <b-form-group
                 label="Fin *"
                 label-for="fin"
-                :state="errors.length > 0 ? false:null"
               >
-                <flat-pickr
+                <b-form-datepicker
                   id="fin"
                   v-model="user.fin"
-                  class="form-control"
-                  :config="config"
+                  :state="errors.length > 0 ? false:null"
+                  v-bind="labelsFormDate"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </b-form-group>
@@ -258,10 +294,9 @@
 <script>
 /* eslint no-underscore-dangle: 0 */
 import {
-  BRow, BCol, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BFormInput, BModal, BButton, BOverlay,
+  BRow, BCol, BForm, BFormGroup, BInputGroup, BFormDatepicker, BInputGroupAppend, BFormInput, BModal, BButton, BOverlay,
 } from 'bootstrap-vue'
-import { Spanish } from 'flatpickr/dist/l10n/es'
-import flatPickr from 'vue-flatpickr-component'
+// import flatPickr from 'vue-flatpickr-component'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import { required, email } from '@validations'
@@ -279,6 +314,7 @@ export default {
     BForm,
     BFormGroup,
     BInputGroup,
+    BFormDatepicker,
     BInputGroupAppend,
     BFormInput,
     BModal,
@@ -287,7 +323,7 @@ export default {
     ValidationObserver,
     ValidationProvider,
     vSelect,
-    flatPickr,
+    // flatPickr,
   },
   directives: {
     Ripple,
@@ -297,14 +333,20 @@ export default {
     return {
       required,
       email,
-      config: {
-        wrap: true, // set wrap to true only when using 'input-group'
-        altInput: true,
-        locale: Spanish, // locale for this instance only
-        enableTime: true,
-        enableSeconds: true,
-        dateFormat: 'Y-m-d H:i:s',
-        minuteIncrement: 1,
+      labelsFormDate: {
+        labelPrevDecade: 'Década anterior',
+        labelPrevYear: 'Año anterior',
+        labelPrevMonth: 'El mes pasado',
+        labelCurrentMonth: 'Mes actual',
+        labelNextMonth: 'Próximo mes',
+        labelNextYear: 'El próximo año',
+        labelNextDecade: 'La próxima década',
+        labelToday: 'Hoy',
+        labelSelected: 'Fecha seleccionada',
+        labelNoDateSelected: 'Sin fecha elegida',
+        labelCalendar: 'Calendario',
+        labelNav: 'Navegación de calendario',
+        labelHelp: 'Navegar por el calendario con las teclas de flechas',
       },
     }
   },
@@ -319,16 +361,16 @@ export default {
     const loadUsers = inject('loadUsers')
     const combos = inject('combos')
 
-    const formatDateTime = dateTime => {
-      const date = new Date(dateTime)
-      const year = `0000${date.getFullYear()}`.slice(-4)
-      const month = `00${date.getMonth() + 1}`.slice(-2)
-      const day = `00${date.getDate()}`.slice(-2)
-      const hour = `00${date.getHours()}`.slice(-2)
-      const minute = `00${date.getMinutes()}`.slice(-2)
-      const second = `00${date.getSeconds()}`.slice(-2)
-      return `${year}-${month}-${day}T${hour}:${minute}:${second}`
-    }
+    // const formatDateTime = dateTime => {
+    //   const date = new Date(dateTime)
+    //   const year = `0000${date.getFullYear()}`.slice(-4)
+    //   const month = `00${date.getMonth() + 1}`.slice(-2)
+    //   const day = `00${date.getDate()}`.slice(-2)
+    //   const hour = `00${date.getHours()}`.slice(-2)
+    //   const minute = `00${date.getMinutes()}`.slice(-2)
+    //   const second = `00${date.getSeconds()}`.slice(-2)
+    //   return `${year}-${month}-${day}T${hour}:${minute}:${second}`
+    // }
 
     const sendForm = async () => {
       user.value.loading = true
@@ -336,8 +378,8 @@ export default {
       user.value.idUsuario = store.state.auth.user._id
       if (user.value.accion === 2) delete user.value.clave
       if (user.value.idColaborador && user.value.idRol) {
-        user.value.inicio = formatDateTime(user.value.inicio)
-        user.value.fin = formatDateTime(user.value.fin)
+        // user.value.inicio = formatDateTime(user.value.inicio)
+        // user.value.fin = formatDateTime(user.value.fin)
         const { error, data } = await useFetch('/usuario', user.value, 'POST')
         if (error) {
           messageToast('danger', 'Error', 'Ocurrio un error')
@@ -373,7 +415,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

@@ -8,7 +8,7 @@
         id="modal-business-unit"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="businessUnit._id ? 'Modificar Unidad de Negocio' : 'Registrar Unidad de Negocio'"
         no-close-on-esc

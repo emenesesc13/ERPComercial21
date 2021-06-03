@@ -8,7 +8,7 @@
         id="modal-access"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="access._id ? 'Modificar Acceso' : 'Registrar Acceso'"
         no-close-on-esc

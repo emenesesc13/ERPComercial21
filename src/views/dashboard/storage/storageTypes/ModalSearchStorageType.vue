@@ -4,7 +4,7 @@
       id="modal-storage-type-search"
       ok-only
       ok-title="Accept"
-      modal-class="modal-primary"
+      modal-class="modal-primary modal--padding"
       centered
       title="Buscar Tipo Almacén"
     >
@@ -110,7 +110,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

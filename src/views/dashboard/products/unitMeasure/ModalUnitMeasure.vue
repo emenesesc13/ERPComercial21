@@ -8,7 +8,7 @@
         id="modal-unit-measure"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="unitMeasure._id ? 'Modificar Unidad Medida' : 'Registrar Unidad Medida'"
         no-close-on-esc

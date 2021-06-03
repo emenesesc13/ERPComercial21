@@ -13,6 +13,15 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   padding-top: 1rem;
 }
 
+.modal--padding {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+[dir] .page-item {
+  height: 100%;
+}
+
 .vgt-responsive {
   min-height: 200px !important;
 }

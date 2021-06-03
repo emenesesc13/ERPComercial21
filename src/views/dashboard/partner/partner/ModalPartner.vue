@@ -8,7 +8,7 @@
         id="modal-partner"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="partner._id ? 'Modificar Socio' : 'Registrar Socio'"
         no-close-on-esc
@@ -717,8 +717,6 @@ export default {
     background-color: #BBB;
   }
   #modal-partner {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
     .modal-dialog {
       @media screen and (min-width: 576px) {
         max-width: 700px;

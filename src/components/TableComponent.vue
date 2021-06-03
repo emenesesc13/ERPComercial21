@@ -275,13 +275,13 @@
               <template #prev-text>
                 <feather-icon
                   icon="ChevronLeftIcon"
-                  size="18"
+                  size="16"
                 />
               </template>
               <template #next-text>
                 <feather-icon
                   icon="ChevronRightIcon"
-                  size="18"
+                  size="16"
                 />
               </template>
             </b-pagination>

@@ -8,7 +8,7 @@
         id="modal-feature-detail"
         ok-only
         ok-title="Accept"
-        modal-class="modal-primary"
+        modal-class="modal-primary modal--padding"
         centered
         :title="featureDetail._id ? 'Modificar Detalle' : 'Registrar Detalle'"
         no-close-on-esc
