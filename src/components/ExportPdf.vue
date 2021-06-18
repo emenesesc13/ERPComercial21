@@ -1,6 +1,7 @@
 <template>
   <fragment>
     <div>
+      <!-- Modal para configurar la exportación -->
       <b-modal
         id="modal-export"
         ref="modal-export"
@@ -12,6 +13,7 @@
       >
         <b-row>
 
+          <!-- Orientación del Documento -->
           <b-col
             cols="12"
           >
@@ -37,6 +39,7 @@
             </b-form-group>
           </b-col>
 
+          <!-- Datos a exportar (Todos | Filtro Actual) -->
           <b-col
             cols="12"
           >
@@ -57,6 +60,7 @@
             </b-form-group>
           </b-col>
 
+          <!-- Columnas a exportar -->
           <b-col
             cols="12"
           >
@@ -80,7 +84,10 @@
 
         </b-row>
 
+        <!-- Sección de botones -->
         <template #modal-footer>
+
+          <!-- Boton imprimir -->
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="primary"
@@ -102,6 +109,8 @@
               Cargando...
             </template>
           </b-button>
+
+          <!-- Botón descargar -->
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="primary"
@@ -127,6 +136,7 @@
 
       </b-modal>
     </div>
+    <!-- Elemento despegable PDF para abrir el modal de exportación -->
     <b-dropdown-item
       v-if="columns.length && urlForExportData"
       @click="openModalExportData"
@@ -137,6 +147,7 @@
 </template>
 
 <script>
+// Importar dependencias del componente
 import { ref, inject } from '@vue/composition-api'
 import { Fragment } from 'vue-fragment'
 import {
@@ -150,6 +161,7 @@ import useExportPdf from '@/hooks/useExportPdf'
 export default {
   name: 'ExportPdf',
   components: {
+    // Registrar componentes a utilizar en el template
     Fragment,
     BRow,
     BCol,
@@ -166,53 +178,74 @@ export default {
     Ripple,
   },
   setup(props, context) {
+    // Inyectar variables y funciones que nos provee un componente superior
     const messageToast = inject('messageToast')
     const titleForExport = inject('titleForExport', 'Listado')
-    const orientationSelected = ref('p')
-    const exportWithFilters = ref('Con filtro actual')
     const urlForExportData = inject('urlForExportData', null)
     const serverParams = inject('serverParams')
     const columns = inject('columns', null)
+    // Crear varuables reactivas
+    const orientationSelected = ref('p')
+    const exportWithFilters = ref('Con filtro actual')
     const dataExport = ref([])
     const loadingDownload = ref(false)
     const loadingPrint = ref(false)
 
+    // Funcipn para cerrar el Modal
     const openModalExportData = () => {
       context.refs['modal-export'].show()
     }
 
+    // Función asincrona para generar el PDF
+    // Recibe 1 parametro
+    /*
+      1.- Modo (print || download)
+    */
     const generatePdf = async mode => {
+      // Verificar el modo y activar el loader
       if (mode === 'download') loadingDownload.value = true
       else if (mode === 'print') loadingPrint.value = true
       try {
+        // Armar la url dependiendo si tiene filtros
         const { columnFilters } = serverParams.value
         const { field, value } = columnFilters
         const urlWithFilters = `${urlForExportData}&campofiltro=${field}&filtro=${value}`
         const url = exportWithFilters.value === 'Con filtro actual' ? urlWithFilters : urlForExportData
+        // Realizar la peticion
         const { error, data } = await useFetch(url)
         if (error) {
+          // Lanzar un error si la peticion fallo
           throw error
         } else if (data) {
+          // Verificar que los datos que me trajo la peticion tenga registros
           if (data.length) {
+            // Verificar que columnas tienen la propiedad pdf en true
             const columnsSelected = columns.filter(column => column.pdf)
+            // Renombrar las columnas para un mejor uso de la libreria jsPDF
             const renameColumns = columnsSelected.map(column => ({ header: column.label, dataKey: column.field, type: column.type }))
+            // Asignar el valor de la petición a mi variable reactiva
             dataExport.value = data
+            // Verificar que desea exportar con filtros
             if (exportWithFilters.value === 'Con filtro actual' && serverParams.value.columnFilters.field) {
               useExportPdf(mode, renameColumns, dataExport.value, titleForExport, orientationSelected.value, serverParams.value.columnFilters)
             } else {
               useExportPdf(mode, renameColumns, dataExport.value, titleForExport, orientationSelected.value)
             }
           } else {
+            // Si no tiene registros la peticion mostrar, una notificacion
             messageToast('warning', 'Advertencia', 'No hay datos para exportar')
           }
         }
       } catch (error) {
+        // Si falla algo mostrar una motificación
         messageToast('danger', 'Error', 'Error al momento de obtener los datos')
       }
+      // Verificar el modo y desactivar el loader
       if (mode === 'download') loadingDownload.value = false
       else if (mode === 'print') loadingPrint.value = false
     }
 
+    // Retornar las variables y funciones que se utilizaran en el template
     return {
       openModalExportData,
       orientationSelected,

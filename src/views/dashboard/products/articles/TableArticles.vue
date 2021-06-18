@@ -55,7 +55,7 @@ export default {
       {
         label: 'Acción',
         field: 'action',
-        width: '55px',
+        width: '69px',
         thClass: 'align-middle text-center',
         pdf: false,
       },

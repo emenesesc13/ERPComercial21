@@ -38,6 +38,8 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 [dir] .dark-layout .vs--disabled .vs__dropdown-toggle,
 [dir] .dark-layout .vs--disabled .vs__search,
 [dir] .dark-layout .vs--disabled .vs__selected,
-[dir] .dark-layout .vs--disabled .vs__open-indicator {
+[dir] .dark-layout .vs--disabled .vs__open-indicator,
+[dir] .dark-layout table.vgt-table tr.clickable:hover,
+[dir] .dark-layout table.vgt-table tr.clickable:hover td {
   background-color: #33394c !important;
 }

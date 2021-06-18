@@ -5,11 +5,13 @@
   >
     <template #options-row="{ props }">
       <b-dropdown-item @click="openModalForChangePassword(props.row)">
-        <feather-icon
-          icon="LockIcon"
-          class="mr-50"
-        />
-        <span>Cambiar Clave</span>
+        <div class="py-mobile-50">
+          <feather-icon
+            icon="LockIcon"
+            class="mr-50"
+          />
+          <span>Cambiar Clave</span>
+        </div>
       </b-dropdown-item>
     </template>
   </table-component>

@@ -1,10 +1,12 @@
+// Creando un arreglo de rutas para el modulo storage (almacen)
 const storageRoutes = [
+  // Ruta storageType (Tipo Almacen)
   {
     path: '/tipo-almacen',
     name: 'storageType',
     component: () => import('@/views/dashboard/storage/storageTypes/StorageType.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Tipo Almacén',
       breadcrumb: [
         {
@@ -18,12 +20,13 @@ const storageRoutes = [
       ],
     },
   },
+  // Ruta storage (Almacén)
   {
     path: '/almacen',
     name: 'storage',
     component: () => import('@/views/dashboard/storage/storage/Storage.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Almacén',
       breadcrumb: [
         {
@@ -37,12 +40,13 @@ const storageRoutes = [
       ],
     },
   },
+  // Ruta predio
   {
     path: '/predio',
     name: 'predio',
     component: () => import('@/views/dashboard/storage/predio/Predio.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Predio',
       breadcrumb: [
         {
@@ -58,4 +62,5 @@ const storageRoutes = [
   },
 ]
 
+// Exportar el arreglo de rutas para el modulo storage (Almacen)
 export default storageRoutes
