@@ -1,10 +1,12 @@
+// Creando un arreglo de rutas para el modulo Productos
 const productsRoutes = [
+  // Ruta articles (Artículos)
   {
     path: '/articulos',
     name: 'articles',
     component: () => import('@/views/dashboard/products/articles/Articles.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Articulos',
       breadcrumb: [
         {
@@ -18,12 +20,13 @@ const productsRoutes = [
       ],
     },
   },
+  // Ruta features (Caracteristicas)
   {
     path: '/caracteristicas',
     name: 'features',
     component: () => import('@/views/dashboard/products/features/Feature.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Características',
       breadcrumb: [
         {
@@ -37,12 +40,13 @@ const productsRoutes = [
       ],
     },
   },
+  // Ruta featureDetail (Detalle Caracteristica)
   {
     path: '/detalle-caracteristica',
     name: 'featureDetail',
     component: () => import('@/views/dashboard/products/featuresDetail/FeatureDetail.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Detalle Característica',
       breadcrumb: [
         {
@@ -56,12 +60,13 @@ const productsRoutes = [
       ],
     },
   },
+  // Ruta productType (Tipo de Producto)
   {
     path: '/tipo-producto',
     name: 'productType',
     component: () => import('@/views/dashboard/products/productTypes/ProductType.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Tipo Producto',
       breadcrumb: [
         {
@@ -75,12 +80,13 @@ const productsRoutes = [
       ],
     },
   },
+  // Ruta unitMeasure (Unidad de Medida)
   {
     path: '/unidad-medida',
     name: 'unitMeasure',
     component: () => import('@/views/dashboard/products/unitMeasure/UnitMeasure.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Unidad Medida',
       breadcrumb: [
         {
@@ -94,12 +100,13 @@ const productsRoutes = [
       ],
     },
   },
+  // Ruta unitGroup (Grupo de Unidad)
   {
     path: '/grupo-unidad',
     name: 'unitGroup',
     component: () => import('@/views/dashboard/products/unitGroup/UnitGroup.vue'),
     meta: {
-      auth: true,
+      auth: true, // El acceso a esta ruta necesita autorización
       pageTitle: 'Grupo Unidad',
       breadcrumb: [
         {
@@ -115,4 +122,5 @@ const productsRoutes = [
   },
 ]
 
+// Exportar el arreglo de rutas para el modulo Productos
 export default productsRoutes

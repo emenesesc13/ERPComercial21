@@ -1,8 +1,8 @@
+// Importando vue y axios
 import Vue from 'vue'
-
-// axios
 import axios from 'axios'
 
+// Creando la configuracion para las peticiones a la API del sistema
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
@@ -15,6 +15,8 @@ const axiosIns = axios.create({
   },
 })
 
+// Agregar una propiedad al prototipo de vue para poder realizar peticiones usando la propiedad this.$http
 Vue.prototype.$http = axiosIns
 
+// Exportar la configuración
 export default axiosIns

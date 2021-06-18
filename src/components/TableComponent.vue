@@ -144,8 +144,8 @@
             >
               <template v-slot:button-content>
                 <feather-icon
-                  icon="MoreVerticalIcon"
-                  size="16"
+                  icon="MoreHorizontalIcon"
+                  size="14"
                   class="text-body align-middle mr-25"
                 />
               </template>
@@ -155,11 +155,14 @@
                 v-if="buttonStatus"
                 @click="changeStatus(props.row)"
               >
-                <feather-icon
-                  :icon="props.row.activo ? 'SlashIcon' : 'CheckCircleIcon'"
-                  class="mr-50"
-                />
-                <span>{{ props.row.activo ? 'Desactivar' : 'Activar' }}</span>
+                <div class="py-mobile-50">
+                  <feather-icon
+                    :icon="props.row.activo ? 'SlashIcon' : 'CheckCircleIcon'"
+                    size="14"
+                    class="mr-50"
+                  />
+                  <span>{{ props.row.activo ? 'Desactivar' : 'Activar' }}</span>
+                </div>
               </b-dropdown-item>
 
               <!-- Elemento del despegable para editar el registro de la fila -->
@@ -167,11 +170,14 @@
                 v-if="buttonEdit"
                 @click="openModalForEdit(props.row)"
               >
-                <feather-icon
-                  icon="Edit2Icon"
-                  class="mr-50"
-                />
-                <span>Editar</span>
+                <div class="py-mobile-50">
+                  <feather-icon
+                    icon="Edit2Icon"
+                    size="14"
+                    class="mr-50"
+                  />
+                  <span>Editar</span>
+                </div>
               </b-dropdown-item>
 
               <!-- Proporcionando una ranura al componente que lo utilice para que pueda personalizar añadir mas elementos despegables y permitar agregar una accion -->
@@ -185,11 +191,14 @@
                 v-if="buttonDelete"
                 @click="deleteRow(props.row)"
               >
-                <feather-icon
-                  icon="TrashIcon"
-                  class="mr-50"
-                />
-                <span>Eliminar</span>
+                <div class="py-mobile-50">
+                  <feather-icon
+                    icon="TrashIcon"
+                    size="14"
+                    class="mr-50"
+                  />
+                  <span>Eliminar</span>
+                </div>
               </b-dropdown-item>
             </b-dropdown>
             <template v-else>
@@ -519,6 +528,22 @@ export default {
       }
     }
 
+    /* eslint-disable global-require */
+    if (
+      window.navigator.userAgent.match(/Android/i)
+      || window.navigator.userAgent.match(/webOS/i)
+      || window.navigator.userAgent.match(/iPhone/i)
+      || window.navigator.userAgent.match(/iPad/i)
+      || window.navigator.userAgent.match(/iPod/i)
+      || window.navigator.userAgent.match(/BlackBerry/i)
+      || window.navigator.userAgent.match(/Windows Phone/i)
+    ) {
+      require('@/assets/scss/components/TableComponent/mobile.scss')
+    } else {
+      require('@/assets/scss/components/TableComponent/desktop.scss')
+    }
+    /* eslint-enable global-require */
+
     // Retornar solo las variables reactivas y funciones que se utilizaran en el template del componente
     return {
       columns,
@@ -541,9 +566,6 @@ export default {
   th span,
   td span {
     font-size: 12px !important;
-  }
-  [dir] .vgt-table.condensed td, [dir] .vgt-table.condensed th.vgt-row-header {
-    padding: 0.1em 0.4em;
   }
   .vgt-loading .vgt-center-align {
     margin-top: 0;

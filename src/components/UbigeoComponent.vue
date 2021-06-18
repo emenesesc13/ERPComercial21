@@ -9,6 +9,7 @@
       :md="colmd"
       :lg="collg"
     >
+      <!-- Validador -->
       <validation-provider
         #default="{ errors }"
         name="departamento"
@@ -19,6 +20,7 @@
           label="Departamento *"
           :state="errors.length > 0 ? false:null"
         >
+          <!-- Combo -->
           <v-select
             id="department"
             v-model="ubigeo.departament"
@@ -48,6 +50,7 @@
       :md="colmd"
       :lg="collg"
     >
+      <!-- Validador -->
       <validation-provider
         #default="{ errors }"
         name="provincia"
@@ -58,6 +61,7 @@
           label="Provincia *"
           :state="errors.length > 0 ? false:null"
         >
+          <!-- Combo -->
           <v-select
             id="province"
             v-model="ubigeo.province"
@@ -87,6 +91,7 @@
       :md="colmd"
       :lg="collg"
     >
+      <!-- Validador -->
       <validation-provider
         #default="{ errors }"
         name="distrito"
@@ -97,6 +102,7 @@
           label="Distrito *"
           :state="errors.length > 0 ? false:null"
         >
+          <!-- Combo -->
           <v-select
             id="district"
             v-model="ubigeo.district"
@@ -122,6 +128,7 @@
 </template>
 
 <script>
+// Importar dependencias del componente
 import { ref, inject } from '@vue/composition-api'
 import { Fragment } from 'vue-fragment'
 import { BCol, BFormGroup } from 'bootstrap-vue'
@@ -131,6 +138,7 @@ import vSelect from 'vue-select'
 export default {
   name: 'UbigeoComponent',
   components: {
+    // Instalar los componentes que se utilizaran
     Fragment,
     BCol,
     BFormGroup,
@@ -138,6 +146,7 @@ export default {
     vSelect,
   },
   props: {
+    // Propiedades permitidas para la distribución de columnas del Departamento, Provincia, Distrito
     cols: {
       type: String,
       default: '12',
@@ -161,16 +170,24 @@ export default {
     const combos = inject('combos')
     const resetCombo = inject('resetCombo')
     const ubigeo = inject('ubigeoSelected')
+    // Variables reactiva que va contener el valor del idUbigeo
     const idUbigeo = ref(0)
 
-    // Función que se ejecuta cuando se selecciona un departamento, recibe como parametro el idDepartamento
+    // Función asincrona que se ejecuta cuando se selecciona un departamento
+    // Recibe un parametro
+    /*
+      1.- idDepartamento
+    */
     const selectedDepartament = async ({ id }) => {
       ubigeo.value.departament = id
       ubigeo.value.province = 0
       ubigeo.value.district = 0
       idUbigeo.value = 0
+      // Limpiar combos de provincia y distrito
       resetCombo(combos.value, ['province', 'district'])
+      // Cargar combos de provincia y distrito en base al departamento seleccionado
       loadComboBoxes(combos.value, ['province'], `/ComboUbigeo/Provincia/${ubigeo.value.departament}`, 'Ocurrio un Error al momento de cargar las Provincias')
+      // Emitir un evento enviando como parametro el idUbigeo
       context.emit('selected-district', idUbigeo.value)
     }
 
@@ -179,8 +196,11 @@ export default {
       ubigeo.value.province = id
       ubigeo.value.district = 0
       idUbigeo.value = 0
+      // Limpiar combo de distrito
       resetCombo(combos.value, ['district'])
+      // Cargar combo de distrito en base a la provincia seleccionada
       loadComboBoxes(combos.value, ['district'], `/ComboUbigeo/Distrito/${ubigeo.value.departament}/${ubigeo.value.province}`, 'Ocurrio un Error al momento de cargar las Provincias')
+      // Emitir un evento enviando como parametro el idUbigeo
       context.emit('selected-district', idUbigeo.value)
     }
 
@@ -188,6 +208,7 @@ export default {
     const selectedDistrict = async ({ _id }) => {
       ubigeo.value.district = _id
       idUbigeo.value = _id
+      // Emitir un evento enviando como parametro el idUbigeo
       context.emit('selected-district', idUbigeo.value)
     }
 

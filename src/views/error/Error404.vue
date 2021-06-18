@@ -1,8 +1,8 @@
 <template>
-  <!-- Error page-->
+  <!-- Página de Error 404-->
   <div class="misc-wrapper">
     <b-link class="brand-logo d-flex align-items-center">
-      <!-- <vuexy-logo /> -->
+      <!-- Logo SIMSAC -->
       <b-img
         :src="require('@/assets/images/logo/ico-simsac.png')"
         alt="Simsac Perú"
@@ -20,7 +20,7 @@
         <p class="mb-2">
           Oops! 😖 La página que quiere visitar no se encuentra en el sevidor.
         </p>
-
+        <!-- Botón para regresar al inicio -->
         <b-button
           variant="primary"
           class="mb-2 btn-sm-block"
@@ -29,7 +29,7 @@
           Regresar al Inicio
         </b-button>
 
-        <!-- image -->
+        <!-- Imagen -->
         <b-img
           fluid
           :src="imgUrl"
@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-<!-- / Error page-->
+<!-- / Página de error 404-->
 </template>
 
 <script>

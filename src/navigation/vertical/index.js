@@ -1,3 +1,4 @@
+// Arreglo de objetos para la creación de la barra lateral
 export default [
   {
     title: 'Inicio',

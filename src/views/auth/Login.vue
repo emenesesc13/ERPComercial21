@@ -2,7 +2,7 @@
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
 
-      <!-- Brand logo-->
+      <!-- SimSAC logo-->
       <b-link class="d-none brand-logo d-lg-flex align-items-center">
         <b-img
           :src="require('@/assets/images/logo/ico-simsac.png')"
@@ -12,9 +12,9 @@
           Simsac Perú
         </h2>
       </b-link>
-      <!-- /Brand logo-->
+      <!-- /SimSAC logo-->
 
-      <!-- Left Text-->
+      <!-- Texto Izquierdo-->
       <b-col
         lg="8"
         class="d-none d-lg-flex align-items-center p-5"
@@ -27,7 +27,7 @@
           />
         </div>
       </b-col>
-      <!-- /Left Text-->
+      <!-- /Texto Izquierdo-->
 
       <!-- Login-->
       <b-col
@@ -35,7 +35,7 @@
         class="col-login d-flex flex-column flex-lg-row justify-content-center align-items-center auth-bg px-2 p-lg-5"
       >
 
-        <!-- Brand logo-->
+        <!-- SimSAC logo-->
         <b-link
           class="d-flex brand-logo d-lg-none justify-content-start mb-5 align-items-center"
           style="position: static;"
@@ -48,7 +48,7 @@
             Simsac Perú
           </h2>
         </b-link>
-        <!-- /Brand logo-->
+        <!-- /SimSAC logo-->
 
         <b-col
           sm="8"
@@ -66,13 +66,13 @@
             Inicie sesión con su cuenta
           </b-card-text>
 
-          <!-- form -->
+          <!-- Formulario -->
           <validation-observer ref="loginValidation">
             <b-form
               class="auth-login-form mt-2"
               @submit.prevent
             >
-              <!-- email -->
+              <!-- Campo Usuario -->
               <b-form-group
                 label="Usuario"
                 label-for="login-user"
@@ -94,7 +94,7 @@
                 </validation-provider>
               </b-form-group>
 
-              <!-- forgot password -->
+              <!-- Campo Contraseña -->
               <b-form-group
                 label="Contraseña"
                 label-for="login-password"
@@ -130,7 +130,7 @@
                 </validation-provider>
               </b-form-group>
 
-              <!-- checkbox -->
+              <!-- Checkbox Recuerdame -->
               <b-form-group>
                 <b-form-checkbox
                   id="remember-me"
@@ -141,7 +141,7 @@
                 </b-form-checkbox>
               </b-form-group>
 
-              <!-- submit buttons -->
+              <!-- Botón de Login -->
               <b-button
                 type="submit"
                 variant="primary"
@@ -179,6 +179,7 @@
 
 <script>
 /* eslint-disable global-require */
+// Importar dependencias
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
   BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BSpinner,
@@ -190,7 +191,9 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import useFetch from '@/hooks/useFetch'
 
 export default {
+  name: 'Login',
   components: {
+    // Instalar componentes a utilizar
     BRow,
     BCol,
     BLink,
@@ -208,8 +211,10 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
+  // Instalar mixins
   mixins: [togglePasswordVisibility],
   data() {
+    // Variables reactivas
     return {
       sendLoading: false,
       status: '',
@@ -226,6 +231,7 @@ export default {
     }
   },
   computed: {
+    // Propiedades computadas
     passwordToggleIcon() {
       return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
     },
@@ -239,24 +245,33 @@ export default {
     },
   },
   methods: {
+    // Función asincrona para realizar el login
     async validationForm() {
       const success = await this.$refs.loginValidation.validate()
+      // Verificar que el Formulario esta validado
       if (success && !this.sendLoading) {
+        // Activar el loader
         this.sendLoading = true
+        // Armar los datos a enviar
         const payload = {
           usuario: this.user,
           clave: this.password,
         }
+        // Realizar la peticion
         const { error, data } = await useFetch('/login', payload, 'POST')
+        // Verificar si hay un error o el usuario no existe
         if (error || !data.usuario) {
+          // De ser asi, mostrar una notificacion
           this.sendLoading = false
           this.$bvToast.toast(error || data.mensaje, {
             title: 'Error al iniciar sesión',
             variant: 'danger',
             solid: true,
           })
-        } else {
+        } else if (data) {
+          // De no ser asi, despachar la accion handleLogin del modulo auth y enviar como parametro la data que me trae la peticion
           this.$store.dispatch('auth/handleLogin', data)
+          // Mostrar una notificacion de Bienvenida
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -266,8 +281,11 @@ export default {
               variant: 'success',
             },
           })
+          // Obtener del localstorage la utlima ruta visitada
           const lastPath = JSON.parse(localStorage.getItem('lastPath'))
+          // Si lo encontro, redirigir a esa ruta
           if (lastPath) this.$router.push(lastPath)
+          // Si no lo encontro, redirigir a la ruta inicial /
           else this.$router.push('/')
         }
       }

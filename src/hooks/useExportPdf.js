@@ -2,10 +2,25 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import store from '@/store'
+import axios from 'axios'
+
+// Creando funcion para exportar PDF ya sea por descarga o impresión
+// Recibe 7 parámetros
+/*
+  1.- El modo de exportacion (download || print)
+  2.- Columnas que se van a imprimir
+  3.- Arreglo de objetos donde se encuentran los datos a exportar
+  4.- Titulo que aparecera en el Reporte
+  5.- Orientación (p = vertical || l = horizontal)
+  6.- Variable serverParams para verificar si tiene filtros, subtitle
+*/
 
 const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 'LISTADO', orientation = 'p', serverParams, subtitle) => {
+  // Creando la instancia
   const doc = new jsPDF(orientation, 'pt', 'a4')
+  // Modificar los valores de las columna de estado para mostrar activo si es true y desactivo si es false
   const body = dataExport.map(row => ({ ...row, activo: row.activo ? 'ACTIVO' : 'DESACTIVO' }))
+  // Formater valores de columnas en base al tipo de dato que tienen
   body.forEach(row => {
     columns.forEach(column => {
       if (column.type === 'boolean') {
@@ -17,6 +32,7 @@ const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 
     })
   })
 
+  // Crear ancho de las 4 columnas con las que se manejaran los pdf
   const partColumn = doc.internal.pageSize.getWidth() / 4 - 80
   const lineHeight = 12
 
@@ -215,9 +231,21 @@ const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 
   } else if (mode === 'print') {
     // doc.autoPrint()
     // doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
-    const blob = doc.output('blob')
-    window.open(URL.createObjectURL(blob), '_blank')
+    // const blob = doc.output('blob')
+    // window.open(URL.createObjectURL(blob), '_blank')
+
+    // Codigo para generar base64 del pdf
+    const dataUriString = doc.output('datauristring')
+    const positionBase64 = dataUriString.indexOf('base64,')
+    const base64Pdf = dataUriString.substring(positionBase64 + 7)
+    // Realizar una peticion POST donde se encuentra instalada la impresora enviando el pdf en base64
+    axios.post('http://192.168.1.4:3333/api/print', {
+      pdfBase64: base64Pdf,
+    })
+      .then(console.log)
+      .catch(console.log)
   }
 }
 
+// Exportar la funcion
 export default useExportPdf

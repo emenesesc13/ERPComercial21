@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal para buscar articulos -->
   <b-modal
     id="modal-search-article-component"
     hide-footer
@@ -8,6 +9,7 @@
     size="lg"
   >
     <b-row>
+      <!-- Campo de busqueda -->
       <b-col
         cols="12"
         md="4"
@@ -27,6 +29,7 @@
           />
         </b-form-group>
       </b-col>
+      <!-- Valor de busqueda -->
       <b-col
         cols="12"
         md="8"
@@ -46,6 +49,7 @@
       </b-col>
     </b-row>
 
+    <!-- Tabla con datos y paginación -->
     <table-component
       :header-buttons-enabled="false"
       class="mb-2"
@@ -63,6 +67,7 @@
 
 <script>
 /* eslint no-underscore-dangle: 0 */
+// Importar dependecias del componente
 import {
   BRow, BCol, BFormGroup, BFormInput, BModal,
 } from 'bootstrap-vue'
@@ -75,6 +80,7 @@ import TableComponent from './TableComponent.vue'
 export default {
   name: 'ModalSearchArticleComponent',
   components: {
+    // Registrar componentes a utilizar
     BRow,
     BCol,
     BFormGroup,
@@ -84,12 +90,16 @@ export default {
     vSelect,
   },
   setup(props, context) {
+    // Crear variables
     let timer = null
     const timeForLoad = 500
     // const messageToast = inject('messageToast')
+    // Inyectar variables o funciones que me provee un componente superior
     const tableInfo = inject('tableInfo')
     const loadArticlesForSearch = inject('loadArticlesForSearch')
     const serverParamsSearchArticle = inject('serverParamsSearchArticle')
+
+    // Columnas a mostrar en la tabla
     const columns = [
       {
         label: 'Id',
@@ -101,6 +111,7 @@ export default {
       },
     ]
 
+    // Columnas permitidas para el filtro
     const optionsColumnsFilter = [
       {
         title: 'Id',
@@ -128,15 +139,21 @@ export default {
       },
     ]
 
+    // Funcipon asincrona para buscar
     const searchArticle = async () => {
+      // Asignar que la pagina siempre sea 1
       serverParamsSearchArticle.value.page = 1
+      // Activar el loader
       tableInfo.value.loading = true
+      // Limpiar el intervalo de tiempo
       clearTimeout(timer)
+      // Ejecutar el intervalo de tiempo con la funcion loadArticlesForSearch
       timer = setTimeout(() => {
         loadArticlesForSearch()
       }, timeForLoad)
     }
 
+    // Función asincrona para buscar por filtros
     const searchColumnFilter = async () => {
       serverParamsSearchArticle.value.page = 1
       serverParamsSearchArticle.value.columnFilters.value = ''
@@ -144,16 +161,19 @@ export default {
       context.refs.serverParamsValueArticle.focus()
     }
 
+    // Emitir una funcion cuando el usuario da click en una fila y enviar como parametro los datos de la fila seleccionada
     const onRowClick = ({ row }) => {
       context.emit('selected-article', row)
       context.root.$bvModal.hide('modal-search-article-component')
     }
 
+    // Proveer funciones y variables a los componentes hijos como TableComponent
     provide('loadTable', loadArticlesForSearch)
     provide('columns', columns)
     provide('data', tableInfo)
     provide('serverParams', serverParamsSearchArticle)
 
+    // Retornar variables y funciones que se utilizaran en el template
     return {
       serverParamsSearchArticle,
       optionsColumnsFilter,
