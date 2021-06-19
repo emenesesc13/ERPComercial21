@@ -65,6 +65,10 @@ export default [
         title: 'Unidad Negocio',
         route: 'businessUnit',
       },
+      {
+        title: 'Tipo Servicio',
+        route: 'serviceType',
+      },
     ],
   },
   {
