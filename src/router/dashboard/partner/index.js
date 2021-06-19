@@ -40,6 +40,25 @@ const partnerRoutes = [
       ],
     },
   },
+  {
+    path: '/tipo-servicio',
+    name: 'serviceType',
+    component: () => import('@/views/dashboard/partner/serviceTypes/ServiceType.vue'),
+    meta: {
+      auth: true, // El acceso a esta ruta necesita autorización
+      pageTitle: 'tipo Servicio',
+      breadcrumb: [
+        {
+          text: 'Productos',
+          active: true,
+        },
+        {
+          text: 'Tipo Servicio',
+          active: true,
+        },
+      ],
+    },
+  },
 ]
 
 // Exportar el arreglo de rutas para el modulo Mantenimiento
