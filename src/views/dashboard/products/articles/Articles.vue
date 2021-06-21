@@ -83,6 +83,7 @@ export default {
       loadComboBoxes(combos.value, ['productTypes'], '/combo/tipoproducto/1', 'Error al momento de cargar los Tipos de Producto')
       loadComboBoxes(combos.value, ['unitGroup'], '/combo/grupounidad/0', 'Error al momento de cargar las Unidades de Grupo')
       loadComboBoxes(combos.value, ['features'], '/combo/caracteristica/1', 'Error al momento de cargar las Características')
+      loadComboBoxes(combos.value, ['serviceType'], '/combo/tiposervicio/1', 'Error al momento de cargar los Tipo Servicio')
     })
 
     provide('articles', articles)

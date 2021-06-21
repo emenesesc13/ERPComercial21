@@ -136,6 +136,7 @@ const useVariables = () => {
     features: { ...initialStateCombo },
     valuesByFeature: { ...initialStateCombo },
     unitMeasure: { ...initialStateCombo },
+    serviceType: { ...initialStateCombo },
   })
 
   // Función para regresar al estado inicial el combobox que desee, para ello esta función recibe como parametro un arreglo de string, en el cual debera pasar las claves del o de los combos
