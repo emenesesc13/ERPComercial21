@@ -31,10 +31,6 @@ Vue.use(VueCompositionAPI)
 // VueExcelXlsx
 Vue.use(VueExcelXlsx)
 
-// Feather font icon - For form-wizard
-// * Shall remove it if not using font-icons of feather-icons - For form-wizard
-require('@core/assets/fonts/feather/iconfont.css') // For form-wizard
-
 // import core styles
 require('@core/scss/core.scss')
 
