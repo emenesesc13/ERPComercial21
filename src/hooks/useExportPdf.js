@@ -2,7 +2,6 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import store from '@/store'
-import axios from 'axios'
 
 // Creando funcion para exportar PDF ya sea por descarga o impresión
 // Recibe 7 parámetros
@@ -230,20 +229,20 @@ const useExportPdf = (mode = 'download', columns = [], dataExport = [], title = 
     doc.save(`SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf`)
   } else if (mode === 'print') {
     // doc.autoPrint()
-    // doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
-    // const blob = doc.output('blob')
-    // window.open(URL.createObjectURL(blob), '_blank')
+    doc.output('dataurlnewwindow', { filename: `SISTEMAS INTEGRADOS Y MERCADEO S.A.C. ${title} ${date}.pdf` })
+    const blob = doc.output('blob')
+    window.open(URL.createObjectURL(blob), '_blank')
 
     // Codigo para generar base64 del pdf
-    const dataUriString = doc.output('datauristring')
-    const positionBase64 = dataUriString.indexOf('base64,')
-    const base64Pdf = dataUriString.substring(positionBase64 + 7)
+    // const dataUriString = doc.output('datauristring')
+    // const positionBase64 = dataUriString.indexOf('base64,')
+    // const base64Pdf = dataUriString.substring(positionBase64 + 7)
     // Realizar una peticion POST donde se encuentra instalada la impresora enviando el pdf en base64
-    axios.post('http://192.168.1.4:3333/api/print', {
-      pdfBase64: base64Pdf,
-    })
-      .then(console.log)
-      .catch(console.log)
+    // axios.post('http://192.168.1.4:3333/api/print', {
+    //   pdfBase64: base64Pdf,
+    // })
+    //   .then(console.log)
+    //   .catch(console.log)
   }
 }
 
