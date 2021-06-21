@@ -78,6 +78,7 @@
                       <small class="text-danger">{{ errors[0] }}</small>
                     </b-form-group>
                   </validation-provider>
+
                 </b-col>
 
                 <!-- Article Name -->
@@ -85,23 +86,61 @@
                   cols="12"
                   lg="7"
                 >
-                  <b-form-group
-                    label="Artículo *"
-                    label-for="articleName"
-                  >
-                    <validation-provider
-                      #default="{ errors }"
-                      name="nombre"
-                      rules="required"
+                  <b-row>
+                    <b-col>
+                      <b-form-group
+                        label="Artículo *"
+                        label-for="articleName"
+                      >
+                        <validation-provider
+                          #default="{ errors }"
+                          name="nombre"
+                          rules="required"
+                        >
+                          <b-form-input
+                            id="articleName"
+                            v-model="article.nombre"
+                            :state="errors.length > 0 ? false:null"
+                          />
+                          <small class="text-danger">{{ errors[0] }}</small>
+                        </validation-provider>
+                      </b-form-group>
+                    </b-col>
+
+                    <!-- Service Types -->
+                    <b-col
+                      v-if="article.flgSelected === 'servicio'"
                     >
-                      <b-form-input
-                        id="articleName"
-                        v-model="article.nombre"
-                        :state="errors.length > 0 ? false:null"
-                      />
-                      <small class="text-danger">{{ errors[0] }}</small>
-                    </validation-provider>
-                  </b-form-group>
+                      <validation-provider
+                        #default="{ errors }"
+                        name="Tipo Serevicio"
+                        rules="requiredComboVueSelect"
+                      >
+                        <b-form-group
+                          label-for="serviceType"
+                          label="Tipo Servicio *"
+                          :state="errors.length > 0 ? false:null"
+                        >
+                          <v-select
+                            id="serviceType"
+                            v-model="article.idTipoServicio"
+                            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                            :reduce="serviceType => serviceType._id"
+                            label="nombre"
+                            :options="combos.serviceType.data"
+                            :loading="combos.serviceType.loading"
+                            :clearable="false"
+                            :disabled="combos.serviceType.disabled"
+                          >
+                            <template v-slot:no-options>
+                              No se encontraron resultados.
+                            </template>
+                          </v-select>
+                          <small class="text-danger">{{ errors[0] }}</small>
+                        </b-form-group>
+                      </validation-provider>
+                    </b-col>
+                  </b-row>
                 </b-col>
 
                 <!-- Stock -->
